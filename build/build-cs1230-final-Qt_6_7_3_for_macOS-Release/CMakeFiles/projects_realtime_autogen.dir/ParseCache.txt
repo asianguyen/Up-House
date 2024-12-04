@@ -244,8 +244,8 @@
  mdp:/Users/sophialim/Qt/6.7.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qtwidgetsexports.h
  mdp:/Users/sophialim/Qt/6.7.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qtwidgetsglobal.h
  mdp:/Users/sophialim/Qt/6.7.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qwidget.h
-/Users/sophialim/Desktop/cs1230/cs1230-final/src/utils/scenefilereader.cpp
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/shapes/shape.h
+/Users/sophialim/Desktop/cs1230/cs1230-final/src/utils/scenefilereader.cpp
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/realtime.h
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/mainwindow.h
  mmc:Q_OBJECT
@@ -677,8 +677,8 @@
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/utils/shaderloader.h
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/utils/sceneparser.h
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/shapes/sphere.h
-/Users/sophialim/Desktop/cs1230/cs1230-final/src/camera/camera.cpp
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/settings.cpp
+/Users/sophialim/Desktop/cs1230/cs1230-final/src/camera/camera.cpp
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/shapes/cube.cpp
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/shapes/cone.cpp
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/realtime.cpp

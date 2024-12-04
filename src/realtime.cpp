@@ -105,12 +105,12 @@ void Realtime::setupSkyBox(){
 
     //load each texture face
     std::vector<std::string> faces = {
-        "/Users/sophialim/Desktop/cs1230/cs1230-final/resources/images/right.jpg", //Positive X
-        "/Users/sophialim/Desktop/cs1230/cs1230-final/resources/images/left.jpg",//Negative X
-        "/Users/sophialim/Desktop/cs1230/cs1230-final/resources/images/top.jpg", //Positive Y
-        "/Users/sophialim/Desktop/cs1230/cs1230-final/resources/images/bottom.jpg", //Negative Y
-        "/Users/sophialim/Desktop/cs1230/cs1230-final/resources/images/front.jpg",//Positive Z
-        "/Users/sophialim/Desktop/cs1230/cs1230-final/resources/images/back.jpg" //Negative Z
+        "./resources/images/right.jpg", //Positive X
+        "./resources/images/left.jpg",//Negative X
+        "./resources/images/top.jpg", //Positive Y
+        "./resources/images/bottom.jpg", //Negative Y
+        "./resources/images/front.jpg",//Positive Z
+        "./resources/images/back.jpg" //Negative Z
     };
 
     int width, height, nrChannels;
@@ -222,7 +222,7 @@ void Realtime::setupFullscreenQuad() {
         1.f, -1.f, 0.0f,         1.0f, 0.0f // Bottom RIght
     };
 
-    // Generate and bind a VBO and a VAO for a fullscreen quad
+    //generate and bind a VBO and a VAO for a fullscreen quad
     glGenBuffers(1, &m_fullscreen_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_fullscreen_vbo);
     glBufferData(GL_ARRAY_BUFFER, fullscreen_quad_data.size()*sizeof(GLfloat), fullscreen_quad_data.data(), GL_STATIC_DRAW);
@@ -309,10 +309,6 @@ void Realtime::paintGL() {
     GLint kdLocation = glGetUniformLocation(m_shader, "k_d");
     glUniform1f(kdLocation, m_kd);
 
-
-    // GLint lightPosLocation = glGetUniformLocation(m_shader, "lightPos");
-    // glUniform4fv(lightPosLocation, 1, glm::value_ptr(m_lightPos));
-
     glm::vec4 cameraPos = glm::inverse(m_view) * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
     GLint ksLocation = glGetUniformLocation(m_shader, "k_s");
@@ -375,7 +371,6 @@ void Realtime::paintGL() {
     //loop through all shapes
     for (const auto& shapeData : m_shapeDataList) {
 
-        //UPDATE pick it out for shape once
         glBindVertexArray(shapeData.vao);
         glBindBuffer(GL_ARRAY_BUFFER, shapeData.vbo);
 
@@ -412,30 +407,25 @@ void Realtime::paintGL() {
 
 void Realtime::renderSkybox() {
 
-    // glDepthFunc(GL_LEQUAL);
+    glDepthFunc(GL_LEQUAL);
     glDepthMask(GL_FALSE);
 
     glUseProgram(m_skybox_shader);
 
-    // Remove translation from view matrix
     glm::mat4 view = glm::mat4(glm::mat3(m_view));
 
-    // Set uniforms
     glUniformMatrix4fv(glGetUniformLocation(m_skybox_shader, "view"), 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(glGetUniformLocation(m_skybox_shader, "projection"), 1, GL_FALSE, glm::value_ptr(m_proj));
 
-    // Bind skybox texture
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxTexture);
     glUniform1i(glGetUniformLocation(m_skybox_shader, "skybox"), 0);  // Set texture uniform
 
-    // Draw skybox cube
     glBindVertexArray(m_skyboxVAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
 
-    // Reset state
-    // glDepthFunc(GL_LESS);
+    glDepthFunc(GL_LESS);
     glDepthMask(GL_TRUE);
 }
 
