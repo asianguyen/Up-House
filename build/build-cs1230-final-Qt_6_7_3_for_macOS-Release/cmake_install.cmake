@@ -1,4 +1,4 @@
-# Install script for directory: /Users/sophialim/Desktop/cs1230/cs1230-final
+# Install script for directory: /Users/asianguyen/Desktop/CS1230/cs1230-final
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/Users/sophialim/Desktop/cs1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Release/glm/cmake_install.cmake")
+  include("/Users/asianguyen/Desktop/CS1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Release/glm/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/sophialim/Desktop/cs1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Release/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/asianguyen/Desktop/CS1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Release/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

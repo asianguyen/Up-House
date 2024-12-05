@@ -56,7 +56,9 @@
 #define __ATOMIC_RELEASE 3
 #define __ATOMIC_SEQ_CST 5
 #define __BIGGEST_ALIGNMENT__ 8
+#define __BITINT_MAXWIDTH__ 128
 #define __BLOCKS__ 1
+#define __BOOL_WIDTH__ 8
 #define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__
 #define __CHAR16_TYPE__ unsigned short
 #define __CHAR32_TYPE__ unsigned int
@@ -90,8 +92,8 @@
 #define __DECIMAL_DIG__ __LDBL_DECIMAL_DIG__
 #define __DEPRECATED 1
 #define __DYNAMIC__ 1
-#define __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ 120000
-#define __ENVIRONMENT_OS_VERSION_MIN_REQUIRED__ 120000
+#define __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ 130000
+#define __ENVIRONMENT_OS_VERSION_MIN_REQUIRED__ 130000
 #define __EXCEPTIONS 1
 #define __FINITE_MATH_ONLY__ 0
 #define __FLT16_DECIMAL_DIG__ 5
@@ -112,7 +114,6 @@
 #define __FLT_DENORM_MIN__ 1.40129846e-45F
 #define __FLT_DIG__ 6
 #define __FLT_EPSILON__ 1.19209290e-7F
-#define __FLT_EVAL_METHOD__ 0
 #define __FLT_HAS_DENORM__ 1
 #define __FLT_HAS_INFINITY__ 1
 #define __FLT_HAS_QUIET_NAN__ 1
@@ -187,35 +188,44 @@
 #define __INT_FAST16_FMTi__ "hi"
 #define __INT_FAST16_MAX__ 32767
 #define __INT_FAST16_TYPE__ short
+#define __INT_FAST16_WIDTH__ 16
 #define __INT_FAST32_FMTd__ "d"
 #define __INT_FAST32_FMTi__ "i"
 #define __INT_FAST32_MAX__ 2147483647
 #define __INT_FAST32_TYPE__ int
+#define __INT_FAST32_WIDTH__ 32
 #define __INT_FAST64_FMTd__ "lld"
 #define __INT_FAST64_FMTi__ "lli"
 #define __INT_FAST64_MAX__ 9223372036854775807LL
 #define __INT_FAST64_TYPE__ long long int
+#define __INT_FAST64_WIDTH__ 64
 #define __INT_FAST8_FMTd__ "hhd"
 #define __INT_FAST8_FMTi__ "hhi"
 #define __INT_FAST8_MAX__ 127
 #define __INT_FAST8_TYPE__ signed char
+#define __INT_FAST8_WIDTH__ 8
 #define __INT_LEAST16_FMTd__ "hd"
 #define __INT_LEAST16_FMTi__ "hi"
 #define __INT_LEAST16_MAX__ 32767
 #define __INT_LEAST16_TYPE__ short
+#define __INT_LEAST16_WIDTH__ 16
 #define __INT_LEAST32_FMTd__ "d"
 #define __INT_LEAST32_FMTi__ "i"
 #define __INT_LEAST32_MAX__ 2147483647
 #define __INT_LEAST32_TYPE__ int
+#define __INT_LEAST32_WIDTH__ 32
 #define __INT_LEAST64_FMTd__ "lld"
 #define __INT_LEAST64_FMTi__ "lli"
 #define __INT_LEAST64_MAX__ 9223372036854775807LL
 #define __INT_LEAST64_TYPE__ long long int
+#define __INT_LEAST64_WIDTH__ 64
 #define __INT_LEAST8_FMTd__ "hhd"
 #define __INT_LEAST8_FMTi__ "hhi"
 #define __INT_LEAST8_MAX__ 127
 #define __INT_LEAST8_TYPE__ signed char
+#define __INT_LEAST8_WIDTH__ 8
 #define __INT_MAX__ 2147483647
+#define __INT_WIDTH__ 32
 #define __LDBL_DECIMAL_DIG__ 17
 #define __LDBL_DENORM_MIN__ 4.9406564584124654e-324L
 #define __LDBL_DIG__ 15
@@ -231,11 +241,14 @@
 #define __LDBL_MIN_EXP__ (-1021)
 #define __LDBL_MIN__ 2.2250738585072014e-308L
 #define __LITTLE_ENDIAN__ 1
+#define __LLONG_WIDTH__ 64
 #define __LONG_LONG_MAX__ 9223372036854775807LL
 #define __LONG_MAX__ 9223372036854775807L
+#define __LONG_WIDTH__ 64
 #define __LP64__ 1
 #define __MACH__ 1
 #define __NO_INLINE__ 1
+#define __NO_MATH_ERRNO__ 1
 #define __OBJC_BOOL_IS_BOOL 1
 #define __OPENCL_MEMORY_SCOPE_ALL_SVM_DEVICES 3
 #define __OPENCL_MEMORY_SCOPE_DEVICE 2
@@ -256,6 +269,7 @@
 #define __REGISTER_PREFIX__ 
 #define __SCHAR_MAX__ 127
 #define __SHRT_MAX__ 32767
+#define __SHRT_WIDTH__ 16
 #define __SIG_ATOMIC_MAX__ 2147483647
 #define __SIG_ATOMIC_WIDTH__ 32
 #define __SIZEOF_DOUBLE__ 8
@@ -378,7 +392,7 @@
 #define __UINT_LEAST8_MAX__ 255
 #define __UINT_LEAST8_TYPE__ unsigned char
 #define __USER_LABEL_PREFIX__ _
-#define __VERSION__ "Apple LLVM 13.1.6 (clang-1316.0.21.2.5)"
+#define __VERSION__ "Apple LLVM 14.0.3 (clang-1403.0.22.14.1)"
 #define __WCHAR_MAX__ 2147483647
 #define __WCHAR_TYPE__ int
 #define __WCHAR_WIDTH__ 32
@@ -386,16 +400,16 @@
 #define __WINT_TYPE__ int
 #define __WINT_WIDTH__ 32
 #define __aarch64__ 1
-#define __apple_build_version__ 13160021
+#define __apple_build_version__ 14030022
 #define __arm64 1
 #define __arm64__ 1
 #define __block __attribute__((__blocks__(byref)))
 #define __clang__ 1
 #define __clang_literal_encoding__ "UTF-8"
-#define __clang_major__ 13
-#define __clang_minor__ 1
-#define __clang_patchlevel__ 6
-#define __clang_version__ "13.1.6 (clang-1316.0.21.2.5)"
+#define __clang_major__ 14
+#define __clang_minor__ 0
+#define __clang_patchlevel__ 3
+#define __clang_version__ "14.0.3 (clang-1403.0.22.14.1)"
 #define __clang_wide_literal_encoding__ "UTF-32"
 #define __cplusplus 202002L
 #define __cpp_aggregate_bases 201603L
@@ -426,6 +440,7 @@
 #define __cpp_guaranteed_copy_elision 201606L
 #define __cpp_hex_float 201603L
 #define __cpp_if_constexpr 201606L
+#define __cpp_impl_coroutine 201902L
 #define __cpp_impl_destroying_delete 201806L
 #define __cpp_impl_three_way_comparison 201907L
 #define __cpp_inheriting_constructors 201511L
