@@ -15,6 +15,8 @@
 #include "utils/scenefilereader.h"
 #include "utils/sceneparser.h"
 #include "shapes/shape.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 // ================== Project 5: Lights, Camera
 
@@ -77,14 +79,136 @@ void Realtime::initializeGL() {
 
     m_defaultFBO = 2;
 
-    m_shader = ShaderLoader::createShaderProgram(":/resources/shaders/default.vert", ":/resources/shaders/default.frag");
+    setupShaders();
 
-    m_texture_shader = ShaderLoader::createShaderProgram(":/resources/shaders/effects.vert", ":/resources/shaders/effects.frag");
+    setupSkyBox();
+    setupSkyBoxGeometry();
 
     setupFullscreenQuad();
     makeFBO();
 
 }
+
+void Realtime::setupShaders(){
+    m_shader = ShaderLoader::createShaderProgram(":/resources/shaders/default.vert", ":/resources/shaders/default.frag");
+
+    m_texture_shader = ShaderLoader::createShaderProgram(":/resources/shaders/effects.vert", ":/resources/shaders/effects.frag");
+
+    m_skybox_shader = ShaderLoader::createShaderProgram(":/resources/shaders/skybox.vert", ":/resources/shaders/skybox.frag");
+
+
+}
+
+void Realtime::setupSkyBox(){
+    glGenTextures(1, &m_skyboxTexture);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxTexture);
+
+    //load each texture face
+    std::vector<std::string> faces = {
+        "./resources/images/right.jpg", //Positive X
+        "./resources/images/left.jpg",//Negative X
+        "./resources/images/top.jpg", //Positive Y
+        "./resources/images/bottom.jpg", //Negative Y
+        "./resources/images/front.jpg",//Positive Z
+        "./resources/images/back.jpg" //Negative Z
+    };
+
+    int width, height, nrChannels;
+    for (unsigned int i = 0; i < faces.size(); i++)
+    {
+        unsigned char *data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+        if (data)
+        {
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+                         0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
+                         );
+            stbi_image_free(data);
+        }
+        else
+        {
+            std::cout << "Cubemap tex failed to load at path: " << faces[i] << std::endl;
+            std::cout << "Reason: " << stbi_failure_reason() << std::endl;
+            stbi_image_free(data);
+        }
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
+}
+
+void Realtime::setupSkyBoxGeometry() {
+    float skyboxVertices[] = {
+        //back face
+        -1.0f,  1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+
+        //front face
+        -1.0f, -1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+        1.0f,  1.0f,  1.0f,
+        1.0f,  1.0f,  1.0f,
+        1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+
+        //left face
+        -1.0f,  1.0f,  1.0f,
+        -1.0f, -1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+
+
+        //right face
+        1.0f,  1.0f, -1.0f,
+        1.0f, -1.0f,  1.0f,
+        1.0f,  1.0f,  1.0f,
+        1.0f, -1.0f,  1.0f,
+        1.0f,  1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+
+
+        //top face
+        -1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f, -1.0f,
+        1.0f,  1.0f, -1.0f,
+        1.0f,  1.0f, -1.0f,
+        1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+
+        //bottom face
+        -1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+        1.0f, -1.0f,  1.0f,
+        1.0f, -1.0f,  1.0f,
+        1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f
+    };
+
+    glGenVertexArrays(1, &m_skyboxVAO);
+    glGenBuffers(1, &m_skyboxVBO);
+
+    glBindVertexArray(m_skyboxVAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_skyboxVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+}
+
 
 void Realtime::setupFullscreenQuad() {
     std::vector<GLfloat> fullscreen_quad_data = {
@@ -98,7 +222,7 @@ void Realtime::setupFullscreenQuad() {
         1.f, -1.f, 0.0f,         1.0f, 0.0f // Bottom RIght
     };
 
-    // Generate and bind a VBO and a VAO for a fullscreen quad
+    //generate and bind a VBO and a VAO for a fullscreen quad
     glGenBuffers(1, &m_fullscreen_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_fullscreen_vbo);
     glBufferData(GL_ARRAY_BUFFER, fullscreen_quad_data.size()*sizeof(GLfloat), fullscreen_quad_data.data(), GL_STATIC_DRAW);
@@ -175,15 +299,16 @@ void Realtime::paintGL() {
     GLint projMatrixLocation = glGetUniformLocation(m_shader, "projectionMatrix");
     glUniformMatrix4fv(projMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_proj));
 
+    renderSkybox();
+    glEnable(GL_DEPTH_TEST);
+
+    glUseProgram(m_shader);
+
     GLint kaLocation = glGetUniformLocation(m_shader, "k_a");
     glUniform1f(kaLocation, m_ka);
 
     GLint kdLocation = glGetUniformLocation(m_shader, "k_d");
     glUniform1f(kdLocation, m_kd);
-
-
-    // GLint lightPosLocation = glGetUniformLocation(m_shader, "lightPos");
-    // glUniform4fv(lightPosLocation, 1, glm::value_ptr(m_lightPos));
 
     glm::vec4 cameraPos = glm::inverse(m_view) * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -247,7 +372,6 @@ void Realtime::paintGL() {
     //loop through all shapes
     for (const auto& shapeData : m_shapeDataList) {
 
-        //UPDATE pick it out for shape once
         glBindVertexArray(shapeData.vao);
         glBindBuffer(GL_ARRAY_BUFFER, shapeData.vbo);
 
@@ -278,7 +402,32 @@ void Realtime::paintGL() {
 
     paintTexture(m_fbo_texture);
 
-    //glUseProgram(0);
+    // //glUseProgram(0);
+    std::cout << glGetError() << std::endl;
+}
+
+void Realtime::renderSkybox() {
+
+    glDepthFunc(GL_LEQUAL);
+    glDepthMask(GL_FALSE);
+
+    glUseProgram(m_skybox_shader);
+
+    glm::mat4 view = glm::mat4(glm::mat3(m_view));
+
+    glUniformMatrix4fv(glGetUniformLocation(m_skybox_shader, "view"), 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(glGetUniformLocation(m_skybox_shader, "projection"), 1, GL_FALSE, glm::value_ptr(m_proj));
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxTexture);
+    glUniform1i(glGetUniformLocation(m_skybox_shader, "skybox"), 0);  // Set texture uniform
+
+    glBindVertexArray(m_skyboxVAO);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBindVertexArray(0);
+
+    glDepthFunc(GL_LESS);
+    glDepthMask(GL_TRUE);
 }
 
 void Realtime::paintTexture(GLuint texture){
@@ -339,40 +488,6 @@ void Realtime::setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const 
 
     ShapeData shapeData;
     shapeData.modelMatrix = ctm;
-
-    //NOTE: I tried my best to incorporate your feedback from project 5 about only rendering the VAO and VBO once per shape type but it proceeded to crash my computer 5 times and took ridiculously long to run. If you have any feedback about my trial implementation I would love to know, thanks!
-    // //check if VBO for this shape type already exists
-    // if(shapeVBOs.find(shapeType)== shapeVBOs.end()){
-    //     glGenBuffers(1, &shapeData.vbo);
-    //     glBindBuffer(GL_ARRAY_BUFFER, shapeData.vbo);
-
-    //     std::vector<float> data = shape.generateShape();
-    //     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
-
-    //     shapeData.vertexCount = data.size() / 6;
-    //     shapeVBOs[shapeType] = shapeData.vbo;
-    // }else{
-    //     shapeData.vbo = shapeVBOs[shapeType]; //reuse VBO
-    // }
-
-    // //check if VAO for this shape type already exists
-    // if(shapeVAOs.find(shapeType)== shapeVAOs.end()){
-    //     glGenVertexArrays(1, &shapeData.vao);
-    //     glBindVertexArray(shapeData.vao);
-
-    //     //position attribute
-    //     glEnableVertexAttribArray(0);
-    //     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(0));
-
-    //     //normal attribute
-    //     glEnableVertexAttribArray(1);
-    //     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
-
-    //     shapeVAOs[shapeType] = shapeData.vao;
-
-    // }else{
-    //     shapeData.vao = shapeVAOs[shapeType]; //reuse VAO
-    // }
 
     glGenBuffers(1, &shapeData.vbo);
     glBindBuffer(GL_ARRAY_BUFFER, shapeData.vbo);

@@ -86,8 +86,19 @@ private:
     std::unordered_map<PrimitiveType, GLuint> shapeVAOs;
     std::unordered_map<PrimitiveType, GLuint> shapeVBOs;
 
+
     void setupShapes();
     void setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const glm::mat4& ctm, SceneMaterial material);
+    void setupShaders();
+
+    //skybox:
+    GLuint m_skyboxTexture;
+    void setupSkyBox();
+    GLuint m_skybox_shader;
+    GLuint m_skyboxVAO;
+    GLuint m_skyboxVBO;
+    void setupSkyBoxGeometry();
+    void renderSkybox();
 
     //Proj6:
 

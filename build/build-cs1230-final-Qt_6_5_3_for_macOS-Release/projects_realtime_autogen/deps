@@ -245,6 +245,7 @@ projects_realtime_autogen/timestamp: \
 	/Users/natalie/Desktop/cs1230/projects/cs1230-final/src/shapes/shape.h \
 	/Users/natalie/Desktop/cs1230/projects/cs1230-final/src/shapes/sphere.cpp \
 	/Users/natalie/Desktop/cs1230/projects/cs1230-final/src/shapes/sphere.h \
+	/Users/natalie/Desktop/cs1230/projects/cs1230-final/src/stb_image.h \
 	/Users/natalie/Desktop/cs1230/projects/cs1230-final/src/utils/aspectratiowidget/aspectratiowidget.hpp \
 	/Users/natalie/Desktop/cs1230/projects/cs1230-final/src/utils/objparser.cpp \
 	/Users/natalie/Desktop/cs1230/projects/cs1230-final/src/utils/objparser.h \

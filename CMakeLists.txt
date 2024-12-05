@@ -48,6 +48,9 @@ add_executable(${PROJECT_NAME}
     src/shapes/sphere.h src/shapes/sphere.cpp
     src/shapes/shape.h
     src/utils/objparser.h src/utils/objparser.cpp
+    src/stb_image.h
+    # resources/shaders/skybox.frag
+    # resources/shaders/skybox.vert
     # resources/shaders/effects.frag
     # resources/shaders/effects.vert
 )
@@ -78,6 +81,15 @@ qt6_add_resources(${PROJECT_NAME} "Resources"
         resources/shaders/default.vert
         resources/shaders/effects.frag
         resources/shaders/effects.vert
+        resources/shaders/skybox.frag
+        resources/shaders/skybox.vert
+
+        resources/images/back.jpg
+        resources/images/bottom.jpg
+        resources/images/front.jpg
+        resources/images/left.jpg
+        resources/images/right.jpg
+        resources/images/top.jpg
 )
 
 # GLEW: this provides support for Windows (including 64-bit)
