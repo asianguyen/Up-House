@@ -14,6 +14,7 @@
 #include "camera/camera.h"
 #include "utils/scenefilereader.h"
 #include "utils/sceneparser.h"
+#include <chrono>
 #include "shapes/shape.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -289,6 +290,7 @@ void Realtime::makeFBO(){
 void Realtime::paintGL() {
     glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
     glViewport(0, 0, width() * m_devicePixelRatio, height() * m_devicePixelRatio);
+    previousTime = std::chrono::high_resolution_clock::now();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(m_shader);
@@ -401,6 +403,13 @@ void Realtime::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     paintTexture(m_fbo_texture);
+
+    auto currentTime = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<float> deltaTime = currentTime - previousTime;
+    previousTime = currentTime;
+
+
+    moveCameraBezier(deltaTime.count());
 
     // //glUseProgram(0);
     std::cout << glGetError() << std::endl;
@@ -597,7 +606,49 @@ void Realtime::settingsChanged() {
 }
 
 // ================== Project 6: Action!
+glm::vec3 Realtime::bezierTangent(float t, const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3){
+    float u = 1 - t;
+    return 3 * u * u * (p1 - p0) + 6 * u * t * (p2 - p1) + 3 * t * t * (p3 - p2);
+}
 
+glm::vec3 Realtime::bezierPosition(float t, const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3){
+    float u = 1 - t;
+    return u * u * u * p0 + 3 * u * u * t * p1 + 3 * u * t * t * p2 + t * t * t * p3;
+}
+
+void Realtime::moveCameraBezier(float deltaTime){
+
+    m_t += 10.0f*deltaTime * m_cameraSpeed;
+    if (m_t> 1.0f){
+        m_t = 1.0f;
+    }
+
+    glm::vec3 p0(0.0f, 0.0f, 0.0f);
+    glm::vec3 p1(2.0f, 5.0f, 0.0f);
+    glm::vec3 p2(4.0f, 5.0f, 0.0f);
+    glm::vec3 p3(6.0f,0.0f,0.0f);
+
+    glm::vec3 position = bezierPosition(m_t,p0, p1, p2, p3);
+    glm::vec3 forward = glm::normalize(bezierTangent(m_t, p0, p1, p2, p3));
+    glm::vec3 up(0.0f, 1.0f, 0.0f);
+
+    glm::vec3 right = glm::normalize(glm::cross(up,forward));
+    up = glm::cross(forward,right);
+
+    //m_view = glm::lookAt(position, position + forward, up);
+    m_cameraData.pos = glm::vec4(position,0.f);
+    m_cameraData.look = m_cameraData.pos + glm::vec4(forward,0.f);
+
+    // m_view = m_camera.getViewMatrix(
+        // glm::vec3(m_cameraData.pos),
+        // glm::vec3(m_cameraData.look+m_cameraData.pos),
+        // glm::vec3(m_cameraData.up)
+    //     );
+    m_view = glm::lookAt(glm::vec3(m_cameraData.pos),
+                         glm::vec3(m_cameraData.look),
+                         glm::vec3(m_cameraData.up));
+
+}
 
 
 void Realtime::keyPressEvent(QKeyEvent *event) {
