@@ -47,6 +47,7 @@ add_executable(${PROJECT_NAME}
     src/shapes/cylinder.h src/shapes/cylinder.cpp
     src/shapes/sphere.h src/shapes/sphere.cpp
     src/shapes/shape.h
+    src/utils/objparser.h src/utils/objparser.cpp
     # resources/shaders/effects.frag
     # resources/shaders/effects.vert
 )
