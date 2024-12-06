@@ -5,7 +5,7 @@ layout(location = 1) in vec3 normal;
 layout(location = 2) in vec3 ka;
 layout(location = 3) in vec3 kd;
 layout(location = 4) in vec3 ks;
-//layout(location = 5) in float shininess;
+// layout(location = 5) in float shininess;
 
 out vec3 worldPosition;
 out vec3 worldNormal;

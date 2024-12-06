@@ -90,6 +90,7 @@ private:
     void setupShapes();
     void setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const glm::mat4& ctm, SceneMaterial material);
     void setupShaders();
+    void setUpMesh(const glm::mat4& ctm, SceneMaterial mat);
 
     //skybox:
     GLuint m_skyboxTexture;
@@ -109,6 +110,10 @@ private:
     GLuint m_fbo_renderbuffer;
     GLuint m_fullscreen_vbo;
     GLuint m_fullscreen_vao;
+    std::vector<float> mesh_data;
+    GLuint mesh_vao;
+    GLuint mesh_vbo;
+    int mesh_vertex_count;
 
     void paintTexture(GLuint texture);
     void setupFullscreenQuad();

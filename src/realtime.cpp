@@ -50,6 +50,9 @@ void Realtime::finish() {
     }
     m_shapeDataList.clear();
 
+    glDeleteBuffers(1, &mesh_vbo);
+    glDeleteVertexArrays(1, &mesh_vao);
+
     this->doneCurrent();
 }
 
@@ -370,23 +373,23 @@ void Realtime::paintGL() {
     GLint lightCountLoc = glGetUniformLocation(m_shader, "lightCount");
     glUniform1i(lightCountLoc, renderData.lights.size());
 
-    //loop through all shapes
+   // loop through all shapes
     for (const auto& shapeData : m_shapeDataList) {
 
         glBindVertexArray(shapeData.vao);
-        glBindBuffer(GL_ARRAY_BUFFER, shapeData.vbo);
+        //glBindBuffer(GL_ARRAY_BUFFER, mesh_vbo);
 
         GLint modelMatrixLocation = glGetUniformLocation(m_shader, "modelMatrix");
         glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, glm::value_ptr(shapeData.modelMatrix));
 
-        GLint ambientColorLoc = glGetUniformLocation(m_shader, "materialAmbient");
-        glUniform4fv(ambientColorLoc, 1, glm::value_ptr(shapeData.material.cAmbient));
+        // GLint ambientColorLoc = glGetUniformLocation(m_shader, "materialAmbient");
+        // glUniform4fv(ambientColorLoc, 1, glm::value_ptr(shapeData.material.cAmbient));
 
-        GLint diffuseColorLoc = glGetUniformLocation(m_shader, "materialDiffuse");
-        glUniform4fv(diffuseColorLoc, 1, glm::value_ptr(shapeData.material.cDiffuse));
+        // GLint diffuseColorLoc = glGetUniformLocation(m_shader, "materialDiffuse");
+        // glUniform4fv(diffuseColorLoc, 1, glm::value_ptr(shapeData.material.cDiffuse));
 
-        GLint specularColorLoc = glGetUniformLocation(m_shader, "materialSpecular");
-        glUniform4fv(specularColorLoc, 1, glm::value_ptr(shapeData.material.cSpecular));
+        // GLint specularColorLoc = glGetUniformLocation(m_shader, "materialSpecular");
+        // glUniform4fv(specularColorLoc, 1, glm::value_ptr(shapeData.material.cSpecular));
 
         GLint shininessLocation = glGetUniformLocation(m_shader, "shininess");
         glUniform1f(shininessLocation, shapeData.material.shininess);
@@ -476,46 +479,51 @@ void Realtime::setupShapes() {
             shape = new Sphere();
             break;
         case PrimitiveType::PRIMITIVE_MESH:
+            setUpMesh(primitive.ctm, primitive.primitive.material);
             break;
         }
 
-        shape->updateParams(settings.shapeParameter1, settings.shapeParameter2);
-        setupVAOVBOForShape(*shape, primitive.primitive.type, primitive.ctm, primitive.primitive.material);
+        //shape->updateParams(settings.shapeParameter1, settings.shapeParameter2);
+        //setupVAOVBOForShape(*shape, primitive.primitive.type, primitive.ctm, primitive.primitive.material);
 
     }
 }
 
-void Realtime::setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const glm::mat4& ctm, SceneMaterial material) {
+void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
 
-    ShapeData shapeData;
-    shapeData.modelMatrix = ctm;
+    ShapeData shapedata;
+    shapedata.modelMatrix = ctm;
 
-    glGenBuffers(1, &shapeData.vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, shapeData.vbo);
+
+    glGenBuffers(1, &mesh_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, mesh_vbo);
+
+    shapedata.vbo = mesh_vbo;
 
     std::vector<float> data;
-    data.clear();
-
     objparser::loadOBJ("/Users/asianguyen/Desktop/CS1230/house/untitled.obj", data);
 
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
-    shapeData.vertexCount = data.size() / 6;
+    mesh_vertex_count = data.size() / 15;
+    shapedata.vertexCount = mesh_vertex_count;
 
+    shapedata.material = mat;
 
-    shapeData.material = material;
+    glGenVertexArrays(1, &mesh_vao);
+    glBindVertexArray(mesh_vao);
 
-    glGenVertexArrays(1, &shapeData.vao);
-    glBindVertexArray(shapeData.vao);
+    shapedata.vao = mesh_vao;
+
 
     //position attribute
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 15 * sizeof(GLfloat), reinterpret_cast<void*>(0));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,15 * sizeof(GLfloat), reinterpret_cast<void*>(0));
 
     //normal attribute
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 15 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
 
-    //ka attribute
+    // ka attribute
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 15 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
 
@@ -527,9 +535,42 @@ void Realtime::setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const 
     glEnableVertexAttribArray(4);
     glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 15 * sizeof(GLfloat), reinterpret_cast<void*>(12 * sizeof(GLfloat)));
 
-    //specular attribute
-    //glEnableVertexAttribArray(5);
-    //glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(15 * sizeof(GLfloat)));
+    // specular attribute
+    // glEnableVertexAttribArray(5);
+    // glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(15 * sizeof(GLfloat)));
+
+    m_shapeDataList.push_back(shapedata);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+}
+
+void Realtime::setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const glm::mat4& ctm, SceneMaterial material) {
+
+    ShapeData shapeData;
+    shapeData.modelMatrix = ctm;
+
+    glGenBuffers(1, &shapeData.vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, shapeData.vbo);
+
+    std::vector<float> data = shape.generateShape();
+    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
+    shapeData.vertexCount = data.size() / 6;
+
+
+    shapeData.material = material;
+
+    glGenVertexArrays(1, &shapeData.vao);
+    glBindVertexArray(shapeData.vao);
+
+    //position attribute
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(0));
+
+    //normal attribute
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
 
     m_shapeDataList.push_back(shapeData);
 
