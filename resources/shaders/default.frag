@@ -2,6 +2,10 @@
 
 in vec3 worldPosition;
 in vec3 worldNormal;
+in vec3 mat_ka;
+in vec3 mat_kd;
+in vec3 mat_ks;
+//in float mat_shininess;
 out vec4 fragColor;
 
 uniform int lightCount;
@@ -35,12 +39,12 @@ vec4 calculatePhong(vec3 L, vec4 lightColor, float attenuation) {
 
     //diffuse
     float diffuseIntensity = max(dot(N, lightDir), 0.0);
-    vec4 diffuse = k_d * diffuseIntensity * materialDiffuse * lightColor;
+    vec4 diffuse = k_d * diffuseIntensity * vec4(mat_kd, 1) * lightColor;
 
     //specular
     vec3 reflectedLight = reflect(-lightDir, N);
     float specIntensity = pow(max(dot(reflectedLight, V), 0.0), max(shininess, 0.001));
-    vec4 specular = k_s * specIntensity * materialSpecular * lightColor;
+    vec4 specular = k_s * specIntensity * vec4(mat_ks, 1) * lightColor;
 
     return (diffuse + specular) * attenuation;
 }
@@ -57,7 +61,7 @@ void main() {
     //output color to the absolute value of your world-space normals, for debugging
     //fragColor = vec4(abs(worldNormal), 1.0);
 
-    vec4 finalColor = k_a * materialAmbient;
+    vec4 finalColor = k_a * vec4(mat_ka, 1);
 
     for (int i =0; i < lightCount; i++){
         vec4 lightColor = lightColors[i];
@@ -115,4 +119,5 @@ void main() {
     }
 
     fragColor = finalColor;
+    fragColor = vec4(mat_kd, 1) + k_a * vec4(mat_ka, 1);
 }

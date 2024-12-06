@@ -1,7 +1,0 @@
-<RCC>
-  <qresource prefix="/">
-    <file alias="resources/shaders/default.frag">/Users/sophialim/Desktop/cs1230/projects-realtime-sophlim/resources/shaders/default.frag</file>
-    <file alias="resources/shaders/default.vert">/Users/sophialim/Desktop/cs1230/projects-realtime-sophlim/resources/shaders/default.vert</file>
-  </qresource>
-</RCC>
-

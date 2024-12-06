@@ -1,0 +1,17 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="resources/shaders/default.frag">/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/shaders/default.frag</file>
+    <file alias="resources/shaders/default.vert">/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/shaders/default.vert</file>
+    <file alias="resources/shaders/effects.frag">/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/shaders/effects.frag</file>
+    <file alias="resources/shaders/effects.vert">/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/shaders/effects.vert</file>
+    <file alias="resources/shaders/skybox.frag">/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/shaders/skybox.frag</file>
+    <file alias="resources/shaders/skybox.vert">/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/shaders/skybox.vert</file>
+    <file alias="resources/images/back.jpg">/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/back.jpg</file>
+    <file alias="resources/images/bottom.jpg">/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/bottom.jpg</file>
+    <file alias="resources/images/front.jpg">/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/front.jpg</file>
+    <file alias="resources/images/left.jpg">/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/left.jpg</file>
+    <file alias="resources/images/right.jpg">/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/right.jpg</file>
+    <file alias="resources/images/top.jpg">/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/top.jpg</file>
+  </qresource>
+</RCC>
+
