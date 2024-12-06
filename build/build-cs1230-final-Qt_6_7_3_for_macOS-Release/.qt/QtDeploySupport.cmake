@@ -33,8 +33,8 @@ endif()
 # These are internal implementation details. They may be removed at any time.
 set(__QT_DEPLOY_SYSTEM_NAME "Darwin")
 set(__QT_DEPLOY_IS_SHARED_LIBS_BUILD "ON")
-set(__QT_DEPLOY_TOOL "/Users/asianguyen/Qt/6.7.3/macos/bin/macdeployqt")
-set(__QT_DEPLOY_IMPL_DIR "/Users/asianguyen/Desktop/CS1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Release/.qt")
+set(__QT_DEPLOY_TOOL "/Users/sophialim/Qt/6.7.3/macos/bin/macdeployqt")
+set(__QT_DEPLOY_IMPL_DIR "/Users/sophialim/Desktop/cs1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Release/.qt")
 set(__QT_DEPLOY_VERBOSE "")
 set(__QT_CMAKE_EXPORT_NAMESPACE "Qt6")
 set(__QT_DEPLOY_GENERATOR_IS_MULTI_CONFIG "0")
@@ -42,13 +42,13 @@ set(__QT_DEPLOY_ACTIVE_CONFIG "Release")
 set(__QT_NO_CREATE_VERSIONLESS_FUNCTIONS "")
 set(__QT_DEFAULT_MAJOR_VERSION "6")
 set(__QT_DEPLOY_QT_ADDITIONAL_PACKAGES_PREFIX_PATH "")
-set(__QT_DEPLOY_QT_INSTALL_PREFIX "/Users/asianguyen/Qt/6.7.3/macos")
+set(__QT_DEPLOY_QT_INSTALL_PREFIX "/Users/sophialim/Qt/6.7.3/macos")
 set(__QT_DEPLOY_QT_INSTALL_BINS "bin")
 set(__QT_DEPLOY_QT_INSTALL_DATA ".")
 set(__QT_DEPLOY_QT_INSTALL_LIBEXECS "libexec")
 set(__QT_DEPLOY_QT_INSTALL_PLUGINS "plugins")
 set(__QT_DEPLOY_QT_INSTALL_TRANSLATIONS "translations")
-set(__QT_DEPLOY_TARGET_QT_PATHS_PATH "/Users/asianguyen/Qt/6.7.3/macos/bin/qtpaths6")
+set(__QT_DEPLOY_TARGET_QT_PATHS_PATH "/Users/sophialim/Qt/6.7.3/macos/bin/qtpaths6")
 set(__QT_DEPLOY_PLUGINS "")
 set(__QT_DEPLOY_MUST_ADJUST_PLUGINS_RPATH "")
 set(__QT_DEPLOY_USE_PATCHELF "")
@@ -58,8 +58,8 @@ set(__QT_DEPLOY_QT_DEBUG_POSTFIX "")
 
 # Define the CMake commands to be made available during deployment.
 set(__qt_deploy_support_files
-    "/Users/asianguyen/Desktop/CS1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Release/.qt/QtDeployTargets.cmake"
-    "/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6Core/Qt6CoreDeploySupport.cmake"
+    "/Users/sophialim/Desktop/cs1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Release/.qt/QtDeployTargets.cmake"
+    "/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6Core/Qt6CoreDeploySupport.cmake"
 )
 foreach(__qt_deploy_support_file IN LISTS __qt_deploy_support_files)
     include("${__qt_deploy_support_file}")

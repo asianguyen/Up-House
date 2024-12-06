@@ -54,7 +54,7 @@ rule CXX_COMPILER__StaticGLEW_unscanned_Release
 # Rule for linking CXX static library.
 
 rule CXX_STATIC_LIBRARY_LINKER__StaticGLEW_Release
-  command = $PRE_LINK && /Users/asianguyen/Qt/Tools/CMake/CMake.app/Contents/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/ar qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && /Users/asianguyen/Qt/Tools/CMake/CMake.app/Contents/bin/cmake -E touch $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && /Users/sophialim/Qt/Tools/CMake/CMake.app/Contents/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/ar qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && /Users/sophialim/Qt/Tools/CMake/CMake.app/Contents/bin/cmake -E touch $TARGET_FILE && $POST_BUILD
   description = Linking CXX static library $TARGET_FILE
   restat = $RESTAT
 
@@ -71,7 +71,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /Users/asianguyen/Qt/Tools/CMake/CMake.app/Contents/bin/cmake --regenerate-during-build -S/Users/asianguyen/Desktop/CS1230/cs1230-final -B/Users/asianguyen/Desktop/CS1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Release
+  command = /Users/sophialim/Qt/Tools/CMake/CMake.app/Contents/bin/cmake --regenerate-during-build -S/Users/sophialim/Desktop/cs1230/cs1230-final -B/Users/sophialim/Desktop/cs1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Release
   description = Re-running CMake...
   generator = 1
 
@@ -80,7 +80,7 @@ rule RERUN_CMAKE
 # Rule for cleaning additional files.
 
 rule CLEAN_ADDITIONAL
-  command = /Users/asianguyen/Qt/Tools/CMake/CMake.app/Contents/bin/cmake -DCONFIG=$CONFIG -P CMakeFiles/clean_additional.cmake
+  command = /Users/sophialim/Qt/Tools/CMake/CMake.app/Contents/bin/cmake -DCONFIG=$CONFIG -P CMakeFiles/clean_additional.cmake
   description = Cleaning additional files...
 
 
@@ -88,7 +88,7 @@ rule CLEAN_ADDITIONAL
 # Rule for cleaning all built files.
 
 rule CLEAN
-  command = /Users/asianguyen/Qt/Tools/Ninja/ninja $FILE_ARG -t clean $TARGETS
+  command = /Users/sophialim/Qt/Tools/Ninja/ninja $FILE_ARG -t clean $TARGETS
   description = Cleaning all built files...
 
 
@@ -96,6 +96,6 @@ rule CLEAN
 # Rule for printing all primary targets available.
 
 rule HELP
-  command = /Users/asianguyen/Qt/Tools/Ninja/ninja -t targets
+  command = /Users/sophialim/Qt/Tools/Ninja/ninja -t targets
   description = All primary targets available:
 
