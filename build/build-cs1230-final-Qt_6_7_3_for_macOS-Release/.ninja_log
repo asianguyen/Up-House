@@ -99,3 +99,10 @@
 11	38	1733518934259487417	/Users/asianguyen/Desktop/CS1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Release/.qt/rcc/qrc_Resources.cpp	4eb60130edbc1880
 38	404	1733518934260356272	CMakeFiles/projects_realtime.dir/build/build-cs1230-final-Qt_6_7_3_for_macOS-Release/.qt/rcc/qrc_Resources.cpp.o	af76eddc9774d637
 404	574	1733518934626081072	projects_realtime	7d7df803f2bf8a4e
+11	51	1733521228937323629	projects_realtime_autogen/timestamp	83963f071b57783c
+11	51	1733521228937323629	projects_realtime_autogen/mocs_compilation.cpp	83963f071b57783c
+11	51	1733521228937323629	/Users/asianguyen/Desktop/CS1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Release/projects_realtime_autogen/timestamp	83963f071b57783c
+11	51	1733521228937323629	/Users/asianguyen/Desktop/CS1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Release/projects_realtime_autogen/mocs_compilation.cpp	83963f071b57783c
+51	1090	1733521228977240850	CMakeFiles/projects_realtime.dir/src/utils/objparser.cpp.o	dee993d4b3a58b17
+51	2567	1733521228977008978	CMakeFiles/projects_realtime.dir/src/realtime.cpp.o	755394013e0fb756
+2567	2743	1733521231492689419	projects_realtime	7d7df803f2bf8a4e

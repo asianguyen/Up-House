@@ -501,7 +501,7 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
     shapedata.vbo = mesh_vbo;
 
     std::vector<float> data;
-    objparser::loadOBJ("/Users/asianguyen/Desktop/CS1230/house/untitled.obj", data);
+    objparser::loadOBJ("/Users/asianguyen/Desktop/CS1230/cs1230-final/house/untitled.obj", data);
 
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
     mesh_vertex_count = data.size() / 15;
