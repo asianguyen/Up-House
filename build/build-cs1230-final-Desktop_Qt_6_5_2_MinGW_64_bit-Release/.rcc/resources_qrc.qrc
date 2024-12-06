@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="resources/shaders/default.frag">C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/shaders/default.frag</file>
+    <file alias="resources/shaders/default.vert">C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/shaders/default.vert</file>
+    <file alias="resources/shaders/effects.frag">C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/shaders/effects.frag</file>
+    <file alias="resources/shaders/effects.vert">C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/shaders/effects.vert</file>
+  </qresource>
+</RCC>
+

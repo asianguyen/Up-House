@@ -18,6 +18,7 @@
 #include "shapes/shape.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include "utils/objparser.h"
 
 // ================== Project 5: Lights, Camera
 
@@ -501,7 +502,11 @@ void Realtime::setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const 
     glGenBuffers(1, &shapeData.vbo);
     glBindBuffer(GL_ARRAY_BUFFER, shapeData.vbo);
 
-    std::vector<float> data = shape.generateShape();
+    std::vector<float> data;
+    data.clear();
+
+    objparser::loadOBJ("/Users/asianguyen/Desktop/CS1230/house/untitled.obj", data);
+
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
     shapeData.vertexCount = data.size() / 6;
 
@@ -513,11 +518,27 @@ void Realtime::setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const 
 
     //position attribute
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(0));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 15 * sizeof(GLfloat), reinterpret_cast<void*>(0));
 
     //normal attribute
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 15 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
+
+    //ka attribute
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 15 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
+
+    //kd attribute
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 15 * sizeof(GLfloat), reinterpret_cast<void*>(9 * sizeof(GLfloat)));
+
+    //ks attribute
+    glEnableVertexAttribArray(4);
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 15 * sizeof(GLfloat), reinterpret_cast<void*>(12 * sizeof(GLfloat)));
+
+    //specular attribute
+    //glEnableVertexAttribArray(5);
+    //glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(15 * sizeof(GLfloat)));
 
     m_shapeDataList.push_back(shapeData);
 
