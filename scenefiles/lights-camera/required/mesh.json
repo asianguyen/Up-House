@@ -1,15 +1,15 @@
 {
   "name": "root",
   "globalData": {
-    "ambientCoeff": 0.4,
-    "diffuseCoeff": 0.2,
-    "specularCoeff": 0.5,
+    "ambientCoeff": 0.6,
+    "diffuseCoeff": 0.45,
+    "specularCoeff": 0.25,
     "transparentCoeff": 0
   },
   "cameraData": {
     "position": [0, 15.0, 30.0],
     "up": [0.0, 1.0, 0.0],
-    "heightAngle": 30.0,
+    "heightAngle": 60.0,
     "focus": [0.0, 0.0, 0.0]
   },
   "groups": [
@@ -18,7 +18,7 @@
         {
           "type": "directional",
           "color": [1.0, 1.0, 1.0],
-          "direction": [-3.0, -2.0, -1.0]
+          "direction": [0, -1.0, 0.0]
         }
       ]
     },

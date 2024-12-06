@@ -61,7 +61,7 @@ void main() {
     //output color to the absolute value of your world-space normals, for debugging
     //fragColor = vec4(abs(worldNormal), 1.0);
 
-    vec4 finalColor = k_a * vec4(mat_ka, 1);
+    vec4 finalColor = k_d * vec4(mat_kd, 1.0);
 
     for (int i =0; i < lightCount; i++){
         vec4 lightColor = lightColors[i];
@@ -119,5 +119,8 @@ void main() {
     }
 
     fragColor = finalColor;
-    fragColor = vec4(mat_kd, 1) + k_a * vec4(mat_ka, 1);
+    // fragColor += k_a * vec4(mat_ka, 1.0);
+
+
+
 }
