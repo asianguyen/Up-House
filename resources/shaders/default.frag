@@ -39,7 +39,7 @@ float calculateAttenuation(vec3 attenuation, float distance) {
 
 vec4 calculatePhong(vec3 L, vec4 lightColor, float attenuation) {
      vec3 N;
-    if(mat_kd == vec3(0.244469,0.137024,0.087113)||mat_kd == vec3(0.376260,0.205079,0.130137)){
+    if(mat_kd == vec3(0.061246,0.038204,0.027321)){
         vec3 normalMap = texture(normalMap, TextureCoords).rgb * 2.0 - 1.0;
         N = normalize(TBN * normalMap);
     } else{

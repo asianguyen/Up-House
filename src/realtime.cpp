@@ -108,7 +108,7 @@ void Realtime::loadNormalMap() {
     glBindTexture(GL_TEXTURE_2D, m_normalMap);
 
     int width, height, nrChannels;
-    std::string normalFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/roof3.jpg";
+    std::string normalFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/roof2.jpg";
     unsigned char *data = stbi_load(normalFile.c_str(), &width, &height, &nrChannels, 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
