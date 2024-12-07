@@ -661,12 +661,12 @@
  mdp:/Users/sophialim/Qt/6.7.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qtwidgetsexports.h
  mdp:/Users/sophialim/Qt/6.7.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qtwidgetsglobal.h
  mdp:/Users/sophialim/Qt/6.7.3/macos/lib/QtWidgets.framework/Versions/A/Headers/qwidget.h
-/Users/sophialim/Desktop/cs1230/cs1230-final/src/utils/objparser.h
-/Users/sophialim/Desktop/cs1230/cs1230-final/src/shapes/cylinder.cpp
-/Users/sophialim/Desktop/cs1230/cs1230-final/src/camera/camera.h
-/Users/sophialim/Desktop/cs1230/cs1230-final/src/settings.h
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/shapes/sphere.cpp
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/shapes/cube.h
+/Users/sophialim/Desktop/cs1230/cs1230-final/src/settings.h
+/Users/sophialim/Desktop/cs1230/cs1230-final/src/camera/camera.h
+/Users/sophialim/Desktop/cs1230/cs1230-final/src/utils/objparser.h
+/Users/sophialim/Desktop/cs1230/cs1230-final/src/shapes/cylinder.cpp
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/utils/scenefilereader.h
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/shapes/cylinder.h
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/mainwindow.cpp
@@ -674,8 +674,8 @@
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/main.cpp
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/utils/scenedata.h
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/shapes/sphere.h
-/Users/sophialim/Desktop/cs1230/cs1230-final/src/camera/camera.cpp
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/settings.cpp
+/Users/sophialim/Desktop/cs1230/cs1230-final/src/camera/camera.cpp
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/shapes/cube.cpp
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/utils/sceneparser.h
 /Users/sophialim/Desktop/cs1230/cs1230-final/src/utils/shaderloader.h
