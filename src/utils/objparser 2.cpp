@@ -1,6 +1,5 @@
 #include "objparser.h"
 #include "glm/ext/vector_float3.hpp"
-#include <glm/glm.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -86,10 +85,8 @@ std::unordered_map<std::string, Material> parseMTL(const std::string& filepath) 
 }
 
 
-
 bool objparser::loadOBJ(const char * path, std::vector<float> & out_vertices){
-
-    std::unordered_map<std::string, Material> materials = parseMTL("/Users/asianguyen/Desktop/CS1230/cs1230-final/house/untitled.mtl");
+    std::unordered_map<std::string, Material> materials = parseMTL("/Users/asianguyen/Desktop/CS1230/cs1230-final/house/final.mtl");
 
     std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
     std::vector<std::string> materialNames;
@@ -98,18 +95,23 @@ bool objparser::loadOBJ(const char * path, std::vector<float> & out_vertices){
     std::vector<glm::vec3> temp_normals;
     std::string activeMaterial;
 
+
     FILE * file = fopen(path, "r");
     if( file == NULL ){
         printf("Impossible to open the file !\n");
         return false;
     }
 
+
     while(1){
+
         char lineHeader[256];
+        // read the first word of the line
         int res = fscanf(file, "%s", lineHeader);
         if (res == EOF){
             break;
-        }
+        } // EOF = End Of File. Quit the loop.
+        // else : parse lineHeader
 
         if ( strcmp( lineHeader, "v" ) == 0 ){
             glm::vec3 vertex;
@@ -127,11 +129,9 @@ bool objparser::loadOBJ(const char * path, std::vector<float> & out_vertices){
             temp_normals.push_back(normal);
 
         } else if ( strcmp( lineHeader, "f" ) == 0 ){
+
             unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n",
-                                 &vertexIndex[0], &uvIndex[0], &normalIndex[0],
-                                 &vertexIndex[1], &uvIndex[1], &normalIndex[1],
-                                 &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
             if (matches != 9){
                 printf("File can't be read by our simple parser : ( Try exporting with other options\n");
                 return false;
@@ -139,100 +139,60 @@ bool objparser::loadOBJ(const char * path, std::vector<float> & out_vertices){
             vertexIndices.push_back(vertexIndex[0]);
             vertexIndices.push_back(vertexIndex[1]);
             vertexIndices.push_back(vertexIndex[2]);
-
             uvIndices.push_back(uvIndex[0]);
             uvIndices.push_back(uvIndex[1]);
             uvIndices.push_back(uvIndex[2]);
-
             normalIndices.push_back(normalIndex[0]);
             normalIndices.push_back(normalIndex[1]);
             normalIndices.push_back(normalIndex[2]);
+            materialNames.push_back(activeMaterial);
+            materialNames.push_back(activeMaterial);
+            materialNames.push_back(activeMaterial);
 
-            materialNames.push_back(activeMaterial);
-            materialNames.push_back(activeMaterial);
-            materialNames.push_back(activeMaterial);
         } else if (strcmp( lineHeader, "usemtl" ) == 0 ) {
-            char temp_material_name[256];
-            fscanf(file, "%255s\n", temp_material_name);
+
+            char temp_material_name[256]; // Temporary buffer for reading the material name
+            fscanf(file, "%255s\n", temp_material_name); // Read into the buffer (up to 255 characters + null terminator)
+
             activeMaterial = temp_material_name;
         }
     }
 
-    // Now that we have the vertex, uv, normal indices, and materials, calculate tangents
-    for( unsigned int i = 0; i < vertexIndices.size(); i += 3 ){
-        // Get the three vertices and uvs for each triangle
-        glm::vec3 v1 = temp_vertices[vertexIndices[i] - 1];
-        glm::vec3 v2 = temp_vertices[vertexIndices[i+1] - 1];
-        glm::vec3 v3 = temp_vertices[vertexIndices[i+2] - 1];
-        glm::vec2 uv1 = temp_uvs[uvIndices[i] - 1];
-        glm::vec2 uv2 = temp_uvs[uvIndices[i+1] - 1];
-        glm::vec2 uv3 = temp_uvs[uvIndices[i+2] - 1];
+    for( unsigned int i=0; i < vertexIndices.size(); i++ ){
+        unsigned int vertexIndex = vertexIndices[i];
+        glm::vec3 vertex = temp_vertices[vertexIndex - 1];
+        out_vertices.push_back(vertex.x);
+        out_vertices.push_back(vertex.y);
+        out_vertices.push_back(vertex.z);
 
-        // Calculate the tangent for this triangle
-        glm::vec3 tangent = calculateTangent(v1, v2, v3, uv1, uv2, uv3);
+        unsigned int normalIndex = normalIndices[i];
+        glm::vec3 normal = temp_vertices[normalIndex -1 ];
+        out_vertices.push_back(normal.x);
+        out_vertices.push_back(normal.y);
+        out_vertices.push_back(normal.z);
 
-        // Now add the vertices, normals, UVs, material properties, and tangent
-        for (unsigned int j = 0; j < 3; j++) {
-            unsigned int vertexIndex = vertexIndices[i + j];
-            glm::vec3 vertex = temp_vertices[vertexIndex - 1];
-            out_vertices.push_back(vertex.x);
-            out_vertices.push_back(vertex.y);
-            out_vertices.push_back(vertex.z);
-
-            unsigned int normalIndex = normalIndices[i + j];
-            glm::vec3 normal = temp_normals[normalIndex - 1];
-            out_vertices.push_back(normal.x);
-            out_vertices.push_back(normal.y);
-            out_vertices.push_back(normal.z);
-
-            //material
-            Material mat = materials[materialNames[i + j]];
-            out_vertices.push_back(mat.Ka[0]);
-            out_vertices.push_back(mat.Ka[1]);
-            out_vertices.push_back(mat.Ka[2]);
-
-            out_vertices.push_back(mat.Kd[0]);
-            out_vertices.push_back(mat.Kd[1]);
-            out_vertices.push_back(mat.Kd[2]);
-
-            out_vertices.push_back(mat.Ks[0]);
-            out_vertices.push_back(mat.Ks[1]);
-            out_vertices.push_back(mat.Ks[2]);
+        Material mat = materials[materialNames[i]];
 
 
-            //UV coordinates
-            unsigned int uvIndex = uvIndices[i + j];
-            glm::vec2 uv = temp_uvs[uvIndex - 1];
-            out_vertices.push_back(uv.x);
-            out_vertices.push_back(uv.y);
+        out_vertices.push_back(mat.Ka[0]);
+        out_vertices.push_back(mat.Ka[1]);
+        out_vertices.push_back(mat.Ka[2]);
 
-            //tangent
-            out_vertices.push_back(tangent.x);
-            out_vertices.push_back(tangent.y);
-            out_vertices.push_back(tangent.z);
-        }
+        out_vertices.push_back(mat.Kd[0]);
+        out_vertices.push_back(mat.Kd[1]);
+        out_vertices.push_back(mat.Kd[2]);
+
+        out_vertices.push_back(mat.Ks[0]);
+        out_vertices.push_back(mat.Ks[1]);
+        out_vertices.push_back(mat.Ks[2]);
+
+        out_vertices.push_back(mat.Ns);
+
+
+        // unsigned int textureIndex = uvIndices[i];
+        // glm::vec3 texture = temp_vertices[textureIndex -1 ];
+        // out_vertices.push_back(texture);
     }
     return true;
-}
 
-
-//calculation of tangents for bump mapping
-glm::vec3 objparser::calculateTangent(
-    const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3,
-    const glm::vec2& uv1, const glm::vec2& uv2, const glm::vec2& uv3)
-{
-    glm::vec3 edge1 = v2 - v1;
-    glm::vec3 edge2 = v3 - v1;
-    glm::vec2 deltaUV1 = uv2 - uv1;
-    glm::vec2 deltaUV2 = uv3 - uv1;
-
-    float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
-
-    glm::vec3 tangent;
-    tangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-    tangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
-    tangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
-
-
-    return glm::normalize(tangent);
 }

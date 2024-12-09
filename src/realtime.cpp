@@ -108,7 +108,7 @@ void Realtime::loadNormalMap() {
     glBindTexture(GL_TEXTURE_2D, m_normalMap);
 
     int width, height, nrChannels;
-    std::string normalFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/roof2.jpg";
+    std::string normalFile= "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/roof2.jpg";
     unsigned char *data = stbi_load(normalFile.c_str(), &width, &height, &nrChannels, 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -132,12 +132,12 @@ void Realtime::setupSkyBox(){
 
     //load each texture face
     std::vector<std::string> faces = {
-        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/right.jpg", //Positive X
-        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/left.jpg",//Negative X
-        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/top.jpg", //Positive Y
-        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/bottom.jpg", //Negative Y
-        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/front.jpg",//Positive Z
-        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/back.jpg" //Negative Z
+        "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/right.jpg", //Positive X
+        "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/left.jpg",//Negative X
+        "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/top.jpg", //Positive Y
+        "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/bottom.jpg", //Negative Y
+        "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/front.jpg",//Positive Z
+        "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/back.jpg" //Negative Z
     };
 
     int width, height, nrChannels;
@@ -406,14 +406,6 @@ void Realtime::paintGL() {
 
         glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_model * shapeData.modelMatrix));
 
-        // GLint ambientColorLoc = glGetUniformLocation(m_shader, "materialAmbient");
-        // glUniform4fv(ambientColorLoc, 1, glm::value_ptr(shapeData.material.cAmbient));
-
-        // GLint diffuseColorLoc = glGetUniformLocation(m_shader, "materialDiffuse");
-        // glUniform4fv(diffuseColorLoc, 1, glm::value_ptr(shapeData.material.cDiffuse));
-
-        // GLint specularColorLoc = glGetUniformLocation(m_shader, "materialSpecular");
-        // glUniform4fv(specularColorLoc, 1, glm::value_ptr(shapeData.material.cSpecular));
 
         GLint shininessLocation = glGetUniformLocation(m_shader, "shininess");
         glUniform1f(shininessLocation, shapeData.material.shininess);
@@ -513,8 +505,6 @@ void Realtime::setupShapes() {
             break;
         }
 
-        //shape->updateParams(settings.shapeParameter1, settings.shapeParameter2);
-        //setupVAOVBOForShape(*shape, primitive.primitive.type, primitive.ctm, primitive.primitive.material);
 
     }
 }
@@ -532,12 +522,8 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
 
     std::vector<float> data;
 
-    objparser::loadOBJ("/Users/asianguyen/Desktop/CS1230/cs1230-final/house/final.obj", data);
+    objparser::loadOBJ("/Users/asianguyen/Desktop/CS1230/cs1230-final/house/untitled.obj", data);
 
-    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
-    mesh_vertex_count = data.size() / 16;
-
-    objparser::loadOBJ("/Users/sophialim/Desktop/CS1230/cs1230-final/house/actualfinalhouseandballoons.obj", data);
 
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
     mesh_vertex_count = data.size() / 20;
@@ -552,7 +538,6 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
     shapedata.vao = mesh_vao;
 
 
- 
     glEnableVertexAttribArray(0);
 
     //position attribute

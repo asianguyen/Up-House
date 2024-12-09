@@ -49,6 +49,7 @@ add_executable(${PROJECT_NAME}
     src/shapes/shape.h
     src/utils/objparser.h src/utils/objparser.cpp
     src/stb_image.h
+
     # resources/shaders/skybox.frag
     # resources/shaders/skybox.vert
     # resources/shaders/effects.frag

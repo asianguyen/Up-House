@@ -41,6 +41,6 @@ void main() {
     mat_ka = ka;
     mat_kd = kd;
     mat_ks = ks;
-    mat_shininess = shininess;
+
 
 }
