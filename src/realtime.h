@@ -94,6 +94,10 @@ private:
     void setupShaders();
     void setUpMesh(const glm::mat4& ctm, SceneMaterial mat);
 
+    //bump mappin
+    void loadNormalMap();
+    GLuint m_normalMap;
+
     //skybox:
     GLuint m_skyboxTexture;
     void setupSkyBox();
@@ -104,7 +108,6 @@ private:
     void renderSkybox();
 
     //Proj6:
-
     GLuint m_texture_shader;
     GLuint m_defaultFBO;
     GLuint m_fbo;

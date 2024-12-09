@@ -83,8 +83,8 @@ void Realtime::initializeGL() {
 
     m_defaultFBO = 2;
 
+    loadNormalMap();
     setupShaders();
-
     setupSkyBox();
     setupSkyBoxGeometry();
 
@@ -103,18 +103,41 @@ void Realtime::setupShaders(){
 
 }
 
+void Realtime::loadNormalMap() {
+    glGenTextures(1, &m_normalMap);
+    glBindTexture(GL_TEXTURE_2D, m_normalMap);
+
+    int width, height, nrChannels;
+    std::string normalFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/roof2.jpg";
+    unsigned char *data = stbi_load(normalFile.c_str(), &width, &height, &nrChannels, 0);
+    if (data) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D); //generates mipmaps for the texture for visual quality at different distances
+    }
+    else
+    {
+        std::cout << "Normal tex failed to load at path: " << normalFile << std::endl;
+    }
+    stbi_image_free(data);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
 void Realtime::setupSkyBox(){
     glGenTextures(1, &m_skyboxTexture);
     glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxTexture);
 
     //load each texture face
     std::vector<std::string> faces = {
-        "./resources/images/right.jpg", //Positive X
-        "./resources/images/left.jpg",//Negative X
-        "./resources/images/top.jpg", //Positive Y
-        "./resources/images/bottom.jpg", //Negative Y
-        "./resources/images/front.jpg",//Positive Z
-        "./resources/images/back.jpg" //Negative Z
+        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/right.jpg", //Positive X
+        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/left.jpg",//Negative X
+        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/top.jpg", //Positive Y
+        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/bottom.jpg", //Negative Y
+        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/front.jpg",//Positive Z
+        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/back.jpg" //Negative Z
     };
 
     int width, height, nrChannels;
@@ -395,6 +418,13 @@ void Realtime::paintGL() {
         GLint shininessLocation = glGetUniformLocation(m_shader, "shininess");
         glUniform1f(shininessLocation, shapeData.material.shininess);
 
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, m_normalMap); //Bind the normal map to texture unit 1
+
+        GLuint normalMapLocation = glGetUniformLocation(m_shader, "normalMap");
+
+        glUniform1i(normalMapLocation, 1);
+
         glDrawArrays(GL_TRIANGLES, 0, shapeData.vertexCount);
 
         glBindVertexArray(0);
@@ -424,7 +454,7 @@ void Realtime::renderSkybox() {
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxTexture);
-    glUniform1i(glGetUniformLocation(m_skybox_shader, "skybox"), 0);  // Set texture uniform
+    glUniform1i(glGetUniformLocation(m_skybox_shader, "skybox"), 0);
 
     glBindVertexArray(m_skyboxVAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -501,10 +531,17 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
     shapedata.vbo = mesh_vbo;
 
     std::vector<float> data;
+
     objparser::loadOBJ("/Users/asianguyen/Desktop/CS1230/cs1230-final/house/final.obj", data);
 
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
     mesh_vertex_count = data.size() / 16;
+
+    objparser::loadOBJ("/Users/sophialim/Desktop/CS1230/cs1230-final/house/actualfinalhouseandballoons.obj", data);
+
+    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
+    mesh_vertex_count = data.size() / 20;
+
     shapedata.vertexCount = mesh_vertex_count;
 
     shapedata.material = mat;
@@ -515,29 +552,35 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
     shapedata.vao = mesh_vao;
 
 
-    //position attribute
+ 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,16 * sizeof(GLfloat), reinterpret_cast<void*>(0));
+
+    //position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), reinterpret_cast<void*>(0));
 
     //normal attribute
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
 
     // ka attribute
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
 
     //kd attribute
     glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(9 * sizeof(GLfloat)));
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), reinterpret_cast<void*>(9 * sizeof(GLfloat)));
 
     //ks attribute
     glEnableVertexAttribArray(4);
-    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(12 * sizeof(GLfloat)));
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), reinterpret_cast<void*>(12 * sizeof(GLfloat)));
 
-    //specular attribute
+    //texture coords
     glEnableVertexAttribArray(5);
-    glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(15 * sizeof(GLfloat)));
+    glVertexAttribPointer(5, 2, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), (void*)(15 * sizeof(GLfloat)));
+
+    //tangent
+    glEnableVertexAttribArray(6);
+    glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), (void*)(17 * sizeof(GLfloat)));
 
     m_shapeDataList.push_back(shapedata);
 
