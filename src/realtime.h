@@ -61,6 +61,8 @@ private:
     glm::mat4 m_view  = glm::mat4(1.f);
     glm::mat4 m_proj  = glm::mat4(1.f);
 
+    float offset;
+
     GLuint m_shader;
 
     glm::vec4 m_lightPos;

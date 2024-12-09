@@ -380,7 +380,8 @@ void Realtime::paintGL() {
         //glBindBuffer(GL_ARRAY_BUFFER, mesh_vbo);
 
         GLint modelMatrixLocation = glGetUniformLocation(m_shader, "modelMatrix");
-        glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, glm::value_ptr(shapeData.modelMatrix));
+
+        glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_model * shapeData.modelMatrix));
 
         // GLint ambientColorLoc = glGetUniformLocation(m_shader, "materialAmbient");
         // glUniform4fv(ambientColorLoc, 1, glm::value_ptr(shapeData.material.cAmbient));
@@ -406,8 +407,7 @@ void Realtime::paintGL() {
 
     paintTexture(m_fbo_texture);
 
-    // //glUseProgram(0);
-    std::cout << glGetError() << std::endl;
+    glUseProgram(0);
 }
 
 void Realtime::renderSkybox() {
@@ -501,10 +501,10 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
     shapedata.vbo = mesh_vbo;
 
     std::vector<float> data;
-    objparser::loadOBJ("/Users/asianguyen/Desktop/CS1230/cs1230-final/house/untitled.obj", data);
+    objparser::loadOBJ("/Users/asianguyen/Desktop/CS1230/cs1230-final/house/final.obj", data);
 
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
-    mesh_vertex_count = data.size() / 15;
+    mesh_vertex_count = data.size() / 16;
     shapedata.vertexCount = mesh_vertex_count;
 
     shapedata.material = mat;
@@ -517,27 +517,27 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
 
     //position attribute
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,15 * sizeof(GLfloat), reinterpret_cast<void*>(0));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,16 * sizeof(GLfloat), reinterpret_cast<void*>(0));
 
     //normal attribute
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 15 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
 
     // ka attribute
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 15 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
 
     //kd attribute
     glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 15 * sizeof(GLfloat), reinterpret_cast<void*>(9 * sizeof(GLfloat)));
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(9 * sizeof(GLfloat)));
 
     //ks attribute
     glEnableVertexAttribArray(4);
-    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 15 * sizeof(GLfloat), reinterpret_cast<void*>(12 * sizeof(GLfloat)));
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(12 * sizeof(GLfloat)));
 
-    // specular attribute
-    // glEnableVertexAttribArray(5);
-    // glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(15 * sizeof(GLfloat)));
+    //specular attribute
+    glEnableVertexAttribArray(5);
+    glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(15 * sizeof(GLfloat)));
 
     m_shapeDataList.push_back(shapedata);
 
@@ -728,14 +728,31 @@ void Realtime::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void Realtime::timerEvent(QTimerEvent *event) {
+    glUseProgram(m_shader);
     int elapsedms   = m_elapsedTimer.elapsed();
     float deltaTime = elapsedms * 0.001f;
     m_elapsedTimer.restart();
+
+    static float totalTime = 0.0f; // Track total time for smooth animation
+    totalTime += deltaTime;
+
+
+    float angle = sin(totalTime * 2.0f) * glm::radians(3.f);
+
+    glm::vec3 pivotPoint(0.0f, 20.0f, 0.0f);
+    glm::mat4 T_toPivot = glm::translate(glm::mat4(1.0f), -pivotPoint);
+
+    glm::mat4 R = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 0.0f, 1.0f));
+
+    glm::mat4 T_back = glm::translate(glm::mat4(1.0f), pivotPoint);
+
+    m_model = T_back * R * T_toPivot;
 
     // Use deltaTime and m_keyMap here to move around
 
     float speed = 5.0f * deltaTime;
     bool moved = false;
+
 
     glm::vec3 look = glm::normalize(glm::vec3(m_cameraData.look));
     glm::vec3 up = glm::normalize(glm::vec3(m_cameraData.up));
@@ -770,6 +787,8 @@ void Realtime::timerEvent(QTimerEvent *event) {
             glm::vec3(m_cameraData.up)
             );
     }
+    glUseProgram(0);
+
 
     update(); // asks for a PaintGL() call to occur
 }

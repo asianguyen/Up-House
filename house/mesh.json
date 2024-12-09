@@ -3,7 +3,7 @@
   "globalData": {
     "ambientCoeff": 0.6,
     "diffuseCoeff": 0.45,
-    "specularCoeff": 0.25,
+    "specularCoeff": 0.8,
     "transparentCoeff": 0
   },
   "cameraData": {
