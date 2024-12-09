@@ -52,6 +52,7 @@ static constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers:
     "onValChangeNearBox",
     "onValChangeFarBox",
     "onBezierCircle",
+    "id",
     "onExtraCredit1",
     "onExtraCredit2",
     "onExtraCredit3",
@@ -59,7 +60,7 @@ static constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers:
 );
 #else  // !QT_MOC_HAS_STRING_DATA
 struct qt_meta_stringdata_CLASSMainWindowENDCLASS_t {
-    uint offsetsAndSizes[36];
+    uint offsetsAndSizes[38];
     char stringdata0[11];
     char stringdata1[17];
     char stringdata2[1];
@@ -74,10 +75,11 @@ struct qt_meta_stringdata_CLASSMainWindowENDCLASS_t {
     char stringdata11[19];
     char stringdata12[18];
     char stringdata13[15];
-    char stringdata14[15];
+    char stringdata14[3];
     char stringdata15[15];
     char stringdata16[15];
     char stringdata17[15];
+    char stringdata18[15];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_CLASSMainWindowENDCLASS_t::offsetsAndSizes) + ofs), len 
@@ -97,10 +99,11 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSMainWindowENDCLASS_t qt_meta_st
         QT_MOC_LITERAL(154, 18),  // "onValChangeNearBox"
         QT_MOC_LITERAL(173, 17),  // "onValChangeFarBox"
         QT_MOC_LITERAL(191, 14),  // "onBezierCircle"
-        QT_MOC_LITERAL(206, 14),  // "onExtraCredit1"
-        QT_MOC_LITERAL(221, 14),  // "onExtraCredit2"
-        QT_MOC_LITERAL(236, 14),  // "onExtraCredit3"
-        QT_MOC_LITERAL(251, 14)   // "onExtraCredit4"
+        QT_MOC_LITERAL(206, 2),  // "id"
+        QT_MOC_LITERAL(209, 14),  // "onExtraCredit1"
+        QT_MOC_LITERAL(224, 14),  // "onExtraCredit2"
+        QT_MOC_LITERAL(239, 14),  // "onExtraCredit3"
+        QT_MOC_LITERAL(254, 14)   // "onExtraCredit4"
     },
     "MainWindow",
     "onPerPixelFilter",
@@ -116,6 +119,7 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSMainWindowENDCLASS_t qt_meta_st
     "onValChangeNearBox",
     "onValChangeFarBox",
     "onBezierCircle",
+    "id",
     "onExtraCredit1",
     "onExtraCredit2",
     "onExtraCredit3",
@@ -149,11 +153,11 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
       10,    1,  117,    2, 0x08,   11 /* Private */,
       11,    1,  120,    2, 0x08,   13 /* Private */,
       12,    1,  123,    2, 0x08,   15 /* Private */,
-      13,    0,  126,    2, 0x08,   17 /* Private */,
-      14,    0,  127,    2, 0x08,   18 /* Private */,
-      15,    0,  128,    2, 0x08,   19 /* Private */,
-      16,    0,  129,    2, 0x08,   20 /* Private */,
-      17,    0,  130,    2, 0x08,   21 /* Private */,
+      13,    1,  126,    2, 0x08,   17 /* Private */,
+      15,    0,  129,    2, 0x08,   19 /* Private */,
+      16,    0,  130,    2, 0x08,   20 /* Private */,
+      17,    0,  131,    2, 0x08,   21 /* Private */,
+      18,    0,  132,    2, 0x08,   22 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -166,7 +170,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
     QMetaType::Void, QMetaType::Int,    7,
     QMetaType::Void, QMetaType::Double,    7,
     QMetaType::Void, QMetaType::Double,    7,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,   14,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -212,6 +216,7 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         // method 'onBezierCircle'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'onExtraCredit1'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onExtraCredit2'
@@ -240,7 +245,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 7: _t->onValChangeFarSlider((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 8: _t->onValChangeNearBox((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
         case 9: _t->onValChangeFarBox((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
-        case 10: _t->onBezierCircle(); break;
+        case 10: _t->onBezierCircle((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 11: _t->onExtraCredit1(); break;
         case 12: _t->onExtraCredit2(); break;
         case 13: _t->onExtraCredit3(); break;

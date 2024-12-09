@@ -41,11 +41,13 @@ private:
     QSpinBox *p2Box;
     QSlider *nearSlider;
     QSlider *farSlider;
+    QButtonGroup* modeGroup;
     QDoubleSpinBox *nearBox;
     QDoubleSpinBox *farBox;
 
-    // Extra Credit:
+    //Bezier:
     QCheckBox *ec0;
+    // Extra Credit:
     QCheckBox *ec1;
     QCheckBox *ec2;
     QCheckBox *ec3;
@@ -64,7 +66,7 @@ private slots:
     void onValChangeFarBox(double newValue);
 
     // Extra Credit:
-    void onBezierCircle();
+    void onBezierCircle(int id);
     void onExtraCredit1();
     void onExtraCredit2();
     void onExtraCredit3();

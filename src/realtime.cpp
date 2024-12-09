@@ -443,6 +443,9 @@ void Realtime::paintGL() {
 
     // moveCameraCircular(deltaTime.count());
     if (settings.circle){
+        moveCameraBezierCircle(deltaTime.count());
+    }
+    if (settings.curve){
         moveCameraBezier(deltaTime.count());
     }
     // //glUseProgram(0);
@@ -716,72 +719,36 @@ glm::vec3 Realtime::bezierPosition(float t, const glm::vec3& p0, const glm::vec3
     return u * u * u * p0 + 3 * u * u * t * p1 + 3 * u * t * t * p2 + t * t * t * p3;
 }
 
-// void Realtime::moveCameraCircular(float deltaTime) {
-//     // Update theta for circular motion
-//     m_theta += deltaTime * m_cameraSpeed; // Adjust speed
-//     if (m_theta >= glm::two_pi<float>()) {
-//         m_theta -= glm::two_pi<float>(); // Wrap theta to stay within [0, 2π]
-//     }
+void Realtime::moveCameraBezier(float deltaTime){
 
-//     // Circle parameters
-//     float radius = 5.0f; // Adjust as needed
-//     float height = 2.0f; // Adjust as needed
+    if (m_tIncreasing) {
+        m_t += deltaTime * m_cameraSpeed;
+        if (m_t >= 5.0f) {
+            m_t = 5.0f;     // Clamp to the endpoint
+            m_tIncreasing = false; // Reverse direction
+        }
+    } else {
+        m_t -= deltaTime * m_cameraSpeed;
+        if (m_t <= 0.0f) {
+            m_t = 0.0f;     // Clamp to the starting point
+            m_tIncreasing = true; // Reverse direction
+        }
+    }
+    glm::vec3 p0(0.0f, 0.0f, 0.0f);
+    glm::vec3 p1(2.0f, 5.0f, -5.0f);
+    glm::vec3 p2(4.0f, 5.0f, -5.0f);
+    glm::vec3 p3(6.0f,0.0f,0.0f);
 
-//     // Calculate position on the circle
-//     float x = radius * cos(m_theta);
-//     float z = radius * sin(m_theta);
-//     glm::vec3 position(x, height, z);
-
-//     // Calculate forward direction
-//     glm::vec3 forward = glm::normalize(-position); // Points toward the origin
-//     glm::vec3 up(0.0f, 1.0f, 0.0f);
-
-//     // Update camera data
-//     m_cameraData.pos = glm::vec4(position, 1.0f);
-//     m_cameraData.look = glm::vec4(forward, 0.0f);
-//     m_cameraData.up = glm::vec4(up, 0.0f);
-
-//     // Update view matrix
-//     m_view = m_camera.getViewMatrix(
-//         glm::vec3(m_cameraData.pos),
-//         glm::vec3(m_cameraData.look),
-//         glm::vec3(m_cameraData.up)
-//         );
-
-//     update(); // Asks for a PaintGL() call to occur
-// }
+    glm::vec3 position = bezierPosition(m_t, p0, p1, p2, p3);
 
 
-// void Realtime::moveCameraBezier(float deltaTime){
+    m_cameraData.pos = glm::vec4(position, 1.0f);
+    // glm::vec3 forward = glm::normalize(bezierTangent(m_t, p0, p1, p2, p3));
+    // m_cameraData.look = m_cameraData.pos + glm::vec4(forward, 0.0f);
 
-//     if (m_tIncreasing) {
-//         m_t += deltaTime * m_cameraSpeed;
-//         if (m_t >= 5.0f) {
-//             m_t = 5.0f;     // Clamp to the endpoint
-//             m_tIncreasing = false; // Reverse direction
-//         }
-//     } else {
-//         m_t -= deltaTime * m_cameraSpeed;
-//         if (m_t <= 0.0f) {
-//             m_t = 0.0f;     // Clamp to the starting point
-//             m_tIncreasing = true; // Reverse direction
-//         }
-//     }
-//     glm::vec3 p0(0.0f, 0.0f, 0.0f);
-//     glm::vec3 p1(2.0f, 5.0f, -5.0f);
-//     glm::vec3 p2(4.0f, 5.0f, -5.0f);
-//     glm::vec3 p3(6.0f,0.0f,0.0f);
+}
 
-//     glm::vec3 position = bezierPosition(m_t, p0, p1, p2, p3);
-
-
-//     m_cameraData.pos = glm::vec4(position, 1.0f);
-//     glm::vec3 forward = glm::normalize(bezierTangent(m_t, p0, p1, p2, p3));
-//     m_cameraData.look = m_cameraData.pos + glm::vec4(forward, 0.0f);
-
-// }
-
-void Realtime::moveCameraBezier(float deltaTime) {
+void Realtime::moveCameraBezierCircle(float deltaTime) {
     m_t += deltaTime * m_cameraSpeed;
     if (m_t >= 1.0f) {
         m_t = 0.f;
@@ -814,7 +781,7 @@ void Realtime::moveCameraBezier(float deltaTime) {
 
     glm::vec3 position;
     glm::vec3 forward;
-    std::cout << "m_t: " << m_t << ", segment: " << segment << ", segmentT: " << segmentT << std::endl;
+    // std::cout << "m_t: " << m_t << ", segment: " << segment << ", segmentT: " << segmentT << std::endl;
 
     if (segment == 0) {
         position = bezierPosition(segmentT, p0, p1, p2, p3);

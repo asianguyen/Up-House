@@ -8,6 +8,7 @@
 #include <QLabel>
 #include <QGroupBox>
 #include <iostream>
+#include <QButtonGroup>
 
 void MainWindow::initialize() {
     realtime = new Realtime;
@@ -147,9 +148,23 @@ void MainWindow::initialize() {
     lfar->addWidget(farBox);
     farLayout->setLayout(lfar);
 
-    ec0 = new QCheckBox();
-    ec0->setText(QStringLiteral("Bezier Circle"));
-    ec0->setChecked(false);
+    //bezier
+    // ec0 = new QCheckBox();
+    // ec0->setText(QStringLiteral("Bezier Circle"));
+    // ec0->setChecked(false);
+    auto buttonNone = new QPushButton("None");
+    auto buttonCircle = new QPushButton("Circle");
+    auto buttonCurve = new QPushButton("Curve");
+
+    modeGroup = new QButtonGroup(this);
+    modeGroup->addButton(buttonNone, 0);
+    modeGroup->addButton(buttonCircle, 1);
+    modeGroup->addButton(buttonCurve, 2);
+
+    buttonNone->setCheckable(true);
+    buttonCircle->setCheckable(true);
+    buttonCurve->setCheckable(true);
+    buttonNone->setChecked(true);
 
     // Extra Credit:
     ec1 = new QCheckBox();
@@ -186,7 +201,10 @@ void MainWindow::initialize() {
 
     //Bezier curve
     vLayout->addWidget(bez_label);
-    vLayout->addWidget(ec0);
+    vLayout->addWidget(buttonNone);
+    vLayout->addWidget(buttonCircle);
+    vLayout->addWidget(buttonCurve);
+
     // Extra Credit:
     vLayout->addWidget(ec_label);
 
@@ -264,7 +282,12 @@ void MainWindow::connectFar() {
 }
 
 void MainWindow::connectExtraCredit() {
-    connect(ec0, &QCheckBox::clicked, this, &MainWindow::onBezierCircle);
+    //connect(ec0, &QCheckBox::clicked, this, &MainWindow::onBezierCircle);
+    connect(modeGroup, &QButtonGroup::idClicked, this, &MainWindow::onBezierCircle);
+
+    // connect(modeGroup, SIGNAL(buttonClicked(int)), this, SLOT(onBezierCircle(int)));
+
+
     connect(ec1, &QCheckBox::clicked, this, &MainWindow::onExtraCredit1);
     connect(ec2, &QCheckBox::clicked, this, &MainWindow::onExtraCredit2);
     connect(ec3, &QCheckBox::clicked, this, &MainWindow::onExtraCredit3);
@@ -368,8 +391,24 @@ void MainWindow::onValChangeFarBox(double newValue) {
 
 // Extra Credit:
 
-void MainWindow::onBezierCircle() {
-    settings.circle = !settings.circle;
+void MainWindow::onBezierCircle(int id) {
+
+    switch (id) {
+    case 0: // None
+        settings.circle = false;
+        settings.curve = false;
+        break;
+    case 1: // Circle
+        settings.circle = true;
+        settings.curve = false;
+        break;
+    case 2: // Curve
+        settings.circle = false;
+        settings.curve = true;
+        break;
+    default:
+        break;
+    }
     realtime->settingsChanged();
 }
 

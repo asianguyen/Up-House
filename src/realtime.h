@@ -121,7 +121,7 @@ private:
     glm::vec3 p3;
     glm::vec3 generateControlPoint(const glm::vec3& basePoint, float magnitude);
     glm::vec3 m_bezierPosition;
-    void moveCameraCircular(float deltaTime);
+    void moveCameraBezierCircle(float deltaTime);
 
     //Proj6:
     GLuint m_texture_shader;
