@@ -84,6 +84,7 @@ void Realtime::initializeGL() {
     m_defaultFBO = 2;
 
     loadNormalMap();
+    loadNormalMap2();
     setupShaders();
     setupSkyBox();
     setupSkyBoxGeometry();
@@ -104,11 +105,11 @@ void Realtime::setupShaders(){
 }
 
 void Realtime::loadNormalMap() {
-    glGenTextures(1, &m_normalMap);
-    glBindTexture(GL_TEXTURE_2D, m_normalMap);
+    glGenTextures(1, &m_roofMap);
+    glBindTexture(GL_TEXTURE_2D, m_roofMap);
 
     int width, height, nrChannels;
-    std::string normalFile= "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/roof2.jpg";
+    std::string normalFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/roof2.jpg";
     unsigned char *data = stbi_load(normalFile.c_str(), &width, &height, &nrChannels, 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -126,18 +127,40 @@ void Realtime::loadNormalMap() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
+void Realtime::loadNormalMap2() {
+    glGenTextures(1, &m_wallMap);
+    glBindTexture(GL_TEXTURE_2D, m_wallMap);
+
+    int width, height, nrChannels;
+    std::string wallFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/wall.jpg";
+    unsigned char *data = stbi_load(wallFile.c_str(), &width, &height, &nrChannels, 0);
+    if (data) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D); //generates mipmaps for the texture for visual quality at different distances
+    }
+    else
+    {
+        std::cout << "Normal tex failed to load at path: " << wallFile << std::endl;
+    }
+    stbi_image_free(data);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
 void Realtime::setupSkyBox(){
     glGenTextures(1, &m_skyboxTexture);
     glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxTexture);
 
     //load each texture face
     std::vector<std::string> faces = {
-        "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/right.jpg", //Positive X
-        "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/left.jpg",//Negative X
-        "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/top.jpg", //Positive Y
-        "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/bottom.jpg", //Negative Y
-        "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/front.jpg",//Positive Z
-        "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/back.jpg" //Negative Z
+        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/right.jpg", //Positive X
+        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/left.jpg",//Negative X
+        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/top.jpg", //Positive Y
+        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/bottom.jpg", //Negative Y
+        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/front.jpg",//Positive Z
+        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/back.jpg" //Negative Z
     };
 
     int width, height, nrChannels;
@@ -411,11 +434,14 @@ void Realtime::paintGL() {
         glUniform1f(shininessLocation, shapeData.material.shininess);
 
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, m_normalMap); //Bind the normal map to texture unit 1
-
-        GLuint normalMapLocation = glGetUniformLocation(m_shader, "normalMap");
-
+        glBindTexture(GL_TEXTURE_2D, m_roofMap); //Bind the normal map to texture unit 1
+        GLuint normalMapLocation = glGetUniformLocation(m_shader, "roofMap");
         glUniform1i(normalMapLocation, 1);
+
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, m_wallMap); //Bind the normal map to texture unit 2
+        GLuint normalMapLocation2 = glGetUniformLocation(m_shader, "wallMap");
+        glUniform1i(normalMapLocation2, 2);
 
         glDrawArrays(GL_TRIANGLES, 0, shapeData.vertexCount);
 
@@ -522,7 +548,7 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
 
     std::vector<float> data;
 
-    objparser::loadOBJ("/Users/asianguyen/Desktop/CS1230/cs1230-final/house/untitled.obj", data);
+    objparser::loadOBJ("/Users/sophialim/Desktop/CS1230/cs1230-final/house/untitled.obj", data);
 
 
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);

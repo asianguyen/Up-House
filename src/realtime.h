@@ -96,7 +96,9 @@ private:
 
     //bump mappin
     void loadNormalMap();
-    GLuint m_normalMap;
+    void loadNormalMap2();
+    GLuint m_roofMap;
+    GLuint m_wallMap;
 
     //skybox:
     GLuint m_skyboxTexture;
