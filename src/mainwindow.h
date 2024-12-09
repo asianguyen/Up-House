@@ -41,12 +41,11 @@ private:
     QSpinBox *p2Box;
     QSlider *nearSlider;
     QSlider *farSlider;
-    QButtonGroup* modeGroup;
     QDoubleSpinBox *nearBox;
     QDoubleSpinBox *farBox;
 
     //Bezier:
-    QCheckBox *ec0;
+    QButtonGroup* modeGroup;
     // Extra Credit:
     QCheckBox *ec1;
     QCheckBox *ec2;

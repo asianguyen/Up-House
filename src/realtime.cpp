@@ -441,7 +441,6 @@ void Realtime::paintGL() {
     std::chrono::duration<float> deltaTime = currentTime - previousTime;
     previousTime = currentTime;
 
-    // moveCameraCircular(deltaTime.count());
     if (settings.circle){
         moveCameraBezierCircle(deltaTime.count());
     }
@@ -724,14 +723,14 @@ void Realtime::moveCameraBezier(float deltaTime){
     if (m_tIncreasing) {
         m_t += deltaTime * m_cameraSpeed;
         if (m_t >= 5.0f) {
-            m_t = 5.0f;     // Clamp to the endpoint
-            m_tIncreasing = false; // Reverse direction
+            m_t = 5.0f;
+            m_tIncreasing = false; // reverse direction
         }
     } else {
         m_t -= deltaTime * m_cameraSpeed;
         if (m_t <= 0.0f) {
-            m_t = 0.0f;     // Clamp to the starting point
-            m_tIncreasing = true; // Reverse direction
+            m_t = 0.0f;
+            m_tIncreasing = true; // reverse direction
         }
     }
     glm::vec3 p0(0.0f, 0.0f, 0.0f);
@@ -743,6 +742,14 @@ void Realtime::moveCameraBezier(float deltaTime){
 
 
     m_cameraData.pos = glm::vec4(position, 1.0f);
+    for (auto& shapeData : m_shapeDataList) {
+        // Create a translation matrix based on the camera position
+        shapeData.modelMatrix = glm::translate(glm::mat4(1.0f), position + glm::vec3(10.0f, 0.0f, 0.0f));
+
+        // Pass the updated model matrix to the shader
+        // GLint modelMatrixLocation = glGetUniformLocation(m_shader, "modelMatrix");
+        // glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, glm::value_ptr(shapeData.modelMatrix));
+    }
     // glm::vec3 forward = glm::normalize(bezierTangent(m_t, p0, p1, p2, p3));
     // m_cameraData.look = m_cameraData.pos + glm::vec4(forward, 0.0f);
 
@@ -774,10 +781,10 @@ void Realtime::moveCameraBezierCircle(float deltaTime) {
     glm::vec3 p10(radius * 0.55f, 0.0f, -radius);
     glm::vec3 p11(radius, 0.0f, -radius * 0.55f);
 
-    // Select the correct segment of the circle based on `m_t`
-    float segmentT = m_t * 4.0f; // Map `m_t` to one of the 4 segments
-    int segment = static_cast<int>(segmentT); // Segment index (0 to 3)
-    segmentT -= segment; // Local `t` for the selected segment
+    // select the correct segment of the circle
+    float segmentT = m_t * 4.0f;
+    int segment = static_cast<int>(segmentT); // gives a segment index from 0 to 3
+    segmentT -= segment;
 
     glm::vec3 position;
     glm::vec3 forward;
@@ -797,13 +804,10 @@ void Realtime::moveCameraBezierCircle(float deltaTime) {
         forward = bezierTangent(segmentT, p9, p10, p11, p0);
     }
 
-    // Normalize forward vector and compute up
     forward = glm::normalize(forward);
-    glm::vec3 up(0.0f, 1.0f, 0.0f);
 
     m_cameraData.pos = glm::vec4(position, 1.0f);
     // m_cameraData.look = m_cameraData.pos - glm::vec4(forward, 0.0f);
-    //m_cameraData.up = glm::vec4(up, 0.0f);
 
     // Update view matrix
     // m_view = m_camera.getViewMatrix(
@@ -812,7 +816,7 @@ void Realtime::moveCameraBezierCircle(float deltaTime) {
     //     glm::vec3(m_cameraData.up)
     //     );
 
-    update(); // Request a PaintGL call
+    update();
 }
 
 

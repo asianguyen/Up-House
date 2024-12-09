@@ -9,3 +9,4 @@ bump mapping:
 
 bezier curve:
 - formula: https://javascript.info/bezier-curve
+- 4 segment/circular formula: https://stackoverflow.com/questions/1734745/how-to-create-circle-with-b%C3%A9zier-curves#:~:text=A%20common%20approximation%20is%20to,circle%20at%20the%20end%20points.
