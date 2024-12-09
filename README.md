@@ -1,3 +1,5 @@
-# Projects 5 & 6: Lights, Camera & Action!
+## Resources
 
-All project handouts can be found [here](https://cs1230.graphics/projects).
+skybox: 
+- how to: https://learnopengl.com/Advanced-OpenGL/Cubemaps
+- stb library: https://github.com/nothings/stb/blob/master/stb_image.h

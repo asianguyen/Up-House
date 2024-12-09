@@ -86,8 +86,28 @@ private:
     std::unordered_map<PrimitiveType, GLuint> shapeVAOs;
     std::unordered_map<PrimitiveType, GLuint> shapeVBOs;
 
+
     void setupShapes();
     void setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const glm::mat4& ctm, SceneMaterial material);
+    void setupShaders();
+
+    //skybox:
+    GLuint m_skyboxTexture;
+    void setupSkyBox();
+    GLuint m_skybox_shader;
+    GLuint m_skyboxVAO;
+    GLuint m_skyboxVBO;
+    void setupSkyBoxGeometry();
+    void renderSkybox();
+
+    //bezier:
+    glm::vec3 bezierTangent(float t, const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3);
+    glm::vec3 bezierPosition(float t, const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3);
+    void moveCameraBezier(float deltaTime);
+    float m_t = 0.0f;
+    float m_cameraSpeed = 0.1f;
+    std::vector<glm::vec3> m_controlPoints;
+    std::chrono::high_resolution_clock::time_point previousTime;
 
     //Proj6:
 
