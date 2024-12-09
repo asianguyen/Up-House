@@ -58,6 +58,8 @@ void Realtime::finish() {
 
 void Realtime::initializeGL() {
     m_devicePixelRatio = this->devicePixelRatio();
+    m_t = 0.0f;
+    previousTime = std::chrono::high_resolution_clock::now();
 
     m_timer = startTimer(1000/60);
     m_elapsedTimer.start();
@@ -108,7 +110,7 @@ void Realtime::loadNormalMap() {
     glBindTexture(GL_TEXTURE_2D, m_normalMap);
 
     int width, height, nrChannels;
-    std::string normalFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/roof2.jpg";
+    std::string normalFile= "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/roof2.jpg";
     unsigned char *data = stbi_load(normalFile.c_str(), &width, &height, &nrChannels, 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -132,12 +134,12 @@ void Realtime::setupSkyBox(){
 
     //load each texture face
     std::vector<std::string> faces = {
-        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/right.jpg", //Positive X
-        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/left.jpg",//Negative X
-        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/top.jpg", //Positive Y
-        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/bottom.jpg", //Negative Y
-        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/front.jpg",//Positive Z
-        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/back.jpg" //Negative Z
+        "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/right.jpg", //Positive X
+        "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/left.jpg",//Negative X
+        "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/top.jpg", //Positive Y
+        "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/bottom.jpg", //Negative Y
+        "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/front.jpg",//Positive Z
+        "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/back.jpg" //Negative Z
     };
 
     int width, height, nrChannels;
@@ -439,11 +441,11 @@ void Realtime::paintGL() {
     std::chrono::duration<float> deltaTime = currentTime - previousTime;
     previousTime = currentTime;
 
-
+    // moveCameraCircular(deltaTime.count());
     moveCameraBezier(deltaTime.count());
 
     // //glUseProgram(0);
-    std::cout << glGetError() << std::endl;
+    // std::cout << glGetError() << std::endl;
 }
 
 void Realtime::renderSkybox() {
@@ -537,7 +539,7 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
     shapedata.vbo = mesh_vbo;
 
     std::vector<float> data;
-    objparser::loadOBJ("/Users/sophialim/Desktop/CS1230/cs1230-final/house/actualfinalhouseandballoons.obj", data);
+    objparser::loadOBJ("C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/house/actualfinalhouseandballoons.obj", data);
 
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
     mesh_vertex_count = data.size() / 20;
@@ -713,60 +715,227 @@ glm::vec3 Realtime::bezierPosition(float t, const glm::vec3& p0, const glm::vec3
     return u * u * u * p0 + 3 * u * u * t * p1 + 3 * u * t * t * p2 + t * t * t * p3;
 }
 
-void Realtime::moveCameraBezier(float deltaTime){
+// void Realtime::moveCameraCircular(float deltaTime) {
+//     // Update theta for circular motion
+//     m_theta += deltaTime * m_cameraSpeed; // Adjust speed
+//     if (m_theta >= glm::two_pi<float>()) {
+//         m_theta -= glm::two_pi<float>(); // Wrap theta to stay within [0, 2π]
+//     }
 
-    if (m_tIncreasing) {
-        m_t += deltaTime * m_cameraSpeed;
-        if (m_t >= 1.0f) {
-            m_t = 1.0f;     // Clamp to the endpoint
-            m_tIncreasing = false; // Reverse direction
-        }
-    } else {
-        m_t -= deltaTime * m_cameraSpeed;
-        if (m_t <= 0.0f) {
-            m_t = 0.0f;     // Clamp to the starting point
-            m_tIncreasing = true; // Reverse direction
-        }
+//     // Circle parameters
+//     float radius = 5.0f; // Adjust as needed
+//     float height = 2.0f; // Adjust as needed
+
+//     // Calculate position on the circle
+//     float x = radius * cos(m_theta);
+//     float z = radius * sin(m_theta);
+//     glm::vec3 position(x, height, z);
+
+//     // Calculate forward direction
+//     glm::vec3 forward = glm::normalize(-position); // Points toward the origin
+//     glm::vec3 up(0.0f, 1.0f, 0.0f);
+
+//     // Update camera data
+//     m_cameraData.pos = glm::vec4(position, 1.0f);
+//     m_cameraData.look = glm::vec4(forward, 0.0f);
+//     m_cameraData.up = glm::vec4(up, 0.0f);
+
+//     // Update view matrix
+//     m_view = m_camera.getViewMatrix(
+//         glm::vec3(m_cameraData.pos),
+//         glm::vec3(m_cameraData.look),
+//         glm::vec3(m_cameraData.up)
+//         );
+
+//     update(); // Asks for a PaintGL() call to occur
+// }
+
+
+// void Realtime::moveCameraBezier(float deltaTime){
+
+//     if (m_tIncreasing) {
+//         m_t += deltaTime * m_cameraSpeed;
+//         if (m_t >= 5.0f) {
+//             m_t = 5.0f;     // Clamp to the endpoint
+//             m_tIncreasing = false; // Reverse direction
+//         }
+//     } else {
+//         m_t -= deltaTime * m_cameraSpeed;
+//         if (m_t <= 0.0f) {
+//             m_t = 0.0f;     // Clamp to the starting point
+//             m_tIncreasing = true; // Reverse direction
+//         }
+//     }
+//     glm::vec3 p0(0.0f, 0.0f, 0.0f);
+//     glm::vec3 p1(2.0f, 5.0f, -5.0f);
+//     glm::vec3 p2(4.0f, 5.0f, -5.0f);
+//     glm::vec3 p3(6.0f,0.0f,0.0f);
+
+//     glm::vec3 position = bezierPosition(m_t, p0, p1, p2, p3);
+
+
+//     m_cameraData.pos = glm::vec4(position, 1.0f);
+//     glm::vec3 forward = glm::normalize(bezierTangent(m_t, p0, p1, p2, p3));
+//     m_cameraData.look = m_cameraData.pos + glm::vec4(forward, 0.0f);
+
+// }
+
+void Realtime::moveCameraBezier(float deltaTime) {
+    // Update `m_t` to move continuously around the circle
+    std::cout << "deltaTime: " << deltaTime << std::endl;
+    m_t += deltaTime * m_cameraSpeed;
+    if (m_t >= 1.0f) {
+        m_t = 0.f; // Wrap around when completing the circle
+    } else if (m_t < 0.0f) {
+        m_t = 0.f; // Ensure `m_t` is never negative
     }
-    // m_t += deltaTime * m_cameraSpeed;
-    // if (m_t >= 1.0f) {
-    //     m_t = 0.0f; // Reset t for the next segment
-    //     p0 = p3;
 
-    //     // Generate new control points relative to the previous endpoint
-    //     p1 = generateControlPoint(p0, 5.0f); // Adjust magnitude for dramatic curves
-    //     p2 = generateControlPoint(p1, 5.0f);
-    //     p3 = generateControlPoint(p2, 5.0f);
-    // }
-    // m_bezierPosition = bezierPosition(m_t, p0, p1, p2, p3);
-    // glm::vec3 p0(0.0f, 0.0f, 0.0f);
-    // glm::vec3 p1(2.0f, 5.0f, 0.0f);
-    // glm::vec3 p2(4.0f, 5.0f, 0.0f);
-    // glm::vec3 p3(6.0f,0.0f,0.0f);
+    // Define the control points for the four cubic Bézier segments
+    const float radius = 5.0f; // Radius of the circle
+    glm::vec3 p0( radius, 0.0f,  0.0f);
+    glm::vec3 p1( radius, 0.0f,  radius * 0.55f);
+    glm::vec3 p2( radius * 0.55f, 0.0f,  radius);
+    glm::vec3 p3( 0.0f, 0.0f,  radius);
 
+    glm::vec3 p4(-radius * 0.55f, 0.0f,  radius);
+    glm::vec3 p5(-radius, 0.0f,  radius * 0.55f);
+    glm::vec3 p6(-radius, 0.0f,  0.0f);
 
+    glm::vec3 p7(-radius, 0.0f, -radius * 0.55f);
+    glm::vec3 p8(-radius * 0.55f, 0.0f, -radius);
+    glm::vec3 p9( 0.0f, 0.0f, -radius);
 
-    glm::vec3 position = bezierPosition(m_t,p0, p1, p2, p3);
-    glm::vec3 forward = glm::normalize(bezierTangent(m_t, p0, p1, p2, p3));
+    glm::vec3 p10(radius * 0.55f, 0.0f, -radius);
+    glm::vec3 p11(radius, 0.0f, -radius * 0.55f);
+
+    // Select the correct segment of the circle based on `m_t`
+    float segmentT = m_t * 4.0f; // Map `m_t` to one of the 4 segments
+    int segment = static_cast<int>(segmentT); // Segment index (0 to 3)
+    segmentT -= segment; // Local `t` for the selected segment
+
+    glm::vec3 position;
+    glm::vec3 forward;
+    std::cout << "m_t: " << m_t << ", segment: " << segment << ", segmentT: " << segmentT << std::endl;
+
+    if (segment == 0) {
+        position = bezierPosition(segmentT, p0, p1, p2, p3);
+        forward = bezierTangent(segmentT, p0, p1, p2, p3);
+    } else if (segment == 1) {
+        position = bezierPosition(segmentT, p3, p4, p5, p6);
+        forward = bezierTangent(segmentT, p3, p4, p5, p6);
+    } else if (segment == 2) {
+        position = bezierPosition(segmentT, p6, p7, p8, p9);
+        forward = bezierTangent(segmentT, p6, p7, p8, p9);
+    } else if (segment == 3) {
+        position = bezierPosition(segmentT, p9, p10, p11, p0);
+        forward = bezierTangent(segmentT, p9, p10, p11, p0);
+    }
+
+    // Normalize forward vector and compute up
+    forward = glm::normalize(forward);
     glm::vec3 up(0.0f, 1.0f, 0.0f);
 
-    glm::vec3 right = glm::normalize(glm::cross(up,forward));
-    up = glm::cross(forward,right);
+    // Update camera position and orientation
+    std::cout << "x " << position[0] << std::endl;
+    std::cout << "y " << position[1] << std::endl;
+    std::cout << "z " << position[2] << std::endl;
+    m_cameraData.pos = glm::vec4(position, 1.0f);
+    // m_cameraData.look = glm::vec4(forward, 0.0f);
+    //m_cameraData.up = glm::vec4(up, 0.0f);
 
-    //m_view = glm::lookAt(position, position + forward, up);
-    m_cameraData.pos = glm::vec4(position,0.f);
-    m_cameraData.look = m_cameraData.pos + glm::vec4(forward,0.f);
-
+    // Update view matrix
     // m_view = m_camera.getViewMatrix(
-    // glm::vec3(m_cameraData.pos),
-    // glm::vec3(m_cameraData.look+m_cameraData.pos),
-    // glm::vec3(m_cameraData.up)
+    //     glm::vec3(m_cameraData.pos),
+    //     glm::vec3(m_cameraData.look),
+    //     glm::vec3(m_cameraData.up)
     //     );
-    m_view = glm::lookAt(glm::vec3(m_cameraData.pos),
-                         glm::vec3(m_cameraData.look),
-                         glm::vec3(m_cameraData.up));
 
+    update(); // Request a PaintGL call
 }
+
+
+
+
+// void Realtime::moveCameraBezier(float deltaTime){
+
+//     // if (m_tIncreasing) {
+//     //     m_t += deltaTime * m_cameraSpeed;
+//     //     if (m_t >= 5.0f) {
+//     //         m_t = 5.0f;     // Clamp to the endpoint
+//     //         m_tIncreasing = false; // Reverse direction
+//     //     }
+//     // } else {
+//     //     m_t -= deltaTime * m_cameraSpeed;
+//     //     if (m_t <= 0.0f) {
+//     //         m_t = 0.0f;     // Clamp to the starting point
+//     //         m_tIncreasing = true; // Reverse direction
+//     //     }
+//     // }
+
+//     m_t += deltaTime * m_cameraSpeed;
+//     if (m_t > 1.0f) {
+//         m_t -= 1.0f; // Wrap around to create a looping effect
+//     }
+//     // m_t += deltaTime * m_cameraSpeed;
+//     // if (m_t >= 1.0f) {
+//     //     m_t = 0.0f; // Reset t for the next segment
+//     //     p0 = p3;
+
+//     //     // Generate new control points relative to the previous endpoint
+//     //     p1 = generateControlPoint(p0, 5.0f); // Adjust magnitude for dramatic curves
+//     //     p2 = generateControlPoint(p1, 5.0f);
+//     //     p3 = generateControlPoint(p2, 5.0f);
+//     // }
+//     // m_bezierPosition = bezierPosition(m_t, p0, p1, p2, p3);
+//     glm::vec3 p0(0.0f, 0.0f, 0.0f);
+//     glm::vec3 p1(2.0f, 5.0f, -5.0f);
+//     glm::vec3 p2(4.0f, 5.0f, -5.0f);
+//     glm::vec3 p3(6.0f,0.0f,0.0f);
+
+//     glm::vec3 center(0.0f, 0.0f, 0.0f); // Center of the circle
+//     float radius = 10.0f; // Radius of the circle
+
+//     // glm::vec3 p0 = center + glm::vec3(radius, 0.0f, 0.0f);
+//     // glm::vec3 p1 = center + glm::vec3(radius, 0.0f, -radius);
+//     // glm::vec3 p2 = center + glm::vec3(-radius, 0.0f, -radius);
+//     // glm::vec3 p3 = center + glm::vec3(-radius, 0.0f, 0.0f);
+
+
+//     glm::vec3 position = bezierPosition(m_t, p0, p1, p2, p3);
+//     // glm::vec3 forward = glm::normalize(center - position); // Look toward the center
+
+//     glm::vec3 forward = glm::normalize(bezierTangent(m_t, p0, p1, p2, p3));
+//     glm::vec3 up(0.0f, 1.0f, 0.0f);
+
+//     // for (auto& shapeData : m_shapeDataList) {
+//     //     glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position + forward * 2.0f);
+
+//     //     shapeData.modelMatrix = translationMatrix * shapeData.modelMatrix;
+//     // }
+
+//     // glm::vec3 right = glm::normalize(glm::cross(up,forward));
+//     // up = glm::cross(forward,right);
+//     if (glm::length(center - glm::vec3(m_cameraData.pos)) < 0.001f) {
+//         m_cameraData.pos += glm::vec4(0.1f, 0.0f, 0.0f, 0.0f); // Small offset
+//     }
+
+//     m_cameraData.pos = glm::vec4(position, 1.0f);
+//     // glm::vec3 forward = glm::normalize(center - glm::vec3(m_cameraData.pos));
+
+    // glm::vec3 forward = glm::normalize(bezierTangent(m_t, p0, p1, p2, p3));
+    // // m_cameraData.look = m_cameraData.pos + glm::vec4(forward, 0.0f);
+
+//     // m_view = glm::lookAt(glm::vec3(m_cameraData.pos),
+//     //                      glm::vec3(m_cameraData.look),
+//     //                      glm::vec3(m_cameraData.up));
+
+//     // m_view = m_camera.getViewMatrix(
+//     // glm::vec3(m_cameraData.pos),
+//     // glm::vec3(m_cameraData.look+m_cameraData.pos),
+//     // glm::vec3(m_cameraData.up)
+//     //     );
+
+// }
 
 glm::vec3 Realtime::generateControlPoint(const glm::vec3& basePoint, float magnitude) {
     // Generate a random control point around the base point
@@ -879,14 +1048,14 @@ void Realtime::timerEvent(QTimerEvent *event) {
         moved = true;
     }
 
-    if (moved) {
+    // if (moved) {
         //update view matrix
         m_view = m_camera.getViewMatrix(
             glm::vec3(m_cameraData.pos),
             glm::vec3(m_cameraData.look),
             glm::vec3(m_cameraData.up)
             );
-    }
+    // }
 
     update(); // asks for a PaintGL() call to occur
 }

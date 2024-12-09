@@ -110,7 +110,8 @@ private:
     glm::vec3 bezierPosition(float t, const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3);
     void moveCameraBezier(float deltaTime);
     float m_t = 0.0f;
-    float m_cameraSpeed = 0.9f;
+    float m_theta;
+    float m_cameraSpeed = 0.25f;
     std::vector<glm::vec3> m_controlPoints;
     std::chrono::high_resolution_clock::time_point previousTime;
     bool m_tIncreasing = true;
@@ -120,6 +121,7 @@ private:
     glm::vec3 p3;
     glm::vec3 generateControlPoint(const glm::vec3& basePoint, float magnitude);
     glm::vec3 m_bezierPosition;
+    void moveCameraCircular(float deltaTime);
 
     //Proj6:
     GLuint m_texture_shader;
