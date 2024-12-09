@@ -44,7 +44,9 @@ vec4 calculatePhong(vec3 L, vec4 lightColor, float attenuation) {
     if(mat_kd == vec3(0.244469,0.137024,0.087113)||mat_kd == vec3(0.376260,0.205079,0.130137)){
         vec3 roofMap = texture(roofMap, TextureCoords).rgb * 2.0 - 1.0;
         N = normalize(TBN * roofMap);
-    } else if(mat_kd == vec3(0.799098,1.000000,0.412543)||mat_kd == vec3(0.799098,0.450786,0.610496)||mat_kd == vec3(0.799098,0.623961,0.258183)|| mat_kd == vec3(1.000000,0.930112,0.428691)){
+    } else if(mat_kd == vec3(0.799098,1.000000,0.412543)||mat_kd == vec3(0.799098,0.450786,0.610496)||mat_kd == vec3(0.799098,0.623961,0.258183)){
+        //yellow wall vec if we want that textured too: mat_kd == vec3(1.000000,0.930112,0.428691
+
         vec3 wallMap = texture(wallMap, TextureCoords).rgb * 2.0 - 1.0;
         N = normalize(TBN * wallMap);
     }

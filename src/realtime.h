@@ -15,7 +15,7 @@
 #include <QTimer>
 
 #include "utils/sceneparser.h"
-#include "shapes/shape.h"
+//#include "shapes/shape.h"
 #include "camera/camera.h"
 
 class Realtime : public QOpenGLWidget
@@ -90,7 +90,7 @@ private:
 
 
     void setupShapes();
-    void setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const glm::mat4& ctm, SceneMaterial material);
+    // void setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const glm::mat4& ctm, SceneMaterial material);
     void setupShaders();
     void setUpMesh(const glm::mat4& ctm, SceneMaterial mat);
 

@@ -42,11 +42,11 @@ add_executable(${PROJECT_NAME}
     src/utils/shaderloader.h
     src/utils/aspectratiowidget/aspectratiowidget.hpp
     src/camera/camera.h src/camera/camera.cpp
-    src/shapes/cube.h src/shapes/cube.cpp
-    src/shapes/cone.h src/shapes/cone.cpp
-    src/shapes/cylinder.h src/shapes/cylinder.cpp
-    src/shapes/sphere.h src/shapes/sphere.cpp
-    src/shapes/shape.h
+    # src/shapes/cube.h src/shapes/cube.cpp
+    # src/shapes/cone.h src/shapes/cone.cpp
+    # src/shapes/cylinder.h src/shapes/cylinder.cpp
+    # src/shapes/sphere.h src/shapes/sphere.cpp
+    # src/shapes/shape.h
     src/utils/objparser.h src/utils/objparser.cpp
     src/stb_image.h
 
