@@ -199,8 +199,10 @@ bool objparser::loadOBJ(const char * path, std::vector<float> & out_vertices){
             out_vertices.push_back(mat.Ks[1]);
             out_vertices.push_back(mat.Ks[2]);
 
+            out_vertices.push_back(mat.Ns);
 
-            //UV coordinates
+
+            // UV coordinates
             unsigned int uvIndex = uvIndices[i + j];
             glm::vec2 uv = temp_uvs[uvIndex - 1];
             out_vertices.push_back(uv.x);

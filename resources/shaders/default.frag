@@ -5,6 +5,7 @@ in vec3 worldNormal;
 in vec3 mat_ka;
 in vec3 mat_kd;
 in vec3 mat_ks;
+in float mat_shininess;
 out vec4 fragColor;
 
 in vec2 TextureCoords;
@@ -37,14 +38,14 @@ float calculateAttenuation(vec3 attenuation, float distance) {
 }
 
 vec4 calculatePhong(vec3 L, vec4 lightColor, float attenuation) {
-    vec3 N;
 
-    // if(mat_kd == vec3(0.061246,0.038204,0.027321)){
-    //     vec3 normalMap = texture(normalMap, TextureCoords).rgb * 2.0 - 1.0;
-    //     N = normalize(TBN * normalMap);
-    // } else{
+    vec3 N;
+    if(mat_kd == vec3(0.244469,0.137024,0.087113)||mat_kd == vec3(0.376260,0.205079,0.130137)){
+        vec3 normalMap = texture(normalMap, TextureCoords).rgb * 2.0 - 1.0;
+        N = normalize(TBN * normalMap);
+    } else{
         N = normalize(worldNormal);
-    // }
+    }
 
     vec3 V = normalize(vec3(cameraPos) - worldPosition);
     vec3 lightDir = L;
@@ -55,7 +56,12 @@ vec4 calculatePhong(vec3 L, vec4 lightColor, float attenuation) {
 
     //specular
     vec3 reflectedLight = reflect(-lightDir, N);
-    float specIntensity = pow(max(dot(reflectedLight, V), 0.0), max(shininess , 0.001));
+
+    float specIntensity = 0.0; // Default to no specular
+    if (worldPosition[1] >= 16.0) {
+        float spec = mat_shininess * 0.1;
+        specIntensity = pow(max(dot(reflectedLight, V), 0.0), max(spec, 0.001));
+    }
     vec4 specular = k_s * specIntensity * vec4(mat_ks, 1) * vec4(10.f);
 
     return (diffuse + specular) * attenuation;

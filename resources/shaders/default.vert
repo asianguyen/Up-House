@@ -5,16 +5,17 @@ layout(location = 1) in vec3 normal;
 layout(location = 2) in vec3 ka;
 layout(location = 3) in vec3 kd;
 layout(location = 4) in vec3 ks;
+layout(location = 5) in float shininess;
 
-layout(location = 5) in vec2 textureCoord;
-layout(location = 6) in vec3 tangent;
+layout(location = 6) in vec2 textureCoord;
+layout(location = 7) in vec3 tangent;
 
 out vec3 worldPosition;
 out vec3 worldNormal;
 out vec3 mat_ka;
 out vec3 mat_kd;
 out vec3 mat_ks;
-
+out float mat_shininess;
 out vec2 TextureCoords;
 out mat3 TBN;
 
@@ -41,6 +42,7 @@ void main() {
     mat_ka = ka;
     mat_kd = kd;
     mat_ks = ks;
+    mat_shininess = shininess;
 
 
 }

@@ -3,7 +3,7 @@
   "globalData": {
     "ambientCoeff": 0.6,
     "diffuseCoeff": 0.45,
-    "specularCoeff": 0.8,
+    "specularCoeff": 0.3,
     "transparentCoeff": 0
   },
   "cameraData": {
@@ -14,11 +14,17 @@
   },
   "groups": [
     {
+      "translate": [10, 40.0, 10],
       "lights": [
         {
           "type": "directional",
           "color": [1.0, 1.0, 1.0],
           "direction": [0, -1.0, 0.0]
+        },
+        {
+          "type": "point",
+          "color": [1.0, 1.0, 1.0],
+          "attenuationCoeff": [1, 0.1, 0.0]
         }
       ]
     },

@@ -526,7 +526,7 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
 
 
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
-    mesh_vertex_count = data.size() / 20;
+    mesh_vertex_count = data.size() / 21;
 
     shapedata.vertexCount = mesh_vertex_count;
 
@@ -539,33 +539,33 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
 
 
     glEnableVertexAttribArray(0);
-
-    //position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), reinterpret_cast<void*>(0));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,21 * sizeof(GLfloat), reinterpret_cast<void*>(0));
 
     //normal attribute
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
 
     // ka attribute
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
 
     //kd attribute
     glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), reinterpret_cast<void*>(9 * sizeof(GLfloat)));
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(9 * sizeof(GLfloat)));
 
     //ks attribute
     glEnableVertexAttribArray(4);
-    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), reinterpret_cast<void*>(12 * sizeof(GLfloat)));
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(12 * sizeof(GLfloat)));
 
-    //texture coords
+    //specular attribute
     glEnableVertexAttribArray(5);
-    glVertexAttribPointer(5, 2, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), (void*)(15 * sizeof(GLfloat)));
+    glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(15 * sizeof(GLfloat)));
 
-    //tangent
     glEnableVertexAttribArray(6);
-    glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), (void*)(17 * sizeof(GLfloat)));
+    glVertexAttribPointer(6, 2, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(16 * sizeof(GLfloat)));
+
+    glEnableVertexAttribArray(7);
+    glVertexAttribPointer(7, 3, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(18 * sizeof(GLfloat)));
 
     m_shapeDataList.push_back(shapedata);
 
