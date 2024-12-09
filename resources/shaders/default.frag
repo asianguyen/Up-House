@@ -28,7 +28,8 @@ uniform float k_a, k_d, k_s, shininess;
 uniform vec4 materialAmbient, materialDiffuse, materialSpecular;
 uniform vec4 cameraPos;
 
-uniform sampler2D normalMap;
+uniform sampler2D roofMap;
+uniform sampler2D wallMap;
 
 float calculateAttenuation(vec3 attenuation, float distance) {
     float constant = attenuation.x;
@@ -41,9 +42,15 @@ vec4 calculatePhong(vec3 L, vec4 lightColor, float attenuation) {
 
     vec3 N;
     if(mat_kd == vec3(0.244469,0.137024,0.087113)||mat_kd == vec3(0.376260,0.205079,0.130137)){
-        vec3 normalMap = texture(normalMap, TextureCoords).rgb * 2.0 - 1.0;
-        N = normalize(TBN * normalMap);
-    } else{
+        vec3 roofMap = texture(roofMap, TextureCoords).rgb * 2.0 - 1.0;
+        N = normalize(TBN * roofMap);
+    } else if(mat_kd == vec3(0.799098,1.000000,0.412543)||mat_kd == vec3(0.799098,0.450786,0.610496)||mat_kd == vec3(0.799098,0.623961,0.258183)){
+        //yellow wall vec if we want that textured too: mat_kd == vec3(1.000000,0.930112,0.428691
+
+        vec3 wallMap = texture(wallMap, TextureCoords).rgb * 2.0 - 1.0;
+        N = normalize(TBN * wallMap);
+    }
+    else{
         N = normalize(worldNormal);
     }
 
