@@ -26,25 +26,25 @@
 		"files" : 
 		[
 			"CMakeLists.txt",
-			"/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsVersionlessTargets.cmake",
-			"/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfig.cmake",
-			"/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6/Qt6Config.cmake",
-			"/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6OpenGL/Qt6OpenGLVersionlessTargets.cmake",
-			"/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6OpenGL/Qt6OpenGLConfig.cmake",
-			"/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets.cmake",
-			"/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6Gui/Qt6GuiVersionlessTargets.cmake",
-			"/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6Gui/Qt6GuiConfig.cmake",
-			"/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6/FindWrapOpenGL.cmake",
-			"/Users/asianguyen/Qt/Tools/CMake/CMake.app/Contents/share/cmake-3.29/Modules/CMakeFindDependencyMacro.cmake",
-			"/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake",
-			"/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6Gui/Qt6GuiDependencies.cmake",
-			"/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6Gui/Qt6GuiTargets.cmake",
-			"/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6Xml/Qt6XmlVersionlessTargets.cmake",
-			"/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6Xml/Qt6XmlConfig.cmake",
-			"/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6Core/Qt6CoreVersionlessTargets.cmake",
-			"/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6Core/Qt6CoreConfig.cmake",
-			"/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6Core/Qt6CoreTargets.cmake",
-			"/Users/asianguyen/Qt/6.7.3/macos/lib/cmake/Qt6Core/Qt6CoreMacros.cmake"
+			"/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsVersionlessTargets.cmake",
+			"/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfig.cmake",
+			"/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6/Qt6Config.cmake",
+			"/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6OpenGL/Qt6OpenGLVersionlessTargets.cmake",
+			"/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6OpenGL/Qt6OpenGLConfig.cmake",
+			"/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets.cmake",
+			"/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6Gui/Qt6GuiVersionlessTargets.cmake",
+			"/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6Gui/Qt6GuiConfig.cmake",
+			"/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6/FindWrapOpenGL.cmake",
+			"/Users/sophialim/Qt/Tools/CMake/CMake.app/Contents/share/cmake-3.29/Modules/CMakeFindDependencyMacro.cmake",
+			"/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake",
+			"/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6Gui/Qt6GuiDependencies.cmake",
+			"/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6Gui/Qt6GuiTargets.cmake",
+			"/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6Xml/Qt6XmlVersionlessTargets.cmake",
+			"/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6Xml/Qt6XmlConfig.cmake",
+			"/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6Core/Qt6CoreVersionlessTargets.cmake",
+			"/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6Core/Qt6CoreConfig.cmake",
+			"/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6Core/Qt6CoreTargets.cmake",
+			"/Users/sophialim/Qt/6.7.3/macos/lib/cmake/Qt6Core/Qt6CoreMacros.cmake"
 		],
 		"nodes" : 
 		[
@@ -373,7 +373,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-Wno-deprecated-volatile -O3 -DNDEBUG -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics"
+					"fragment" : "-Wno-deprecated-volatile -g -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fcolor-diagnostics"
 				}
 			],
 			"defines" : 
@@ -385,10 +385,6 @@
 				{
 					"backtrace" : 2,
 					"define" : "QT_GUI_LIB"
-				},
-				{
-					"backtrace" : 2,
-					"define" : "QT_NO_DEBUG"
 				},
 				{
 					"backtrace" : 2,
@@ -412,101 +408,101 @@
 				{
 					"backtrace" : 2,
 					"isSystem" : true,
-					"path" : "/Users/asianguyen/Qt/6.7.3/macos/lib/QtCore.framework"
+					"path" : "/Users/sophialim/Qt/6.7.3/macos/lib/QtCore.framework"
 				},
 				{
 					"backtrace" : 2,
 					"isSystem" : true,
-					"path" : "/Users/asianguyen/Qt/6.7.3/macos/lib/QtGui.framework"
+					"path" : "/Users/sophialim/Qt/6.7.3/macos/lib/QtGui.framework"
 				},
 				{
 					"backtrace" : 2,
 					"isSystem" : true,
-					"path" : "/Users/asianguyen/Qt/6.7.3/macos/lib/QtOpenGL.framework"
+					"path" : "/Users/sophialim/Qt/6.7.3/macos/lib/QtOpenGL.framework"
 				},
 				{
 					"backtrace" : 2,
 					"isSystem" : true,
-					"path" : "/Users/asianguyen/Qt/6.7.3/macos/lib/QtOpenGLWidgets.framework"
+					"path" : "/Users/sophialim/Qt/6.7.3/macos/lib/QtOpenGLWidgets.framework"
 				},
 				{
 					"backtrace" : 2,
 					"isSystem" : true,
-					"path" : "/Users/asianguyen/Qt/6.7.3/macos/lib/QtWidgets.framework"
+					"path" : "/Users/sophialim/Qt/6.7.3/macos/lib/QtWidgets.framework"
 				},
 				{
 					"backtrace" : 2,
 					"isSystem" : true,
-					"path" : "/Users/asianguyen/Qt/6.7.3/macos/lib/QtXml.framework"
+					"path" : "/Users/sophialim/Qt/6.7.3/macos/lib/QtXml.framework"
 				}
 			],
 			"includes" : 
 			[
 				{
-					"path" : "/Users/asianguyen/Desktop/CS1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Release"
+					"path" : "/Users/sophialim/Desktop/cs1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Debug"
 				},
 				{
-					"path" : "/Users/asianguyen/Desktop/CS1230/cs1230-final"
+					"path" : "/Users/sophialim/Desktop/cs1230/cs1230-final"
 				},
 				{
 					"backtrace" : 0,
-					"path" : "/Users/asianguyen/Desktop/CS1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Release/projects_realtime_autogen/include"
+					"path" : "/Users/sophialim/Desktop/cs1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Debug/projects_realtime_autogen/include"
 				},
 				{
 					"backtrace" : 54,
-					"path" : "/Users/asianguyen/Desktop/CS1230/cs1230-final/src"
+					"path" : "/Users/sophialim/Desktop/cs1230/cs1230-final/src"
 				},
 				{
 					"backtrace" : 55,
-					"path" : "/Users/asianguyen/Desktop/CS1230/cs1230-final/projects_realtime"
+					"path" : "/Users/sophialim/Desktop/cs1230/cs1230-final/projects_realtime"
 				},
 				{
 					"backtrace" : 55,
-					"path" : "/Users/asianguyen/Desktop/CS1230/cs1230-final/PRIVATE"
+					"path" : "/Users/sophialim/Desktop/cs1230/cs1230-final/PRIVATE"
 				},
 				{
 					"backtrace" : 55,
-					"path" : "/Users/asianguyen/Desktop/CS1230/cs1230-final/glew/include"
+					"path" : "/Users/sophialim/Desktop/cs1230/cs1230-final/glew/include"
 				},
 				{
 					"backtrace" : 2,
 					"isSystem" : true,
-					"path" : "/Users/asianguyen/Qt/6.7.3/macos/lib/QtCore.framework/Headers"
+					"path" : "/Users/sophialim/Qt/6.7.3/macos/lib/QtCore.framework/Headers"
 				},
 				{
 					"backtrace" : 2,
 					"isSystem" : true,
-					"path" : "/Users/asianguyen/Qt/6.7.3/macos/mkspecs/macx-clang"
+					"path" : "/Users/sophialim/Qt/6.7.3/macos/mkspecs/macx-clang"
 				},
 				{
 					"backtrace" : 2,
 					"isSystem" : true,
-					"path" : "/Users/asianguyen/Qt/6.7.3/macos/include"
+					"path" : "/Users/sophialim/Qt/6.7.3/macos/include"
 				},
 				{
 					"backtrace" : 2,
 					"isSystem" : true,
-					"path" : "/Users/asianguyen/Qt/6.7.3/macos/lib/QtGui.framework/Headers"
+					"path" : "/Users/sophialim/Qt/6.7.3/macos/lib/QtGui.framework/Headers"
 				},
 				{
 					"backtrace" : 2,
 					"isSystem" : true,
-					"path" : "/Users/asianguyen/Qt/6.7.3/macos/lib/QtOpenGL.framework/Headers"
+					"path" : "/Users/sophialim/Qt/6.7.3/macos/lib/QtOpenGL.framework/Headers"
 				},
 				{
 					"backtrace" : 2,
 					"isSystem" : true,
-					"path" : "/Users/asianguyen/Qt/6.7.3/macos/lib/QtOpenGLWidgets.framework/Headers"
+					"path" : "/Users/sophialim/Qt/6.7.3/macos/lib/QtOpenGLWidgets.framework/Headers"
 				},
 				{
 					"backtrace" : 2,
 					"isSystem" : true,
-					"path" : "/Users/asianguyen/Qt/6.7.3/macos/lib/QtWidgets.framework/Headers"
+					"path" : "/Users/sophialim/Qt/6.7.3/macos/lib/QtWidgets.framework/Headers"
 				},
 				{
 					"backtrace" : 2,
 					"isSystem" : true,
-					"path" : "/Users/asianguyen/Qt/6.7.3/macos/lib/QtXml.framework/Headers"
+					"path" : "/Users/sophialim/Qt/6.7.3/macos/lib/QtXml.framework/Headers"
 				}
 			],
 			"language" : "CXX",
@@ -558,7 +554,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-Wno-deprecated-volatile -O3 -DNDEBUG",
+				"fragment" : "-Wno-deprecated-volatile -g",
 				"role" : "flags"
 			},
 			{
@@ -566,11 +562,11 @@
 				"role" : "flags"
 			},
 			{
-				"fragment" : "-F/Users/asianguyen/Qt/6.7.3/macos/lib",
+				"fragment" : "-F/Users/sophialim/Qt/6.7.3/macos/lib",
 				"role" : "frameworkPath"
 			},
 			{
-				"fragment" : "-Wl,-rpath,/Users/asianguyen/Qt/6.7.3/macos/lib",
+				"fragment" : "-Wl,-rpath,/Users/sophialim/Qt/6.7.3/macos/lib",
 				"role" : "libraries"
 			},
 			{
@@ -580,22 +576,22 @@
 			},
 			{
 				"backtrace" : 9,
-				"fragment" : "/Users/asianguyen/Qt/6.7.3/macos/lib/QtOpenGLWidgets.framework/Versions/A/QtOpenGLWidgets",
+				"fragment" : "/Users/sophialim/Qt/6.7.3/macos/lib/QtOpenGLWidgets.framework/Versions/A/QtOpenGLWidgets",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 16,
-				"fragment" : "/Users/asianguyen/Qt/6.7.3/macos/lib/QtOpenGL.framework/Versions/A/QtOpenGL",
+				"fragment" : "/Users/sophialim/Qt/6.7.3/macos/lib/QtOpenGL.framework/Versions/A/QtOpenGL",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 19,
-				"fragment" : "/Users/asianguyen/Qt/6.7.3/macos/lib/QtWidgets.framework/Versions/A/QtWidgets",
+				"fragment" : "/Users/sophialim/Qt/6.7.3/macos/lib/QtWidgets.framework/Versions/A/QtWidgets",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 26,
-				"fragment" : "/Users/asianguyen/Qt/6.7.3/macos/lib/QtGui.framework/Versions/A/QtGui",
+				"fragment" : "/Users/sophialim/Qt/6.7.3/macos/lib/QtGui.framework/Versions/A/QtGui",
 				"role" : "libraries"
 			},
 			{
@@ -624,12 +620,12 @@
 			},
 			{
 				"backtrace" : 43,
-				"fragment" : "/Users/asianguyen/Qt/6.7.3/macos/lib/QtXml.framework/Versions/A/QtXml",
+				"fragment" : "/Users/sophialim/Qt/6.7.3/macos/lib/QtXml.framework/Versions/A/QtXml",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 50,
-				"fragment" : "/Users/asianguyen/Qt/6.7.3/macos/lib/QtCore.framework/Versions/A/QtCore",
+				"fragment" : "/Users/sophialim/Qt/6.7.3/macos/lib/QtCore.framework/Versions/A/QtCore",
 				"role" : "libraries"
 			},
 			{
@@ -718,7 +714,7 @@
 			"backtrace" : 0,
 			"compileGroupIndex" : 0,
 			"isGenerated" : true,
-			"path" : "build/build-cs1230-final-Qt_6_7_3_for_macOS-Release/projects_realtime_autogen/mocs_compilation.cpp",
+			"path" : "build/build-cs1230-final-Qt_6_7_3_for_macOS-Debug/projects_realtime_autogen/mocs_compilation.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
@@ -877,25 +873,25 @@
 			"backtrace" : 59,
 			"compileGroupIndex" : 0,
 			"isGenerated" : true,
-			"path" : "build/build-cs1230-final-Qt_6_7_3_for_macOS-Release/.qt/rcc/qrc_Resources.cpp",
+			"path" : "build/build-cs1230-final-Qt_6_7_3_for_macOS-Debug/.qt/rcc/qrc_Resources.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/build-cs1230-final-Qt_6_7_3_for_macOS-Release/projects_realtime_autogen/timestamp",
+			"path" : "build/build-cs1230-final-Qt_6_7_3_for_macOS-Debug/projects_realtime_autogen/timestamp",
 			"sourceGroupIndex" : 2
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/build-cs1230-final-Qt_6_7_3_for_macOS-Release/.qt/rcc/qrc_Resources.cpp.rule",
+			"path" : "build/build-cs1230-final-Qt_6_7_3_for_macOS-Debug/.qt/rcc/qrc_Resources.cpp.rule",
 			"sourceGroupIndex" : 3
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/build-cs1230-final-Qt_6_7_3_for_macOS-Release/projects_realtime_autogen/timestamp.rule",
+			"path" : "build/build-cs1230-final-Qt_6_7_3_for_macOS-Debug/projects_realtime_autogen/timestamp.rule",
 			"sourceGroupIndex" : 3
 		}
 	],

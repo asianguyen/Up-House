@@ -435,6 +435,12 @@ void Realtime::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     paintTexture(m_fbo_texture);
+    auto currentTime = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<float> deltaTime = currentTime - previousTime;
+    previousTime = currentTime;
+
+
+    moveCameraBezier(deltaTime.count());
 
     // //glUseProgram(0);
     std::cout << glGetError() << std::endl;
@@ -697,7 +703,80 @@ void Realtime::settingsChanged() {
 }
 
 // ================== Project 6: Action!
+glm::vec3 Realtime::bezierTangent(float t, const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3){
+    float u = 1 - t;
+    return 3 * u * u * (p1 - p0) + 6 * u * t * (p2 - p1) + 3 * t * t * (p3 - p2);
+}
 
+glm::vec3 Realtime::bezierPosition(float t, const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3){
+    float u = 1 - t;
+    return u * u * u * p0 + 3 * u * u * t * p1 + 3 * u * t * t * p2 + t * t * t * p3;
+}
+
+void Realtime::moveCameraBezier(float deltaTime){
+
+    if (m_tIncreasing) {
+        m_t += deltaTime * m_cameraSpeed;
+        if (m_t >= 1.0f) {
+            m_t = 1.0f;     // Clamp to the endpoint
+            m_tIncreasing = false; // Reverse direction
+        }
+    } else {
+        m_t -= deltaTime * m_cameraSpeed;
+        if (m_t <= 0.0f) {
+            m_t = 0.0f;     // Clamp to the starting point
+            m_tIncreasing = true; // Reverse direction
+        }
+    }
+    // m_t += deltaTime * m_cameraSpeed;
+    // if (m_t >= 1.0f) {
+    //     m_t = 0.0f; // Reset t for the next segment
+    //     p0 = p3;
+
+    //     // Generate new control points relative to the previous endpoint
+    //     p1 = generateControlPoint(p0, 5.0f); // Adjust magnitude for dramatic curves
+    //     p2 = generateControlPoint(p1, 5.0f);
+    //     p3 = generateControlPoint(p2, 5.0f);
+    // }
+    // m_bezierPosition = bezierPosition(m_t, p0, p1, p2, p3);
+    // glm::vec3 p0(0.0f, 0.0f, 0.0f);
+    // glm::vec3 p1(2.0f, 5.0f, 0.0f);
+    // glm::vec3 p2(4.0f, 5.0f, 0.0f);
+    // glm::vec3 p3(6.0f,0.0f,0.0f);
+
+
+
+    glm::vec3 position = bezierPosition(m_t,p0, p1, p2, p3);
+    glm::vec3 forward = glm::normalize(bezierTangent(m_t, p0, p1, p2, p3));
+    glm::vec3 up(0.0f, 1.0f, 0.0f);
+
+    glm::vec3 right = glm::normalize(glm::cross(up,forward));
+    up = glm::cross(forward,right);
+
+    //m_view = glm::lookAt(position, position + forward, up);
+    m_cameraData.pos = glm::vec4(position,0.f);
+    m_cameraData.look = m_cameraData.pos + glm::vec4(forward,0.f);
+
+    // m_view = m_camera.getViewMatrix(
+    // glm::vec3(m_cameraData.pos),
+    // glm::vec3(m_cameraData.look+m_cameraData.pos),
+    // glm::vec3(m_cameraData.up)
+    //     );
+    m_view = glm::lookAt(glm::vec3(m_cameraData.pos),
+                         glm::vec3(m_cameraData.look),
+                         glm::vec3(m_cameraData.up));
+
+}
+
+glm::vec3 Realtime::generateControlPoint(const glm::vec3& basePoint, float magnitude) {
+    // Generate a random control point around the base point
+    glm::vec3 offset = glm::vec3(
+        (rand() % 100 / 100.0f - 0.5f) * magnitude,  // Random X offset
+        (rand() % 100 / 100.0f - 0.5f) * magnitude,  // Random Y offset
+        (rand() % 100 / 100.0f - 0.5f) * magnitude   // Random Z offset
+        );
+    return basePoint + offset;
+}
 
 
 void Realtime::keyPressEvent(QKeyEvent *event) {
