@@ -33,6 +33,9 @@ void MainWindow::initialize() {
     QLabel *filters_label = new QLabel(); // Filters label
     filters_label->setText("Filters");
     filters_label->setFont(font);
+    QLabel *bez_label = new QLabel(); // Bezier label
+    bez_label->setText("Bezier Curve Options");
+    bez_label->setFont(font);
     QLabel *ec_label = new QLabel(); // Extra Credit label
     ec_label->setText("Extra Credit");
     ec_label->setFont(font);
@@ -144,6 +147,10 @@ void MainWindow::initialize() {
     lfar->addWidget(farBox);
     farLayout->setLayout(lfar);
 
+    ec0 = new QCheckBox();
+    ec0->setText(QStringLiteral("Bezier Circle"));
+    ec0->setChecked(false);
+
     // Extra Credit:
     ec1 = new QCheckBox();
     ec1->setText(QStringLiteral("Extra Credit 1"));
@@ -176,8 +183,13 @@ void MainWindow::initialize() {
     vLayout->addWidget(filters_label);
     vLayout->addWidget(filter1);
     vLayout->addWidget(filter2);
+
+    //Bezier curve
+    vLayout->addWidget(bez_label);
+    vLayout->addWidget(ec0);
     // Extra Credit:
     vLayout->addWidget(ec_label);
+
     vLayout->addWidget(ec1);
     vLayout->addWidget(ec2);
     vLayout->addWidget(ec3);
@@ -252,6 +264,7 @@ void MainWindow::connectFar() {
 }
 
 void MainWindow::connectExtraCredit() {
+    connect(ec0, &QCheckBox::clicked, this, &MainWindow::onBezierCircle);
     connect(ec1, &QCheckBox::clicked, this, &MainWindow::onExtraCredit1);
     connect(ec2, &QCheckBox::clicked, this, &MainWindow::onExtraCredit2);
     connect(ec3, &QCheckBox::clicked, this, &MainWindow::onExtraCredit3);
@@ -354,6 +367,11 @@ void MainWindow::onValChangeFarBox(double newValue) {
 }
 
 // Extra Credit:
+
+void MainWindow::onBezierCircle() {
+    settings.circle = !settings.circle;
+    realtime->settingsChanged();
+}
 
 void MainWindow::onExtraCredit1() {
     settings.extraCredit1 = !settings.extraCredit1;

@@ -442,8 +442,9 @@ void Realtime::paintGL() {
     previousTime = currentTime;
 
     // moveCameraCircular(deltaTime.count());
-    moveCameraBezier(deltaTime.count());
-
+    if (settings.circle){
+        moveCameraBezier(deltaTime.count());
+    }
     // //glUseProgram(0);
     // std::cout << glGetError() << std::endl;
 }
@@ -781,17 +782,15 @@ glm::vec3 Realtime::bezierPosition(float t, const glm::vec3& p0, const glm::vec3
 // }
 
 void Realtime::moveCameraBezier(float deltaTime) {
-    // Update `m_t` to move continuously around the circle
-    std::cout << "deltaTime: " << deltaTime << std::endl;
     m_t += deltaTime * m_cameraSpeed;
     if (m_t >= 1.0f) {
-        m_t = 0.f; // Wrap around when completing the circle
+        m_t = 0.f;
     } else if (m_t < 0.0f) {
-        m_t = 0.f; // Ensure `m_t` is never negative
+        m_t = 0.f;
     }
 
-    // Define the control points for the four cubic Bézier segments
-    const float radius = 5.0f; // Radius of the circle
+    // bezier control points
+    const float radius = 10.0f;
     glm::vec3 p0( radius, 0.0f,  0.0f);
     glm::vec3 p1( radius, 0.0f,  radius * 0.55f);
     glm::vec3 p2( radius * 0.55f, 0.0f,  radius);
@@ -835,12 +834,8 @@ void Realtime::moveCameraBezier(float deltaTime) {
     forward = glm::normalize(forward);
     glm::vec3 up(0.0f, 1.0f, 0.0f);
 
-    // Update camera position and orientation
-    std::cout << "x " << position[0] << std::endl;
-    std::cout << "y " << position[1] << std::endl;
-    std::cout << "z " << position[2] << std::endl;
     m_cameraData.pos = glm::vec4(position, 1.0f);
-    // m_cameraData.look = glm::vec4(forward, 0.0f);
+    // m_cameraData.look = m_cameraData.pos - glm::vec4(forward, 0.0f);
     //m_cameraData.up = glm::vec4(up, 0.0f);
 
     // Update view matrix

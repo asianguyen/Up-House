@@ -45,6 +45,7 @@ private:
     QDoubleSpinBox *farBox;
 
     // Extra Credit:
+    QCheckBox *ec0;
     QCheckBox *ec1;
     QCheckBox *ec2;
     QCheckBox *ec3;
@@ -63,6 +64,7 @@ private slots:
     void onValChangeFarBox(double newValue);
 
     // Extra Credit:
+    void onBezierCircle();
     void onExtraCredit1();
     void onExtraCredit2();
     void onExtraCredit3();
