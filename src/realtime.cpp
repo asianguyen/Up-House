@@ -110,6 +110,7 @@ void Realtime::loadNormalMap() {
     glBindTexture(GL_TEXTURE_2D, m_normalMap);
 
     int width, height, nrChannels;
+    // std::string normalFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/roof2.jpg";
     std::string normalFile= "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/roof2.jpg";
     unsigned char *data = stbi_load(normalFile.c_str(), &width, &height, &nrChannels, 0);
     if (data) {
@@ -133,6 +134,14 @@ void Realtime::setupSkyBox(){
     glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxTexture);
 
     //load each texture face
+    // std::vector<std::string> faces = {
+    //     "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/right.jpg", //Positive X
+    //     "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/left.jpg",//Negative X
+    //     "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/top.jpg", //Positive Y
+    //     "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/bottom.jpg", //Negative Y
+    //     "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/front.jpg",//Positive Z
+    //     "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/back.jpg" //Negative Z
+    // };
     std::vector<std::string> faces = {
         "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/right.jpg", //Positive X
         "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/left.jpg",//Negative X
@@ -398,7 +407,7 @@ void Realtime::paintGL() {
     GLint lightCountLoc = glGetUniformLocation(m_shader, "lightCount");
     glUniform1i(lightCountLoc, renderData.lights.size());
 
-   // loop through all shapes
+    // loop through all shapes
     for (const auto& shapeData : m_shapeDataList) {
 
         glBindVertexArray(shapeData.vao);
@@ -542,6 +551,7 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
     shapedata.vbo = mesh_vbo;
 
     std::vector<float> data;
+    // objparser::loadOBJ("/Users/sophialim/Desktop/CS1230/cs1230-final/house/actualfinalhouseandballoons.obj", data);
     objparser::loadOBJ("C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/house/actualfinalhouseandballoons.obj", data);
 
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
@@ -575,7 +585,7 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
     //ks attribute
     glEnableVertexAttribArray(4);
     glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), reinterpret_cast<void*>(12 * sizeof(GLfloat)));
-    //test
+
     // specular attribute
     // glEnableVertexAttribArray(5);
     // glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(15 * sizeof(GLfloat)));
@@ -700,7 +710,8 @@ void Realtime::settingsChanged() {
         glDeleteVertexArrays(1, &shapeData.vao);
     }
     m_shapeDataList.clear();
-
+    m_cameraData.pos = glm::vec4(0.f,5.f,25.f,0.f);
+    m_cameraData.look = -m_cameraData.pos;
     //unnecessarily realocating data for shapes
     setupShapes();
 
@@ -722,8 +733,8 @@ void Realtime::moveCameraBezier(float deltaTime){
 
     if (m_tIncreasing) {
         m_t += deltaTime * m_cameraSpeed;
-        if (m_t >= 5.0f) {
-            m_t = 5.0f;
+        if (m_t >= 1.0f) {
+            m_t = 1.0f;
             m_tIncreasing = false; // reverse direction
         }
     } else {
@@ -733,18 +744,19 @@ void Realtime::moveCameraBezier(float deltaTime){
             m_tIncreasing = true; // reverse direction
         }
     }
-    glm::vec3 p0(0.0f, 0.0f, 0.0f);
-    glm::vec3 p1(2.0f, 5.0f, -5.0f);
-    glm::vec3 p2(4.0f, 5.0f, -5.0f);
-    glm::vec3 p3(6.0f,0.0f,0.0f);
+    glm::vec3 p0(-10.0f, -10.0f, 0.0f);
+    glm::vec3 p1(2.0f, 30.0f, -20.0f);
+    glm::vec3 p2(4.0f, 30.0f, -10.0f);
+    glm::vec3 p3(10.0f,-40.0f,10.0f);
 
     glm::vec3 position = bezierPosition(m_t, p0, p1, p2, p3);
 
 
-    m_cameraData.pos = glm::vec4(position, 1.0f);
+    // m_cameraData.pos = glm::vec4(position, 1.0f);
+
     for (auto& shapeData : m_shapeDataList) {
         // Create a translation matrix based on the camera position
-        shapeData.modelMatrix = glm::translate(glm::mat4(1.0f), position + glm::vec3(10.0f, 0.0f, 0.0f));
+        shapeData.modelMatrix = glm::translate(glm::mat4(1.0f), position);
 
         // Pass the updated model matrix to the shader
         // GLint modelMatrixLocation = glGetUniformLocation(m_shader, "modelMatrix");
@@ -764,22 +776,23 @@ void Realtime::moveCameraBezierCircle(float deltaTime) {
     }
 
     // bezier control points
-    const float radius = 10.0f;
-    glm::vec3 p0( radius, 0.0f,  0.0f);
-    glm::vec3 p1( radius, 0.0f,  radius * 0.55f);
-    glm::vec3 p2( radius * 0.55f, 0.0f,  radius);
-    glm::vec3 p3( 0.0f, 0.0f,  radius);
+    const float radius = settings.cameraDistance;
+    const float y = settings.cameraY;
+    glm::vec3 p0( radius, y,  0.0f);
+    glm::vec3 p1( radius, y,  radius * 0.55f);
+    glm::vec3 p2( radius * 0.55f, y,  radius);
+    glm::vec3 p3( 0.0f, y,  radius);
 
-    glm::vec3 p4(-radius * 0.55f, 0.0f,  radius);
-    glm::vec3 p5(-radius, 0.0f,  radius * 0.55f);
-    glm::vec3 p6(-radius, 0.0f,  0.0f);
+    glm::vec3 p4(-radius * 0.55f, y,  radius);
+    glm::vec3 p5(-radius, y,  radius * 0.55f);
+    glm::vec3 p6(-radius, y,  0.0f);
 
-    glm::vec3 p7(-radius, 0.0f, -radius * 0.55f);
-    glm::vec3 p8(-radius * 0.55f, 0.0f, -radius);
-    glm::vec3 p9( 0.0f, 0.0f, -radius);
+    glm::vec3 p7(-radius, y, -radius * 0.55f);
+    glm::vec3 p8(-radius * 0.55f, y, -radius);
+    glm::vec3 p9( 0.0f, y, -radius);
 
-    glm::vec3 p10(radius * 0.55f, 0.0f, -radius);
-    glm::vec3 p11(radius, 0.0f, -radius * 0.55f);
+    glm::vec3 p10(radius * 0.55f, y, -radius);
+    glm::vec3 p11(radius, y, -radius * 0.55f);
 
     // select the correct segment of the circle
     float segmentT = m_t * 4.0f;
@@ -807,7 +820,8 @@ void Realtime::moveCameraBezierCircle(float deltaTime) {
     forward = glm::normalize(forward);
 
     m_cameraData.pos = glm::vec4(position, 1.0f);
-    // m_cameraData.look = m_cameraData.pos - glm::vec4(forward, 0.0f);
+    m_cameraData.look = -m_cameraData.pos;
+    m_cameraData.up = glm::vec4(0.f, 1.f, 0.f, 0.f);
 
     // Update view matrix
     // m_view = m_camera.getViewMatrix(
@@ -888,8 +902,8 @@ void Realtime::moveCameraBezierCircle(float deltaTime) {
 //     m_cameraData.pos = glm::vec4(position, 1.0f);
 //     // glm::vec3 forward = glm::normalize(center - glm::vec3(m_cameraData.pos));
 
-    // glm::vec3 forward = glm::normalize(bezierTangent(m_t, p0, p1, p2, p3));
-    // // m_cameraData.look = m_cameraData.pos + glm::vec4(forward, 0.0f);
+// glm::vec3 forward = glm::normalize(bezierTangent(m_t, p0, p1, p2, p3));
+// // m_cameraData.look = m_cameraData.pos + glm::vec4(forward, 0.0f);
 
 //     // m_view = glm::lookAt(glm::vec3(m_cameraData.pos),
 //     //                      glm::vec3(m_cameraData.look),
@@ -1015,12 +1029,12 @@ void Realtime::timerEvent(QTimerEvent *event) {
     }
 
     // if (moved) {
-        //update view matrix
-        m_view = m_camera.getViewMatrix(
-            glm::vec3(m_cameraData.pos),
-            glm::vec3(m_cameraData.look),
-            glm::vec3(m_cameraData.up)
-            );
+    //update view matrix
+    m_view = m_camera.getViewMatrix(
+        glm::vec3(m_cameraData.pos),
+        glm::vec3(m_cameraData.look),
+        glm::vec3(m_cameraData.up)
+        );
     // }
 
     update(); // asks for a PaintGL() call to occur
