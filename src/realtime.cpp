@@ -575,7 +575,7 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
     //ks attribute
     glEnableVertexAttribArray(4);
     glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), reinterpret_cast<void*>(12 * sizeof(GLfloat)));
-
+    //test
     // specular attribute
     // glEnableVertexAttribArray(5);
     // glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(15 * sizeof(GLfloat)));
