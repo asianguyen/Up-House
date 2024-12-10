@@ -51,11 +51,16 @@ void Realtime::finish() {
     }
     m_shapeDataList.clear();
 
+    glDeleteBuffers(1, &mesh_vbo);
+    glDeleteVertexArrays(1, &mesh_vao);
+
     this->doneCurrent();
 }
 
 void Realtime::initializeGL() {
     m_devicePixelRatio = this->devicePixelRatio();
+    m_t = 0.0f;
+    previousTime = std::chrono::high_resolution_clock::now();
 
     m_timer = startTimer(1000/60);
     m_elapsedTimer.start();
@@ -81,8 +86,8 @@ void Realtime::initializeGL() {
 
     m_defaultFBO = 2;
 
+    loadNormalMap();
     setupShaders();
-
     setupSkyBox();
     setupSkyBoxGeometry();
 
@@ -101,18 +106,50 @@ void Realtime::setupShaders(){
 
 }
 
+void Realtime::loadNormalMap() {
+    glGenTextures(1, &m_normalMap);
+    glBindTexture(GL_TEXTURE_2D, m_normalMap);
+
+    int width, height, nrChannels;
+    // std::string normalFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/roof2.jpg";
+    std::string normalFile= "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/roof2.jpg";
+    unsigned char *data = stbi_load(normalFile.c_str(), &width, &height, &nrChannels, 0);
+    if (data) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D); //generates mipmaps for the texture for visual quality at different distances
+    }
+    else
+    {
+        std::cout << "Normal tex failed to load at path: " << normalFile << std::endl;
+    }
+    stbi_image_free(data);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
 void Realtime::setupSkyBox(){
     glGenTextures(1, &m_skyboxTexture);
     glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxTexture);
 
     //load each texture face
+    // std::vector<std::string> faces = {
+    //     "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/right.jpg", //Positive X
+    //     "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/left.jpg",//Negative X
+    //     "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/top.jpg", //Positive Y
+    //     "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/bottom.jpg", //Negative Y
+    //     "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/front.jpg",//Positive Z
+    //     "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/back.jpg" //Negative Z
+    // };
     std::vector<std::string> faces = {
-        "./resources/images/right.jpg", //Positive X
-        "./resources/images/left.jpg",//Negative X
-        "./resources/images/top.jpg", //Positive Y
-        "./resources/images/bottom.jpg", //Negative Y
-        "./resources/images/front.jpg",//Positive Z
-        "./resources/images/back.jpg" //Negative Z
+        "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/right.jpg", //Positive X
+        "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/left.jpg",//Negative X
+        "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/top.jpg", //Positive Y
+        "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/bottom.jpg", //Negative Y
+        "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/front.jpg",//Positive Z
+        "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/back.jpg" //Negative Z
     };
 
     int width, height, nrChannels;
@@ -372,26 +409,33 @@ void Realtime::paintGL() {
     GLint lightCountLoc = glGetUniformLocation(m_shader, "lightCount");
     glUniform1i(lightCountLoc, renderData.lights.size());
 
-    //loop through all shapes
+    // loop through all shapes
     for (const auto& shapeData : m_shapeDataList) {
 
         glBindVertexArray(shapeData.vao);
-        glBindBuffer(GL_ARRAY_BUFFER, shapeData.vbo);
+        //glBindBuffer(GL_ARRAY_BUFFER, mesh_vbo);
 
         GLint modelMatrixLocation = glGetUniformLocation(m_shader, "modelMatrix");
         glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, glm::value_ptr(shapeData.modelMatrix));
 
-        GLint ambientColorLoc = glGetUniformLocation(m_shader, "materialAmbient");
-        glUniform4fv(ambientColorLoc, 1, glm::value_ptr(shapeData.material.cAmbient));
+        // GLint ambientColorLoc = glGetUniformLocation(m_shader, "materialAmbient");
+        // glUniform4fv(ambientColorLoc, 1, glm::value_ptr(shapeData.material.cAmbient));
 
-        GLint diffuseColorLoc = glGetUniformLocation(m_shader, "materialDiffuse");
-        glUniform4fv(diffuseColorLoc, 1, glm::value_ptr(shapeData.material.cDiffuse));
+        // GLint diffuseColorLoc = glGetUniformLocation(m_shader, "materialDiffuse");
+        // glUniform4fv(diffuseColorLoc, 1, glm::value_ptr(shapeData.material.cDiffuse));
 
-        GLint specularColorLoc = glGetUniformLocation(m_shader, "materialSpecular");
-        glUniform4fv(specularColorLoc, 1, glm::value_ptr(shapeData.material.cSpecular));
+        // GLint specularColorLoc = glGetUniformLocation(m_shader, "materialSpecular");
+        // glUniform4fv(specularColorLoc, 1, glm::value_ptr(shapeData.material.cSpecular));
 
         GLint shininessLocation = glGetUniformLocation(m_shader, "shininess");
         glUniform1f(shininessLocation, shapeData.material.shininess);
+
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, m_normalMap); //Bind the normal map to texture unit 1
+
+        GLuint normalMapLocation = glGetUniformLocation(m_shader, "normalMap");
+
+        glUniform1i(normalMapLocation, 1);
 
         glDrawArrays(GL_TRIANGLES, 0, shapeData.vertexCount);
 
@@ -404,15 +448,16 @@ void Realtime::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     paintTexture(m_fbo_texture);
-
     auto currentTime = std::chrono::high_resolution_clock::now();
     std::chrono::duration<float> deltaTime = currentTime - previousTime;
     previousTime = currentTime;
 
-
-    moveCameraBezier(deltaTime.count());
-
-    glUseProgram(0);
+    if (settings.circle){
+        moveCameraBezierCircle(deltaTime.count());
+    }
+    if (settings.curve){
+        moveCameraBezier(deltaTime.count());
+    }
 
 }
 
@@ -430,7 +475,7 @@ void Realtime::renderSkybox() {
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxTexture);
-    glUniform1i(glGetUniformLocation(m_skybox_shader, "skybox"), 0);  // Set texture uniform
+    glUniform1i(glGetUniformLocation(m_skybox_shader, "skybox"), 0);
 
     glBindVertexArray(m_skyboxVAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -485,13 +530,80 @@ void Realtime::setupShapes() {
             shape = new Sphere();
             break;
         case PrimitiveType::PRIMITIVE_MESH:
+            setUpMesh(primitive.ctm, primitive.primitive.material);
             break;
         }
 
-        shape->updateParams(settings.shapeParameter1, settings.shapeParameter2);
-        setupVAOVBOForShape(*shape, primitive.primitive.type, primitive.ctm, primitive.primitive.material);
+        //shape->updateParams(settings.shapeParameter1, settings.shapeParameter2);
+        //setupVAOVBOForShape(*shape, primitive.primitive.type, primitive.ctm, primitive.primitive.material);
 
     }
+}
+
+void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
+
+    ShapeData shapedata;
+    shapedata.modelMatrix = ctm;
+
+
+    glGenBuffers(1, &mesh_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, mesh_vbo);
+
+    shapedata.vbo = mesh_vbo;
+
+    std::vector<float> data;
+    // objparser::loadOBJ("/Users/sophialim/Desktop/CS1230/cs1230-final/house/actualfinalhouseandballoons.obj", data);
+    objparser::loadOBJ("C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/house/actualfinalhouseandballoons.obj", data);
+
+    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
+    mesh_vertex_count = data.size() / 20;
+    shapedata.vertexCount = mesh_vertex_count;
+
+    shapedata.material = mat;
+
+    glGenVertexArrays(1, &mesh_vao);
+    glBindVertexArray(mesh_vao);
+
+    shapedata.vao = mesh_vao;
+
+
+    //position attribute
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,20 * sizeof(GLfloat), reinterpret_cast<void*>(0));
+
+    //normal attribute
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
+
+    // ka attribute
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
+
+    //kd attribute
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), reinterpret_cast<void*>(9 * sizeof(GLfloat)));
+
+    //ks attribute
+    glEnableVertexAttribArray(4);
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), reinterpret_cast<void*>(12 * sizeof(GLfloat)));
+
+    // specular attribute
+    // glEnableVertexAttribArray(5);
+    // glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(15 * sizeof(GLfloat)));
+
+    //texture coords
+    glEnableVertexAttribArray(5);
+    glVertexAttribPointer(5, 2, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), (void*)(15 * sizeof(GLfloat)));
+
+    //tangent
+    glEnableVertexAttribArray(6);
+    glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, 20 * sizeof(GLfloat), (void*)(17 * sizeof(GLfloat)));
+
+    m_shapeDataList.push_back(shapedata);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
 }
 
 void Realtime::setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const glm::mat4& ctm, SceneMaterial material) {
@@ -502,11 +614,7 @@ void Realtime::setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const 
     glGenBuffers(1, &shapeData.vbo);
     glBindBuffer(GL_ARRAY_BUFFER, shapeData.vbo);
 
-    std::vector<float> data;
-    data.clear();
-
-    objparser::loadOBJ("/Users/asianguyen/Desktop/CS1230/house/untitled.obj", data);
-
+    std::vector<float> data = shape.generateShape();
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
     shapeData.vertexCount = data.size() / 16;
 
@@ -518,6 +626,7 @@ void Realtime::setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const 
 
     //position attribute
     glEnableVertexAttribArray(0);
+
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(0));
 
     //normal attribute
@@ -619,7 +728,8 @@ void Realtime::settingsChanged() {
         glDeleteVertexArrays(1, &shapeData.vao);
     }
     m_shapeDataList.clear();
-
+    m_cameraData.pos = glm::vec4(0.f,5.f,25.f,0.f);
+    m_cameraData.look = -m_cameraData.pos;
     //unnecessarily realocating data for shapes
     setupShapes();
 
@@ -639,38 +749,89 @@ glm::vec3 Realtime::bezierPosition(float t, const glm::vec3& p0, const glm::vec3
 
 void Realtime::moveCameraBezier(float deltaTime){
 
-    m_t += 10.0f*deltaTime * m_cameraSpeed;
-    if (m_t> 1.0f){
-        m_t = 1.0f;
+    if (m_tIncreasing) {
+        m_t += deltaTime * settings.cameraSpeed;
+        if (m_t >= 1.0f) {
+            m_t = 1.0f;
+            m_tIncreasing = false; // reverse direction
+        }
+    } else {
+        m_t -= deltaTime * settings.cameraSpeed;
+        if (m_t <= 0.0f) {
+            m_t = 0.0f;
+            m_tIncreasing = true; // reverse direction
+        }
     }
+    glm::vec3 p0(-10.0f, -10.0f, 0.0f);
+    glm::vec3 p1(2.0f, 30.0f, -20.0f);
+    glm::vec3 p2(4.0f, 30.0f, -10.0f);
+    glm::vec3 p3(10.0f,-40.0f,10.0f);
 
-    glm::vec3 p0(0.0f, 0.0f, 0.0f);
-    glm::vec3 p1(2.0f, 5.0f, 0.0f);
-    glm::vec3 p2(4.0f, 5.0f, 0.0f);
-    glm::vec3 p3(6.0f,0.0f,0.0f);
+    glm::vec3 position = bezierPosition(m_t, p0, p1, p2, p3);
 
-    glm::vec3 position = bezierPosition(m_t,p0, p1, p2, p3);
-    glm::vec3 forward = glm::normalize(bezierTangent(m_t, p0, p1, p2, p3));
-    glm::vec3 up(0.0f, 1.0f, 0.0f);
+    for (auto& shapeData : m_shapeDataList) {
+        shapeData.modelMatrix = glm::translate(glm::mat4(1.0f), position);
 
-    glm::vec3 right = glm::normalize(glm::cross(up,forward));
-    up = glm::cross(forward,right);
-
-    //m_view = glm::lookAt(position, position + forward, up);
-    m_cameraData.pos = glm::vec4(position,0.f);
-    m_cameraData.look = m_cameraData.pos + glm::vec4(forward,0.f);
-
-    // m_view = m_camera.getViewMatrix(
-        // glm::vec3(m_cameraData.pos),
-        // glm::vec3(m_cameraData.look+m_cameraData.pos),
-        // glm::vec3(m_cameraData.up)
-    //     );
-    m_view = glm::lookAt(glm::vec3(m_cameraData.pos),
-                         glm::vec3(m_cameraData.look),
-                         glm::vec3(m_cameraData.up));
+    }
 
 }
 
+void Realtime::moveCameraBezierCircle(float deltaTime) {
+    m_t += deltaTime * settings.cameraSpeed;
+    if (m_t >= 1.0f) {
+        m_t = 0.f;
+    } else if (m_t < 0.0f) {
+        m_t = 0.f;
+    }
+
+    // bezier control points
+    const float radius = settings.cameraDistance;
+    const float y = settings.cameraY;
+    glm::vec3 p0( radius, y,  0.0f);
+    glm::vec3 p1( radius, y,  radius * 0.55f);
+    glm::vec3 p2( radius * 0.55f, y,  radius);
+    glm::vec3 p3( 0.0f, y,  radius);
+
+    glm::vec3 p4(-radius * 0.55f, y,  radius);
+    glm::vec3 p5(-radius, y,  radius * 0.55f);
+    glm::vec3 p6(-radius, y,  0.0f);
+
+    glm::vec3 p7(-radius, y, -radius * 0.55f);
+    glm::vec3 p8(-radius * 0.55f, y, -radius);
+    glm::vec3 p9( 0.0f, y, -radius);
+
+    glm::vec3 p10(radius * 0.55f, y, -radius);
+    glm::vec3 p11(radius, y, -radius * 0.55f);
+
+    float segmentT = m_t * 4.0f;
+    int segment = static_cast<int>(segmentT);
+    segmentT -= segment;
+
+    glm::vec3 position;
+    glm::vec3 forward;
+
+    if (segment == 0) {
+        position = bezierPosition(segmentT, p0, p1, p2, p3);
+        forward = bezierTangent(segmentT, p0, p1, p2, p3);
+    } else if (segment == 1) {
+        position = bezierPosition(segmentT, p3, p4, p5, p6);
+        forward = bezierTangent(segmentT, p3, p4, p5, p6);
+    } else if (segment == 2) {
+        position = bezierPosition(segmentT, p6, p7, p8, p9);
+        forward = bezierTangent(segmentT, p6, p7, p8, p9);
+    } else if (segment == 3) {
+        position = bezierPosition(segmentT, p9, p10, p11, p0);
+        forward = bezierTangent(segmentT, p9, p10, p11, p0);
+    }
+
+    forward = glm::normalize(forward);
+
+    m_cameraData.pos = glm::vec4(position, 1.0f);
+    m_cameraData.look = -m_cameraData.pos;
+    m_cameraData.up = glm::vec4(0.f, 1.f, 0.f, 0.f);
+
+    update();
+}
 
 void Realtime::keyPressEvent(QKeyEvent *event) {
     m_keyMap[Qt::Key(event->key())] = true;
@@ -772,14 +933,14 @@ void Realtime::timerEvent(QTimerEvent *event) {
         moved = true;
     }
 
-    if (moved) {
-        //update view matrix
-        m_view = m_camera.getViewMatrix(
-            glm::vec3(m_cameraData.pos),
-            glm::vec3(m_cameraData.look),
-            glm::vec3(m_cameraData.up)
-            );
-    }
+    // if (moved) {
+    //update view matrix
+    m_view = m_camera.getViewMatrix(
+        glm::vec3(m_cameraData.pos),
+        glm::vec3(m_cameraData.look),
+        glm::vec3(m_cameraData.up)
+        );
+    // }
 
     update(); // asks for a PaintGL() call to occur
 }

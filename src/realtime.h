@@ -90,6 +90,11 @@ private:
     void setupShapes();
     void setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const glm::mat4& ctm, SceneMaterial material);
     void setupShaders();
+    void setUpMesh(const glm::mat4& ctm, SceneMaterial mat);
+
+    //bump mappin
+    void loadNormalMap();
+    GLuint m_normalMap;
 
     //skybox:
     GLuint m_skyboxTexture;
@@ -105,12 +110,19 @@ private:
     glm::vec3 bezierPosition(float t, const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3);
     void moveCameraBezier(float deltaTime);
     float m_t = 0.0f;
-    float m_cameraSpeed = 0.1f;
+
     std::vector<glm::vec3> m_controlPoints;
     std::chrono::high_resolution_clock::time_point previousTime;
+    bool m_tIncreasing = true;
+    glm::vec3 p0;  // Start point
+    glm::vec3 p1;
+    glm::vec3 p2;
+    glm::vec3 p3;
+    glm::vec3 generateControlPoint(const glm::vec3& basePoint, float magnitude);
+    glm::vec3 m_bezierPosition;
+    void moveCameraBezierCircle(float deltaTime);
 
     //Proj6:
-
     GLuint m_texture_shader;
     GLuint m_defaultFBO;
     GLuint m_fbo;
@@ -118,6 +130,10 @@ private:
     GLuint m_fbo_renderbuffer;
     GLuint m_fullscreen_vbo;
     GLuint m_fullscreen_vao;
+    std::vector<float> mesh_data;
+    GLuint mesh_vao;
+    GLuint mesh_vbo;
+    int mesh_vertex_count;
 
     void paintTexture(GLuint texture);
     void setupFullscreenQuad();

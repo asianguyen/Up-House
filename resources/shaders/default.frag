@@ -8,6 +8,9 @@ in vec3 mat_ks;
 //in float mat_shininess;
 out vec4 fragColor;
 
+in vec2 TextureCoords;
+in mat3 TBN;
+
 uniform int lightCount;
 
 const int LIGHT_POINT = 0;
@@ -25,6 +28,8 @@ uniform float k_a, k_d, k_s, shininess;
 uniform vec4 materialAmbient, materialDiffuse, materialSpecular;
 uniform vec4 cameraPos;
 
+uniform sampler2D normalMap;
+
 float calculateAttenuation(vec3 attenuation, float distance) {
     float constant = attenuation.x;
     float linear = attenuation.y;
@@ -33,7 +38,14 @@ float calculateAttenuation(vec3 attenuation, float distance) {
 }
 
 vec4 calculatePhong(vec3 L, vec4 lightColor, float attenuation) {
-    vec3 N = normalize(worldNormal);
+     vec3 N;
+    if(mat_kd == vec3(0.061246,0.038204,0.027321)){
+        vec3 normalMap = texture(normalMap, TextureCoords).rgb * 2.0 - 1.0;
+        N = normalize(TBN * normalMap);
+    } else{
+        N = normalize(worldNormal);
+    }
+
     vec3 V = normalize(vec3(cameraPos) - worldPosition);
     vec3 lightDir = L;
 
@@ -61,7 +73,7 @@ void main() {
     //output color to the absolute value of your world-space normals, for debugging
     //fragColor = vec4(abs(worldNormal), 1.0);
 
-    vec4 finalColor = k_a * vec4(mat_ka, 1);
+    vec4 finalColor = k_d * vec4(mat_kd, 1.0);
 
     for (int i =0; i < lightCount; i++){
         vec4 lightColor = lightColors[i];
@@ -119,5 +131,8 @@ void main() {
     }
 
     fragColor = finalColor;
-    fragColor = vec4(mat_kd, 1) + k_a * vec4(mat_ka, 1);
+    // fragColor += k_a * vec4(mat_ka, 1.0);
+
+
+
 }

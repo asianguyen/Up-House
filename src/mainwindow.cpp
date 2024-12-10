@@ -8,6 +8,7 @@
 #include <QLabel>
 #include <QGroupBox>
 #include <iostream>
+#include <QButtonGroup>
 
 void MainWindow::initialize() {
     realtime = new Realtime;
@@ -22,10 +23,10 @@ void MainWindow::initialize() {
 
     // Create labels in sidebox
     QFont font;
-    font.setPointSize(12);
+    font.setPointSize(10);
     font.setBold(true);
     QLabel *tesselation_label = new QLabel(); // Parameters label
-    tesselation_label->setText("Tesselation");
+    tesselation_label->setText("Camera distance while rotating");
     tesselation_label->setFont(font);
     QLabel *camera_label = new QLabel(); // Camera label
     camera_label->setText("Camera");
@@ -33,17 +34,25 @@ void MainWindow::initialize() {
     QLabel *filters_label = new QLabel(); // Filters label
     filters_label->setText("Filters");
     filters_label->setFont(font);
+    QLabel *bez_label = new QLabel(); // Bezier label
+    bez_label->setText("Bezier Curve Options");
+    bez_label->setFont(font);
     QLabel *ec_label = new QLabel(); // Extra Credit label
     ec_label->setText("Extra Credit");
     ec_label->setFont(font);
     QLabel *param1_label = new QLabel(); // Parameter 1 label
     param1_label->setText("Parameter 1:");
     QLabel *param2_label = new QLabel(); // Parameter 2 label
-    param2_label->setText("Parameter 2:");
+    param2_label->setText("Y-value of camera while rotating:");
+    param2_label->setFont(font);
     QLabel *near_label = new QLabel(); // Near plane label
     near_label->setText("Near Plane:");
     QLabel *far_label = new QLabel(); // Far plane label
     far_label->setText("Far Plane:");
+
+    QLabel *speed_label = new QLabel(); // Far plane label
+    speed_label->setText("Bezier movement speed");
+    speed_label->setFont(font);
 
 
 
@@ -60,7 +69,7 @@ void MainWindow::initialize() {
     // Create file uploader for scene file
     uploadFile = new QPushButton();
     uploadFile->setText(QStringLiteral("Upload Scene File"));
-    
+
     saveImage = new QPushButton();
     saveImage->setText(QStringLiteral("Save image"));
 
@@ -69,31 +78,40 @@ void MainWindow::initialize() {
     QHBoxLayout *l1 = new QHBoxLayout();
     QGroupBox *p2Layout = new QGroupBox(); // horizonal slider 2 alignment
     QHBoxLayout *l2 = new QHBoxLayout();
+    QGroupBox *p3Layout = new QGroupBox(); // horizonal slider 3 alignment
+    QHBoxLayout *l3 = new QHBoxLayout();
 
     // Create slider controls to control parameters
-    p1Slider = new QSlider(Qt::Orientation::Horizontal); // Parameter 1 slider
+    p1Slider = new QSlider(Qt::Orientation::Horizontal); // camera z slider
     p1Slider->setTickInterval(1);
     p1Slider->setMinimum(1);
-    p1Slider->setMaximum(25);
-    p1Slider->setValue(1);
+    p1Slider->setMaximum(100);
+    p1Slider->setValue(60);
 
     p1Box = new QSpinBox();
     p1Box->setMinimum(1);
-    p1Box->setMaximum(25);
+    p1Box->setMaximum(100);
     p1Box->setSingleStep(1);
-    p1Box->setValue(1);
+    p1Box->setValue(60);
 
-    p2Slider = new QSlider(Qt::Orientation::Horizontal); // Parameter 2 slider
+    p2Slider = new QSlider(Qt::Orientation::Horizontal); // camera y slider
     p2Slider->setTickInterval(1);
-    p2Slider->setMinimum(1);
-    p2Slider->setMaximum(25);
+    p2Slider->setMinimum(-50);
+    p2Slider->setMaximum(50);
     p2Slider->setValue(1);
 
     p2Box = new QSpinBox();
-    p2Box->setMinimum(1);
-    p2Box->setMaximum(25);
+    p2Box->setMinimum(-50);
+    p2Box->setMaximum(50);
     p2Box->setSingleStep(1);
     p2Box->setValue(1);
+
+
+    p3Box = new QSpinBox();
+    p3Box->setMinimum(1);
+    p3Box->setMaximum(100);
+    p3Box->setSingleStep(1);
+    p3Box->setValue(25);
 
     // Adds the slider and number box to the parameter layouts
     l1->addWidget(p1Slider);
@@ -103,6 +121,10 @@ void MainWindow::initialize() {
     l2->addWidget(p2Slider);
     l2->addWidget(p2Box);
     p2Layout->setLayout(l2);
+
+    // l3->addWidget(p3Slider);
+    l3->addWidget(p3Box);
+    p3Layout->setLayout(l3);
 
     // Creates the boxes containing the camera sliders and number boxes
     QGroupBox *nearLayout = new QGroupBox(); // horizonal near slider alignment
@@ -144,6 +166,21 @@ void MainWindow::initialize() {
     lfar->addWidget(farBox);
     farLayout->setLayout(lfar);
 
+    //bezier
+    auto buttonNone = new QPushButton("None");
+    auto buttonCircle = new QPushButton("Circle");
+    auto buttonCurve = new QPushButton("Curve");
+
+    modeGroup = new QButtonGroup(this);
+    modeGroup->addButton(buttonNone, 0);
+    modeGroup->addButton(buttonCircle, 1);
+    modeGroup->addButton(buttonCurve, 2);
+
+    buttonNone->setCheckable(true);
+    buttonCircle->setCheckable(true);
+    buttonCurve->setCheckable(true);
+    buttonNone->setChecked(true);
+
     // Extra Credit:
     ec1 = new QCheckBox();
     ec1->setText(QStringLiteral("Extra Credit 1"));
@@ -163,11 +200,7 @@ void MainWindow::initialize() {
 
     vLayout->addWidget(uploadFile);
     vLayout->addWidget(saveImage);
-    vLayout->addWidget(tesselation_label);
-    vLayout->addWidget(param1_label);
-    vLayout->addWidget(p1Layout);
-    vLayout->addWidget(param2_label);
-    vLayout->addWidget(p2Layout);
+
     vLayout->addWidget(camera_label);
     vLayout->addWidget(near_label);
     vLayout->addWidget(nearLayout);
@@ -176,12 +209,36 @@ void MainWindow::initialize() {
     vLayout->addWidget(filters_label);
     vLayout->addWidget(filter1);
     vLayout->addWidget(filter2);
+
+    //Bezier curve
+    vLayout->addWidget(bez_label);
+    vLayout->addWidget(buttonNone);
+    vLayout->addWidget(buttonCircle);
+    vLayout->addWidget(buttonCurve);
+
+    //distance from camera
+    vLayout->addWidget(tesselation_label);
+    vLayout->addWidget(p1Layout);
+    // y value of camera
+    vLayout->addWidget(param2_label);
+    vLayout->addWidget(p2Layout);
+    // speed of camera
+    vLayout->addWidget(speed_label);
+    vLayout->addWidget(p3Layout);
+
+    // vLayout->addWidget(tesselation_label);
+    // vLayout->addWidget(param1_label);
+    // vLayout->addWidget(p1Layout);
+
+
+
     // Extra Credit:
-    vLayout->addWidget(ec_label);
-    vLayout->addWidget(ec1);
-    vLayout->addWidget(ec2);
-    vLayout->addWidget(ec3);
-    vLayout->addWidget(ec4);
+    // vLayout->addWidget(ec_label);
+
+    // vLayout->addWidget(ec1);
+    // vLayout->addWidget(ec2);
+    // vLayout->addWidget(ec3);
+    // vLayout->addWidget(ec4);
 
     connectUIElements();
 
@@ -206,6 +263,7 @@ void MainWindow::connectUIElements() {
     connectSaveImage();
     connectParam1();
     connectParam2();
+    connectParam3();
     connectNear();
     connectFar();
     connectExtraCredit();
@@ -238,6 +296,10 @@ void MainWindow::connectParam2() {
     connect(p2Box, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             this, &MainWindow::onValChangeP2);
 }
+void MainWindow::connectParam3() {
+    connect(p3Box, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this, &MainWindow::onSpinBoxChangeP3);
+}
 
 void MainWindow::connectNear() {
     connect(nearSlider, &QSlider::valueChanged, this, &MainWindow::onValChangeNearSlider);
@@ -252,10 +314,11 @@ void MainWindow::connectFar() {
 }
 
 void MainWindow::connectExtraCredit() {
-    connect(ec1, &QCheckBox::clicked, this, &MainWindow::onExtraCredit1);
-    connect(ec2, &QCheckBox::clicked, this, &MainWindow::onExtraCredit2);
-    connect(ec3, &QCheckBox::clicked, this, &MainWindow::onExtraCredit3);
-    connect(ec4, &QCheckBox::clicked, this, &MainWindow::onExtraCredit4);
+    connect(modeGroup, &QButtonGroup::idClicked, this, &MainWindow::onBezierCircle);
+    // connect(ec1, &QCheckBox::clicked, this, &MainWindow::onExtraCredit1);
+    // connect(ec2, &QCheckBox::clicked, this, &MainWindow::onExtraCredit2);
+    // connect(ec3, &QCheckBox::clicked, this, &MainWindow::onExtraCredit3);
+    // connect(ec4, &QCheckBox::clicked, this, &MainWindow::onExtraCredit4);
 }
 
 void MainWindow::onPerPixelFilter() {
@@ -314,16 +377,21 @@ void MainWindow::onSaveImage() {
 void MainWindow::onValChangeP1(int newValue) {
     p1Slider->setValue(newValue);
     p1Box->setValue(newValue);
-    settings.shapeParameter1 = p1Slider->value();
-    realtime->settingsChanged();
+    settings.cameraDistance = p1Slider->value();
 }
 
 void MainWindow::onValChangeP2(int newValue) {
     p2Slider->setValue(newValue);
     p2Box->setValue(newValue);
-    settings.shapeParameter2 = p2Slider->value();
-    realtime->settingsChanged();
+    settings.cameraY = p2Slider->value();
 }
+
+void MainWindow::onSpinBoxChangeP3(int boxValue) {
+
+    float sliderValue = (boxValue / 100.f);
+    settings.cameraSpeed = sliderValue;
+}
+
 
 void MainWindow::onValChangeNearSlider(int newValue) {
     //nearSlider->setValue(newValue);
@@ -354,6 +422,27 @@ void MainWindow::onValChangeFarBox(double newValue) {
 }
 
 // Extra Credit:
+
+void MainWindow::onBezierCircle(int id) {
+
+    switch (id) {
+    case 0: // None
+        settings.circle = false;
+        settings.curve = false;
+        break;
+    case 1: // Circle
+        settings.circle = true;
+        settings.curve = false;
+        break;
+    case 2: // Curve
+        settings.circle = false;
+        settings.curve = true;
+        break;
+    default:
+        break;
+    }
+    realtime->settingsChanged();
+}
 
 void MainWindow::onExtraCredit1() {
     settings.extraCredit1 = !settings.extraCredit1;
