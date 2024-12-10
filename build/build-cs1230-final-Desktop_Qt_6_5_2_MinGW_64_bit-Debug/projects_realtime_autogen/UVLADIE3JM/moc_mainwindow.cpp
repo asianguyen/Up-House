@@ -47,7 +47,8 @@ static constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers:
     "onValChangeP1",
     "newValue",
     "onValChangeP2",
-    "onValChangeP3",
+    "onSpinBoxChangeP3",
+    "boxValue",
     "onValChangeNearSlider",
     "onValChangeFarSlider",
     "onValChangeNearBox",
@@ -61,7 +62,7 @@ static constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers:
 );
 #else  // !QT_MOC_HAS_STRING_DATA
 struct qt_meta_stringdata_CLASSMainWindowENDCLASS_t {
-    uint offsetsAndSizes[40];
+    uint offsetsAndSizes[42];
     char stringdata0[11];
     char stringdata1[17];
     char stringdata2[1];
@@ -71,17 +72,18 @@ struct qt_meta_stringdata_CLASSMainWindowENDCLASS_t {
     char stringdata6[14];
     char stringdata7[9];
     char stringdata8[14];
-    char stringdata9[14];
-    char stringdata10[22];
-    char stringdata11[21];
-    char stringdata12[19];
-    char stringdata13[18];
-    char stringdata14[15];
-    char stringdata15[3];
-    char stringdata16[15];
+    char stringdata9[18];
+    char stringdata10[9];
+    char stringdata11[22];
+    char stringdata12[21];
+    char stringdata13[19];
+    char stringdata14[18];
+    char stringdata15[15];
+    char stringdata16[3];
     char stringdata17[15];
     char stringdata18[15];
     char stringdata19[15];
+    char stringdata20[15];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_CLASSMainWindowENDCLASS_t::offsetsAndSizes) + ofs), len 
@@ -96,17 +98,18 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSMainWindowENDCLASS_t qt_meta_st
         QT_MOC_LITERAL(74, 13),  // "onValChangeP1"
         QT_MOC_LITERAL(88, 8),  // "newValue"
         QT_MOC_LITERAL(97, 13),  // "onValChangeP2"
-        QT_MOC_LITERAL(111, 13),  // "onValChangeP3"
-        QT_MOC_LITERAL(125, 21),  // "onValChangeNearSlider"
-        QT_MOC_LITERAL(147, 20),  // "onValChangeFarSlider"
-        QT_MOC_LITERAL(168, 18),  // "onValChangeNearBox"
-        QT_MOC_LITERAL(187, 17),  // "onValChangeFarBox"
-        QT_MOC_LITERAL(205, 14),  // "onBezierCircle"
-        QT_MOC_LITERAL(220, 2),  // "id"
-        QT_MOC_LITERAL(223, 14),  // "onExtraCredit1"
-        QT_MOC_LITERAL(238, 14),  // "onExtraCredit2"
-        QT_MOC_LITERAL(253, 14),  // "onExtraCredit3"
-        QT_MOC_LITERAL(268, 14)   // "onExtraCredit4"
+        QT_MOC_LITERAL(111, 17),  // "onSpinBoxChangeP3"
+        QT_MOC_LITERAL(129, 8),  // "boxValue"
+        QT_MOC_LITERAL(138, 21),  // "onValChangeNearSlider"
+        QT_MOC_LITERAL(160, 20),  // "onValChangeFarSlider"
+        QT_MOC_LITERAL(181, 18),  // "onValChangeNearBox"
+        QT_MOC_LITERAL(200, 17),  // "onValChangeFarBox"
+        QT_MOC_LITERAL(218, 14),  // "onBezierCircle"
+        QT_MOC_LITERAL(233, 2),  // "id"
+        QT_MOC_LITERAL(236, 14),  // "onExtraCredit1"
+        QT_MOC_LITERAL(251, 14),  // "onExtraCredit2"
+        QT_MOC_LITERAL(266, 14),  // "onExtraCredit3"
+        QT_MOC_LITERAL(281, 14)   // "onExtraCredit4"
     },
     "MainWindow",
     "onPerPixelFilter",
@@ -117,7 +120,8 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSMainWindowENDCLASS_t qt_meta_st
     "onValChangeP1",
     "newValue",
     "onValChangeP2",
-    "onValChangeP3",
+    "onSpinBoxChangeP3",
+    "boxValue",
     "onValChangeNearSlider",
     "onValChangeFarSlider",
     "onValChangeNearBox",
@@ -154,15 +158,15 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
        6,    1,  114,    2, 0x08,    5 /* Private */,
        8,    1,  117,    2, 0x08,    7 /* Private */,
        9,    1,  120,    2, 0x08,    9 /* Private */,
-      10,    1,  123,    2, 0x08,   11 /* Private */,
-      11,    1,  126,    2, 0x08,   13 /* Private */,
-      12,    1,  129,    2, 0x08,   15 /* Private */,
-      13,    1,  132,    2, 0x08,   17 /* Private */,
-      14,    1,  135,    2, 0x08,   19 /* Private */,
-      16,    0,  138,    2, 0x08,   21 /* Private */,
-      17,    0,  139,    2, 0x08,   22 /* Private */,
-      18,    0,  140,    2, 0x08,   23 /* Private */,
-      19,    0,  141,    2, 0x08,   24 /* Private */,
+      11,    1,  123,    2, 0x08,   11 /* Private */,
+      12,    1,  126,    2, 0x08,   13 /* Private */,
+      13,    1,  129,    2, 0x08,   15 /* Private */,
+      14,    1,  132,    2, 0x08,   17 /* Private */,
+      15,    1,  135,    2, 0x08,   19 /* Private */,
+      17,    0,  138,    2, 0x08,   21 /* Private */,
+      18,    0,  139,    2, 0x08,   22 /* Private */,
+      19,    0,  140,    2, 0x08,   23 /* Private */,
+      20,    0,  141,    2, 0x08,   24 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -171,12 +175,12 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    7,
     QMetaType::Void, QMetaType::Int,    7,
-    QMetaType::Void, QMetaType::Float,    7,
+    QMetaType::Void, QMetaType::Int,   10,
     QMetaType::Void, QMetaType::Int,    7,
     QMetaType::Void, QMetaType::Int,    7,
     QMetaType::Void, QMetaType::Double,    7,
     QMetaType::Void, QMetaType::Double,    7,
-    QMetaType::Void, QMetaType::Int,   15,
+    QMetaType::Void, QMetaType::Int,   16,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -208,9 +212,9 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         // method 'onValChangeP2'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
-        // method 'onValChangeP3'
+        // method 'onSpinBoxChangeP3'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<float, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'onValChangeNearSlider'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
@@ -250,7 +254,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 3: _t->onSaveImage(); break;
         case 4: _t->onValChangeP1((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 5: _t->onValChangeP2((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 6: _t->onValChangeP3((*reinterpret_cast< std::add_pointer_t<float>>(_a[1]))); break;
+        case 6: _t->onSpinBoxChangeP3((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 7: _t->onValChangeNearSlider((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 8: _t->onValChangeFarSlider((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 9: _t->onValChangeNearBox((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;

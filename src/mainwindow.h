@@ -62,7 +62,8 @@ private slots:
     void onSaveImage();
     void onValChangeP1(int newValue);
     void onValChangeP2(int newValue);
-    void onValChangeP3(float newValue);
+    // void onValChangeP3(float newValue);
+    void onSpinBoxChangeP3(int boxValue);
     void onValChangeNearSlider(int newValue);
     void onValChangeFarSlider(int newValue);
     void onValChangeNearBox(double newValue);

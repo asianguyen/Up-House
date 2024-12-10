@@ -23,7 +23,7 @@ void MainWindow::initialize() {
 
     // Create labels in sidebox
     QFont font;
-    font.setPointSize(12);
+    font.setPointSize(10);
     font.setBold(true);
     QLabel *tesselation_label = new QLabel(); // Parameters label
     tesselation_label->setText("Camera distance while rotating");
@@ -43,14 +43,16 @@ void MainWindow::initialize() {
     QLabel *param1_label = new QLabel(); // Parameter 1 label
     param1_label->setText("Parameter 1:");
     QLabel *param2_label = new QLabel(); // Parameter 2 label
-    param2_label->setText("y-value of camera:");
+    param2_label->setText("Y-value of camera while rotating:");
+    param2_label->setFont(font);
     QLabel *near_label = new QLabel(); // Near plane label
     near_label->setText("Near Plane:");
     QLabel *far_label = new QLabel(); // Far plane label
     far_label->setText("Far Plane:");
 
     QLabel *speed_label = new QLabel(); // Far plane label
-    speed_label->setText("Camera Speed");
+    speed_label->setText("Bezier movement speed");
+    speed_label->setFont(font);
 
 
 
@@ -104,17 +106,12 @@ void MainWindow::initialize() {
     p2Box->setSingleStep(1);
     p2Box->setValue(1);
 
-    p3Slider = new QSlider(Qt::Orientation::Horizontal); // camera speed slider
-    p3Slider->setTickInterval(0.05f);
-    p3Slider->setMinimum(0.f);
-    p3Slider->setMaximum(1.0f);
-    p3Slider->setValue(0.25f);
 
     p3Box = new QSpinBox();
-    p3Box->setMinimum(0.f);
-    p3Box->setMaximum(1.0f);
-    p3Box->setSingleStep(0.05f);
-    p3Box->setValue(0.25f);
+    p3Box->setMinimum(1);
+    p3Box->setMaximum(100);
+    p3Box->setSingleStep(1);
+    p3Box->setValue(25);
 
     // Adds the slider and number box to the parameter layouts
     l1->addWidget(p1Slider);
@@ -125,7 +122,7 @@ void MainWindow::initialize() {
     l2->addWidget(p2Box);
     p2Layout->setLayout(l2);
 
-    l3->addWidget(p3Slider);
+    // l3->addWidget(p3Slider);
     l3->addWidget(p3Box);
     p3Layout->setLayout(l3);
 
@@ -300,9 +297,8 @@ void MainWindow::connectParam2() {
             this, &MainWindow::onValChangeP2);
 }
 void MainWindow::connectParam3() {
-    connect(p3Slider, &QSlider::valueChanged, this, &MainWindow::onValChangeP3);
     connect(p3Box, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-            this, &MainWindow::onValChangeP3);
+            this, &MainWindow::onSpinBoxChangeP3);
 }
 
 void MainWindow::connectNear() {
@@ -390,11 +386,12 @@ void MainWindow::onValChangeP2(int newValue) {
     settings.cameraY = p2Slider->value();
 }
 
-void MainWindow::onValChangeP3(float newValue) {
-    p3Slider->setValue(newValue);
-    p3Box->setValue(newValue);
-    settings.cameraSpeed = p3Slider->value();
+void MainWindow::onSpinBoxChangeP3(int boxValue) {
+
+    float sliderValue = (boxValue / 100.f);
+    settings.cameraSpeed = sliderValue;
 }
+
 
 void MainWindow::onValChangeNearSlider(int newValue) {
     //nearSlider->setValue(newValue);

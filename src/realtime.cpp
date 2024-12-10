@@ -732,13 +732,13 @@ glm::vec3 Realtime::bezierPosition(float t, const glm::vec3& p0, const glm::vec3
 void Realtime::moveCameraBezier(float deltaTime){
 
     if (m_tIncreasing) {
-        m_t += deltaTime * m_cameraSpeed;
+        m_t += deltaTime * settings.cameraSpeed;
         if (m_t >= 1.0f) {
             m_t = 1.0f;
             m_tIncreasing = false; // reverse direction
         }
     } else {
-        m_t -= deltaTime * m_cameraSpeed;
+        m_t -= deltaTime * settings.cameraSpeed;
         if (m_t <= 0.0f) {
             m_t = 0.0f;
             m_tIncreasing = true; // reverse direction
@@ -751,24 +751,15 @@ void Realtime::moveCameraBezier(float deltaTime){
 
     glm::vec3 position = bezierPosition(m_t, p0, p1, p2, p3);
 
-
-    // m_cameraData.pos = glm::vec4(position, 1.0f);
-
     for (auto& shapeData : m_shapeDataList) {
-        // Create a translation matrix based on the camera position
         shapeData.modelMatrix = glm::translate(glm::mat4(1.0f), position);
 
-        // Pass the updated model matrix to the shader
-        // GLint modelMatrixLocation = glGetUniformLocation(m_shader, "modelMatrix");
-        // glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, glm::value_ptr(shapeData.modelMatrix));
     }
-    // glm::vec3 forward = glm::normalize(bezierTangent(m_t, p0, p1, p2, p3));
-    // m_cameraData.look = m_cameraData.pos + glm::vec4(forward, 0.0f);
 
 }
 
 void Realtime::moveCameraBezierCircle(float deltaTime) {
-    m_t += deltaTime * m_cameraSpeed;
+    m_t += deltaTime * settings.cameraSpeed;
     if (m_t >= 1.0f) {
         m_t = 0.f;
     } else if (m_t < 0.0f) {
@@ -794,14 +785,12 @@ void Realtime::moveCameraBezierCircle(float deltaTime) {
     glm::vec3 p10(radius * 0.55f, y, -radius);
     glm::vec3 p11(radius, y, -radius * 0.55f);
 
-    // select the correct segment of the circle
     float segmentT = m_t * 4.0f;
-    int segment = static_cast<int>(segmentT); // gives a segment index from 0 to 3
+    int segment = static_cast<int>(segmentT);
     segmentT -= segment;
 
     glm::vec3 position;
     glm::vec3 forward;
-    // std::cout << "m_t: " << m_t << ", segment: " << segment << ", segmentT: " << segmentT << std::endl;
 
     if (segment == 0) {
         position = bezierPosition(segmentT, p0, p1, p2, p3);
@@ -823,110 +812,8 @@ void Realtime::moveCameraBezierCircle(float deltaTime) {
     m_cameraData.look = -m_cameraData.pos;
     m_cameraData.up = glm::vec4(0.f, 1.f, 0.f, 0.f);
 
-    // Update view matrix
-    // m_view = m_camera.getViewMatrix(
-    //     glm::vec3(m_cameraData.pos),
-    //     glm::vec3(m_cameraData.look),
-    //     glm::vec3(m_cameraData.up)
-    //     );
-
     update();
 }
-
-
-
-
-// void Realtime::moveCameraBezier(float deltaTime){
-
-//     // if (m_tIncreasing) {
-//     //     m_t += deltaTime * m_cameraSpeed;
-//     //     if (m_t >= 5.0f) {
-//     //         m_t = 5.0f;     // Clamp to the endpoint
-//     //         m_tIncreasing = false; // Reverse direction
-//     //     }
-//     // } else {
-//     //     m_t -= deltaTime * m_cameraSpeed;
-//     //     if (m_t <= 0.0f) {
-//     //         m_t = 0.0f;     // Clamp to the starting point
-//     //         m_tIncreasing = true; // Reverse direction
-//     //     }
-//     // }
-
-//     m_t += deltaTime * m_cameraSpeed;
-//     if (m_t > 1.0f) {
-//         m_t -= 1.0f; // Wrap around to create a looping effect
-//     }
-//     // m_t += deltaTime * m_cameraSpeed;
-//     // if (m_t >= 1.0f) {
-//     //     m_t = 0.0f; // Reset t for the next segment
-//     //     p0 = p3;
-
-//     //     // Generate new control points relative to the previous endpoint
-//     //     p1 = generateControlPoint(p0, 5.0f); // Adjust magnitude for dramatic curves
-//     //     p2 = generateControlPoint(p1, 5.0f);
-//     //     p3 = generateControlPoint(p2, 5.0f);
-//     // }
-//     // m_bezierPosition = bezierPosition(m_t, p0, p1, p2, p3);
-//     glm::vec3 p0(0.0f, 0.0f, 0.0f);
-//     glm::vec3 p1(2.0f, 5.0f, -5.0f);
-//     glm::vec3 p2(4.0f, 5.0f, -5.0f);
-//     glm::vec3 p3(6.0f,0.0f,0.0f);
-
-//     glm::vec3 center(0.0f, 0.0f, 0.0f); // Center of the circle
-//     float radius = 10.0f; // Radius of the circle
-
-//     // glm::vec3 p0 = center + glm::vec3(radius, 0.0f, 0.0f);
-//     // glm::vec3 p1 = center + glm::vec3(radius, 0.0f, -radius);
-//     // glm::vec3 p2 = center + glm::vec3(-radius, 0.0f, -radius);
-//     // glm::vec3 p3 = center + glm::vec3(-radius, 0.0f, 0.0f);
-
-
-//     glm::vec3 position = bezierPosition(m_t, p0, p1, p2, p3);
-//     // glm::vec3 forward = glm::normalize(center - position); // Look toward the center
-
-//     glm::vec3 forward = glm::normalize(bezierTangent(m_t, p0, p1, p2, p3));
-//     glm::vec3 up(0.0f, 1.0f, 0.0f);
-
-//     // for (auto& shapeData : m_shapeDataList) {
-//     //     glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position + forward * 2.0f);
-
-//     //     shapeData.modelMatrix = translationMatrix * shapeData.modelMatrix;
-//     // }
-
-//     // glm::vec3 right = glm::normalize(glm::cross(up,forward));
-//     // up = glm::cross(forward,right);
-//     if (glm::length(center - glm::vec3(m_cameraData.pos)) < 0.001f) {
-//         m_cameraData.pos += glm::vec4(0.1f, 0.0f, 0.0f, 0.0f); // Small offset
-//     }
-
-//     m_cameraData.pos = glm::vec4(position, 1.0f);
-//     // glm::vec3 forward = glm::normalize(center - glm::vec3(m_cameraData.pos));
-
-// glm::vec3 forward = glm::normalize(bezierTangent(m_t, p0, p1, p2, p3));
-// // m_cameraData.look = m_cameraData.pos + glm::vec4(forward, 0.0f);
-
-//     // m_view = glm::lookAt(glm::vec3(m_cameraData.pos),
-//     //                      glm::vec3(m_cameraData.look),
-//     //                      glm::vec3(m_cameraData.up));
-
-//     // m_view = m_camera.getViewMatrix(
-//     // glm::vec3(m_cameraData.pos),
-//     // glm::vec3(m_cameraData.look+m_cameraData.pos),
-//     // glm::vec3(m_cameraData.up)
-//     //     );
-
-// }
-
-glm::vec3 Realtime::generateControlPoint(const glm::vec3& basePoint, float magnitude) {
-    // Generate a random control point around the base point
-    glm::vec3 offset = glm::vec3(
-        (rand() % 100 / 100.0f - 0.5f) * magnitude,  // Random X offset
-        (rand() % 100 / 100.0f - 0.5f) * magnitude,  // Random Y offset
-        (rand() % 100 / 100.0f - 0.5f) * magnitude   // Random Z offset
-        );
-    return basePoint + offset;
-}
-
 
 void Realtime::keyPressEvent(QKeyEvent *event) {
     m_keyMap[Qt::Key(event->key())] = true;
