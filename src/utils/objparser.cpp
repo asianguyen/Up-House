@@ -206,8 +206,8 @@ std::unordered_map<std::string, Material> parseMTL(const std::string& filepath) 
 
 bool objparser::loadOBJ(const char * path, std::vector<float> & out_vertices){
 
-    std::unordered_map<std::string, Material> materials = parseMTL("/Users/asianguyen/Desktop/CS1230/house/untitled.mtl");
-    //std::unordered_map<std::string, Material> materials = parseMTL("C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/house/actualfinalhouseandballoons.mtl");
+    // std::unordered_map<std::string, Material> materials = parseMTL("/Users/asianguyen/Desktop/CS1230/house/untitled.mtl");
+    std::unordered_map<std::string, Material> materials = parseMTL("C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/house/actualfinalhouseandballoons.mtl");
 
 
     std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;

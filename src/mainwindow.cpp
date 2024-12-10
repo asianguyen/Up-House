@@ -111,7 +111,7 @@ void MainWindow::initialize() {
     p3Box->setMinimum(1);
     p3Box->setMaximum(100);
     p3Box->setSingleStep(1);
-    p3Box->setValue(25);
+    p3Box->setValue(5);
 
     // Adds the slider and number box to the parameter layouts
     l1->addWidget(p1Slider);
@@ -388,8 +388,8 @@ void MainWindow::onValChangeP2(int newValue) {
 
 void MainWindow::onSpinBoxChangeP3(int boxValue) {
 
-    float sliderValue = (boxValue / 100.f);
-    settings.cameraSpeed = sliderValue;
+    //float sliderValue = (boxValue / 100.f);
+    settings.cameraSpeed = boxValue;
 }
 
 

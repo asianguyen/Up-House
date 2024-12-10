@@ -19,7 +19,7 @@ struct Settings {
     bool extraCredit4 = false;
     int cameraDistance = 30;
     int cameraY = 5;
-    float cameraSpeed = 0.25;
+    float cameraSpeed = 5;
 };
 
 
