@@ -5,16 +5,11 @@
 #include <QKeyEvent>
 #include <iostream>
 #include "settings.h"
-#include "shapes/cube.h"
-#include "shapes/cone.h"
-#include "shapes/cylinder.h"
-#include "shapes/sphere.h"
 #include "utils/shaderloader.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "camera/camera.h"
 #include "utils/scenefilereader.h"
 #include "utils/sceneparser.h"
-#include "shapes/shape.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include "utils/objparser.h"
@@ -84,6 +79,9 @@ void Realtime::initializeGL() {
     m_defaultFBO = 2;
 
     loadNormalMap();
+    loadNormalMap2();
+    loadNormalMap3();
+    loadNormalMap4();
     setupShaders();
     setupSkyBox();
     setupSkyBoxGeometry();
@@ -104,8 +102,8 @@ void Realtime::setupShaders(){
 }
 
 void Realtime::loadNormalMap() {
-    glGenTextures(1, &m_normalMap);
-    glBindTexture(GL_TEXTURE_2D, m_normalMap);
+    glGenTextures(1, &m_roofMap);
+    glBindTexture(GL_TEXTURE_2D, m_roofMap);
 
     int width, height, nrChannels;
     std::string normalFile= "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/roof2.jpg";
@@ -117,6 +115,75 @@ void Realtime::loadNormalMap() {
     else
     {
         std::cout << "Normal tex failed to load at path: " << normalFile << std::endl;
+    }
+    stbi_image_free(data);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
+void Realtime::loadNormalMap2() {
+    glGenTextures(1, &m_wallMap);
+    glBindTexture(GL_TEXTURE_2D, m_wallMap);
+
+    int width, height, nrChannels;
+    std::string wallFile= "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/walls.jpg";
+    unsigned char *data = stbi_load(wallFile.c_str(), &width, &height, &nrChannels, 0);
+    if (data) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D); //generates mipmaps for the texture for visual quality at different distances
+    }
+    else
+    {
+        std::cout << "Normal tex failed to load at path: " << wallFile << std::endl;
+    }
+    stbi_image_free(data);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
+void Realtime::loadNormalMap3() {
+    glGenTextures(1, &m_chimneyMap);
+    glBindTexture(GL_TEXTURE_2D, m_chimneyMap);
+
+    int width, height, nrChannels;
+    std::string chimneyFile= "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/brick.jpeg";
+    unsigned char *data = stbi_load(chimneyFile.c_str(), &width, &height, &nrChannels, 0);
+    if (data) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D); //generates mipmaps for the texture for visual quality at different distances
+    }
+    else
+    {
+        std::cout << "Normal tex failed to load at path: " << chimneyFile << std::endl;
+    }
+    stbi_image_free(data);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
+void Realtime::loadNormalMap4() {
+    glGenTextures(1, &m_shingleMap);
+    glBindTexture(GL_TEXTURE_2D, m_shingleMap);
+
+    int width, height, nrChannels;
+    std::string shingleFile= "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/shingles.jpg";
+    unsigned char *data = stbi_load(shingleFile.c_str(), &width, &height, &nrChannels, 0);
+    if (data) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D); //generates mipmaps for the texture for visual quality at different distances
+    }
+    else
+    {
+        std::cout << "Normal tex failed to load at path: " << shingleFile << std::endl;
     }
     stbi_image_free(data);
 
@@ -411,11 +478,24 @@ void Realtime::paintGL() {
         glUniform1f(shininessLocation, shapeData.material.shininess);
 
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, m_normalMap); //Bind the normal map to texture unit 1
-
-        GLuint normalMapLocation = glGetUniformLocation(m_shader, "normalMap");
-
+        glBindTexture(GL_TEXTURE_2D, m_roofMap); //Bind the normal map to texture unit 1
+        GLuint normalMapLocation = glGetUniformLocation(m_shader, "roofMap");
         glUniform1i(normalMapLocation, 1);
+
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, m_wallMap); //Bind the normal map to texture unit 2
+        GLuint normalMapLocation2 = glGetUniformLocation(m_shader, "wallMap");
+        glUniform1i(normalMapLocation2, 2);
+
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_2D, m_chimneyMap); //Bind the normal map to texture unit 3
+        GLuint normalMapLocation3 = glGetUniformLocation(m_shader, "chimneyMap");
+        glUniform1i(normalMapLocation3, 3);
+
+        glActiveTexture(GL_TEXTURE4);
+        glBindTexture(GL_TEXTURE_2D, m_shingleMap); //Bind the normal map to texture unit 3
+        GLuint normalMapLocation4 = glGetUniformLocation(m_shader, "shingleMap");
+        glUniform1i(normalMapLocation4, 4);
 
         glDrawArrays(GL_TRIANGLES, 0, shapeData.vertexCount);
 
@@ -485,27 +565,10 @@ void Realtime::paintTexture(GLuint texture){
 void Realtime::setupShapes() {
     //dont need to loop through all the shapes, use same VAO and VBO
     for (auto &primitive : renderData.shapes) {
-        Shape *shape;
-
-        switch (primitive.primitive.type) {
-        case PrimitiveType::PRIMITIVE_CUBE:
-            shape = new Cube();
-            break;
-        case PrimitiveType::PRIMITIVE_CONE:
-            shape = new Cone();
-            break;
-        case PrimitiveType::PRIMITIVE_CYLINDER:
-            shape = new Cylinder();
-            break;
-        case PrimitiveType::PRIMITIVE_SPHERE:
-            shape = new Sphere();
-            break;
-        case PrimitiveType::PRIMITIVE_MESH:
+        if(primitive.primitive.type==PrimitiveType::PRIMITIVE_MESH){
             setUpMesh(primitive.ctm, primitive.primitive.material);
-            break;
+
         }
-
-
     }
 }
 
@@ -574,38 +637,6 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
 
 }
 
-void Realtime::setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const glm::mat4& ctm, SceneMaterial material) {
-
-    ShapeData shapeData;
-    shapeData.modelMatrix = ctm;
-
-    glGenBuffers(1, &shapeData.vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, shapeData.vbo);
-
-    std::vector<float> data = shape.generateShape();
-    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
-    shapeData.vertexCount = data.size() / 6;
-
-
-    shapeData.material = material;
-
-    glGenVertexArrays(1, &shapeData.vao);
-    glBindVertexArray(shapeData.vao);
-
-    //position attribute
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(0));
-
-    //normal attribute
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
-
-    m_shapeDataList.push_back(shapeData);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-}
-
 void Realtime::resizeGL(int w, int h) {
     // Tells OpenGL how big the screen is
     glViewport(0, 0, size().width() * m_devicePixelRatio, size().height() * m_devicePixelRatio);
@@ -652,7 +683,6 @@ void Realtime::sceneChanged() {
         }
         m_shapeDataList.clear();
 
-        setupShapes();
 
         update(); // asks for a PaintGL() call to occur
     } else {

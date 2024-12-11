@@ -236,15 +236,6 @@ projects_realtime_autogen/timestamp: \
 	/Users/asianguyen/Desktop/CS1230/cs1230-final/src/realtime.h \
 	/Users/asianguyen/Desktop/CS1230/cs1230-final/src/settings.cpp \
 	/Users/asianguyen/Desktop/CS1230/cs1230-final/src/settings.h \
-	/Users/asianguyen/Desktop/CS1230/cs1230-final/src/shapes/cone.cpp \
-	/Users/asianguyen/Desktop/CS1230/cs1230-final/src/shapes/cone.h \
-	/Users/asianguyen/Desktop/CS1230/cs1230-final/src/shapes/cube.cpp \
-	/Users/asianguyen/Desktop/CS1230/cs1230-final/src/shapes/cube.h \
-	/Users/asianguyen/Desktop/CS1230/cs1230-final/src/shapes/cylinder.cpp \
-	/Users/asianguyen/Desktop/CS1230/cs1230-final/src/shapes/cylinder.h \
-	/Users/asianguyen/Desktop/CS1230/cs1230-final/src/shapes/shape.h \
-	/Users/asianguyen/Desktop/CS1230/cs1230-final/src/shapes/sphere.cpp \
-	/Users/asianguyen/Desktop/CS1230/cs1230-final/src/shapes/sphere.h \
 	/Users/asianguyen/Desktop/CS1230/cs1230-final/src/stb_image.h \
 	/Users/asianguyen/Desktop/CS1230/cs1230-final/src/utils/aspectratiowidget/aspectratiowidget.hpp \
 	/Users/asianguyen/Desktop/CS1230/cs1230-final/src/utils/objparser.cpp \

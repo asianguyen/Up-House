@@ -224,7 +224,6 @@
   /Users/asianguyen/Desktop/CS1230/cs1230-final/glm/vector_relational.hpp \
   /Users/asianguyen/Desktop/CS1230/cs1230-final/src/camera/camera.h \
   /Users/asianguyen/Desktop/CS1230/cs1230-final/src/realtime.h \
-  /Users/asianguyen/Desktop/CS1230/cs1230-final/src/shapes/shape.h \
   /Users/asianguyen/Desktop/CS1230/cs1230-final/src/utils/aspectratiowidget/aspectratiowidget.hpp \
   /Users/asianguyen/Desktop/CS1230/cs1230-final/src/utils/scenedata.h \
   /Users/asianguyen/Desktop/CS1230/cs1230-final/src/utils/sceneparser.h \
