@@ -1,12 +1,34 @@
-## Resources
+# CS1230 Final Project
+Team members:
+- Sophia Lim (szlim)
+- Asia Nguyen (atnguyen)
+- Natalie King (nking12)
+- Jinho Lee (jlee812)
 
-skybox: 
-- how to: https://learnopengl.com/Advanced-OpenGL/Cubemaps (sophia)
-- stb library: https://github.com/nothings/stb/blob/master/stb_image.h (sophia)
+## Overview
 
-bump mapping:
-- background and explanation: https://learnopengl.com/Advanced-Lighting/Normal-Mapping#:~:text=The%20great%20thing%20about%20tangent,Tangent%20%2C%20Bitangent%20and%20Normal%20vector. (sophia)
+New Technical Features:
+- Bump mapping: add realistic details to the house (szlim and atnguyen)
+- Bezier curve camera motion: house "floating away" (jlee812)
+- Skybox: large skybox showing clear sky textures  to set the high-altitude scene. (szlim)
+- Physics: wind
+- TBD (atnguyen and nking12)
 
-bezier curve:
-- formula: https://javascript.info/bezier-curve
-- 4 segment/circular formula: https://stackoverflow.com/questions/1734745/how-to-create-circle-with-b%C3%A9zier-curves#:~:text=A%20common%20approximation%20is%20to,circle%20at%20the%20end%20points.
+Additional
+- Blender model rendering for a more realistic house and balloon objects (atnguyen and nking12)
+- Final video (jlee812)
+
+## How to use
+1. Run the program
+2. Select "Upload Scene File"
+3. Use "mesh.json" located in the house/ folder
+4. Once loaded, set the far plane to 100 using the slider.
+5. Choose your bezier curve option:
+None- no motion but can use WASD, space, and command keys to move and rotate around the scene with mouse
+Circle - Circles around the house. Can use sliders to change camera distance and y position
+Curve - House moves in a curve
+7. Choose bezier movement speed for Circle and Curve options
+8. Toggle on/off the bump mapping textures
+
+## External Libraries
+- stb library for skybox: https://github.com/nothings/stb/blob/master/stb_image.h (sophia)
