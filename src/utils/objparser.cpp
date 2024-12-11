@@ -4,8 +4,8 @@
 
 #include <iostream>
 #include <fstream>
+#include <map>
 #include <sstream>
-#include <cstring>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -19,6 +19,9 @@ struct Material {
     float d = 1.0f;        // Transparency (default to opaque)
     std::string map_Kd;    // Diffuse texture map
 };
+
+std::vector<Balloon> objparser::balloons;
+std::map<int, std::vector<size_t>> objparser::balloonVertexIndices;
 
 // Function to parse an .mtl file
 std::unordered_map<std::string, Material> parseMTL(const std::string& filepath) {

@@ -7,6 +7,7 @@
 #include "settings.h"
 #include "utils/shaderloader.h"
 #include <glm/gtc/type_ptr.hpp>
+#include <random>
 #include "camera/camera.h"
 #include "utils/scenefilereader.h"
 #include "utils/sceneparser.h"
@@ -32,6 +33,8 @@ Realtime::Realtime(QWidget *parent)
     m_keyMap[Qt::Key_Space]   = false;
 
     // If you must use this function, do not edit anything above this
+
+
 }
 
 void Realtime::finish() {
@@ -45,8 +48,6 @@ void Realtime::finish() {
     }
     m_shapeDataList.clear();
 
-    // glDeleteBuffers(1, &mesh_vbo);
-    // glDeleteVertexArrays(1, &mesh_vao);
     glDeleteBuffers(1, &house_vbo);
     glDeleteVertexArrays(1, &house_vao);
 
@@ -58,8 +59,6 @@ void Realtime::finish() {
 
 void Realtime::initializeGL() {
     m_devicePixelRatio = this->devicePixelRatio();
-    m_t = 0.0f;
-    previousTime = std::chrono::high_resolution_clock::now();
 
     m_timer = startTimer(1000/60);
     m_elapsedTimer.start();
@@ -139,6 +138,8 @@ void Realtime::loadNormalMap2() {
     glBindTexture(GL_TEXTURE_2D, m_wallMap);
 
     int width, height, nrChannels;
+
+
     std::string wallFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/walls.jpg";
     unsigned char *data = stbi_load(wallFile.c_str(), &width, &height, &nrChannels, 0);
     if (data) {
@@ -202,20 +203,12 @@ void Realtime::loadNormalMap4() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
-
 void Realtime::setupSkyBox(){
     glGenTextures(1, &m_skyboxTexture);
     glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxTexture);
 
     //load each texture face
-    // std::vector<std::string> faces = {
-    //     "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/right.jpg", //Positive X
-    //     "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/left.jpg",//Negative X
-    //     "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/top.jpg", //Positive Y
-    //     "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/bottom.jpg", //Negative Y
-    //     "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/front.jpg",//Positive Z
-    //     "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/back.jpg" //Negative Z
-    // };
+
     std::vector<std::string> faces = {
         "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/right.jpg", //Positive X
         "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/left.jpg",//Negative X
@@ -596,15 +589,7 @@ void Realtime::paintTexture(GLuint texture){
     glUseProgram(0);
 }
 
-// void Realtime::setupShapes() {
-//     //dont need to loop through all the shapes, use same VAO and VBO
-//     for (auto &primitive : renderData.shapes) {
-//         if(primitive.primitive.type==PrimitiveType::PRIMITIVE_MESH){
-//             setUpMesh(primitive.ctm, primitive.primitive.material);
 
-//         }
-//     }
-// }
 
 void Realtime::setupShapes() {
     //dont need to loop through all the shapes, use same VAO and VBO
@@ -628,70 +613,6 @@ void Realtime::setupShapes() {
 
     }
 }
-
-// void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
-
-//     ShapeData shapedata;
-//     shapedata.modelMatrix = ctm;
-
-
-//     glGenBuffers(1, &mesh_vbo);
-//     glBindBuffer(GL_ARRAY_BUFFER, mesh_vbo);
-
-//     shapedata.vbo = mesh_vbo;
-
-//     std::vector<float> data;
-
-//     objparser::loadOBJ("/Users/sophialim/Desktop/CS1230/cs1230-final/house/untitled.obj", data);
-
-//     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
-//     mesh_vertex_count = data.size() / 21;
-
-//     shapedata.vertexCount = mesh_vertex_count;
-
-//     shapedata.material = mat;
-
-//     glGenVertexArrays(1, &mesh_vao);
-//     glBindVertexArray(mesh_vao);
-
-//     shapedata.vao = mesh_vao;
-
-
-//     glEnableVertexAttribArray(0);
-//     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,21 * sizeof(GLfloat), reinterpret_cast<void*>(0));
-
-//     //normal attribute
-//     glEnableVertexAttribArray(1);
-//     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
-
-//     // ka attribute
-//     glEnableVertexAttribArray(2);
-//     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
-
-//     //kd attribute
-//     glEnableVertexAttribArray(3);
-//     glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(9 * sizeof(GLfloat)));
-
-//     //ks attribute
-//     glEnableVertexAttribArray(4);
-//     glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(12 * sizeof(GLfloat)));
-
-//     //specular attribute
-//     glEnableVertexAttribArray(5);
-//     glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(15 * sizeof(GLfloat)));
-
-//     glEnableVertexAttribArray(6);
-//     glVertexAttribPointer(6, 2, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(16 * sizeof(GLfloat)));
-
-//     glEnableVertexAttribArray(7);
-//     glVertexAttribPointer(7, 3, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(18 * sizeof(GLfloat)));
-
-//     m_shapeDataList.push_back(shapedata);
-
-//     glBindBuffer(GL_ARRAY_BUFFER, 0);
-//     glBindVertexArray(0);
-
-// }
 
 void Realtime::setUpHouseMesh(const glm::mat4& ctm, SceneMaterial mat, const char* path) {
 
@@ -755,8 +676,10 @@ void Realtime::setUpHouseMesh(const glm::mat4& ctm, SceneMaterial mat, const cha
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-
 }
+
+
+
 
 void Realtime::setUpBalloonMesh(const glm::mat4& ctm, SceneMaterial mat, const std::vector<float> data) {
 
@@ -814,7 +737,6 @@ void Realtime::setUpBalloonMesh(const glm::mat4& ctm, SceneMaterial mat, const s
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-
 }
 
 void Realtime::resizeGL(int w, int h) {
@@ -863,6 +785,7 @@ void Realtime::sceneChanged() {
         }
         m_shapeDataList.clear();
 
+        setupShapes();
 
         update(); // asks for a PaintGL() call to occur
     } else {
@@ -889,13 +812,7 @@ void Realtime::settingsChanged() {
         glDeleteVertexArrays(1, &shapeData.vao);
     }
     m_shapeDataList.clear();
-    m_cameraData.pos = glm::vec4(0.f,5.f,25.f,0.f);
-    m_cameraData.look = -m_cameraData.pos;
-    m_view = m_camera.getViewMatrix(
-        glm::vec3(m_cameraData.pos),
-        glm::vec3(m_cameraData.look),
-        glm::vec3(m_cameraData.up)
-        );
+
     //unnecessarily realocating data for shapes
     setupShapes();
 
@@ -1005,6 +922,7 @@ void Realtime::moveCameraBezierCircle(float deltaTime) {
     update();
 }
 
+
 void Realtime::keyPressEvent(QKeyEvent *event) {
     m_keyMap[Qt::Key(event->key())] = true;
 }
@@ -1070,71 +988,7 @@ void Realtime::mouseMoveEvent(QMouseEvent *event) {
     }
 }
 
-// void Realtime::timerEvent(QTimerEvent *event) {
-//     glUseProgram(m_shader);
-//     int elapsedms   = m_elapsedTimer.elapsed();
-//     float deltaTime = elapsedms * 0.001f;
-//     m_elapsedTimer.restart();
 
-//     static float totalTime = 0.0f; // Track total time for smooth animation
-//     totalTime += deltaTime;
-
-
-//     float angle = sin(totalTime * 2.0f) * glm::radians(3.f);
-
-//     glm::vec3 pivotPoint(0.0f, 20.0f, 0.0f);
-//     glm::mat4 T_toPivot = glm::translate(glm::mat4(1.0f), -pivotPoint);
-
-//     glm::mat4 R = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 0.0f, 1.0f));
-
-//     glm::mat4 T_back = glm::translate(glm::mat4(1.0f), pivotPoint);
-
-//     m_model = T_back * R * T_toPivot;
-
-//     // Use deltaTime and m_keyMap here to move around
-
-//     float speed = 5.0f * deltaTime;
-//     bool moved = false;
-
-
-//     glm::vec3 look = glm::normalize(glm::vec3(m_cameraData.look));
-//     glm::vec3 up = glm::normalize(glm::vec3(m_cameraData.up));
-//     glm::vec3 right = glm::normalize(glm::cross(look, up));
-//     glm::vec3 movement(0.0f);
-
-//     //W: Translates the camera in the direction of the look vector (forward)
-//     if (m_keyMap[Qt::Key_W]) movement += look * speed;
-//     //S: Translates the camera in the opposite direction of the look vector(backward)
-//     if (m_keyMap[Qt::Key_S]) movement -= look * speed;
-
-//     //A: Translates the camera in the left direction, perpendicular to the look and up vectors (left)
-//     if (m_keyMap[Qt::Key_A]) movement -= right * speed;
-//     //D: Translates the camera in the right direction, also perpendicular to the look and up vectors. (right)
-//     if (m_keyMap[Qt::Key_D]) movement += right * speed;
-
-//     //Space: Translates the camera along the world space vector (0,1,0)(up)
-//     if (m_keyMap[Qt::Key_Space]) movement += glm::vec3(0, 1, 0) * speed;
-//     //Ctrl: Translates the camera along the world space vector (0,-1,0)(down)
-//     if (m_keyMap[Qt::Key_Control]) movement -= glm::vec3(0, 1, 0) * speed; //command on mac?
-
-//     if (glm::length(movement) > 0) {
-//         m_cameraData.pos += glm::vec4(movement, 0.0f);
-//         moved = true;
-//     }
-
-//     if (moved) {
-//         //update view matrix
-//         m_view = m_camera.getViewMatrix(
-//             glm::vec3(m_cameraData.pos),
-//             glm::vec3(m_cameraData.look),
-//             glm::vec3(m_cameraData.up)
-//             );
-//     }
-//     glUseProgram(0);
-
-
-//     update(); // asks for a PaintGL() call to occur
-// }
 void Realtime::timerEvent(QTimerEvent *event) {
     glUseProgram(m_shader);
     int elapsedms   = m_elapsedTimer.elapsed();
@@ -1225,6 +1079,7 @@ void Realtime::updateBalloons(float deltaTime) {
 
     }
 }
+
 glm::mat4 Realtime::getRotationMatrix(const glm::vec3& axis, float angle) {
     float cosTheta = cos(angle);
     float sinTheta = sin(angle);

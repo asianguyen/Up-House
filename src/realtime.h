@@ -47,8 +47,10 @@ private:
 
     // Tick Related Variables
     int m_timer;                                        // Stores timer which attempts to run ~60 times per second
-    QElapsedTimer m_elapsedTimer;        // Stores timer which keeps track of actual time between frames
-    static std::vector<float> balloonVertexData;
+
+    QElapsedTimer m_elapsedTimer;
+    static std::vector<float> balloonVertexData;          // Stores timer which keeps track of actual time between frames
+
 
     // Input Related Variables
     bool m_mouseDown = false;                           // Stores state of left mouse button
@@ -60,9 +62,11 @@ private:
 
     RenderData renderData;
 
-    // glm::mat4 m_model = glm::mat4(1.f);
+
     glm::mat4 m_house_model = glm::mat4(1.f);
     glm::mat4 m_balloon_model = glm::mat4(1.f);
+
+    glm::mat4 m_model = glm::mat4(1.f);
     glm::mat4 m_view  = glm::mat4(1.f);
     glm::mat4 m_proj  = glm::mat4(1.f);
 
@@ -101,7 +105,7 @@ private:
     void setupShapes();
     // void setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const glm::mat4& ctm, SceneMaterial material);
     void setupShaders();
-    //void setUpMesh(const glm::mat4& ctm, SceneMaterial mat);
+
     void setUpHouseMesh(const glm::mat4& ctm, SceneMaterial mat, const char* path);
     void setUpBalloonMesh(const glm::mat4& ctm, SceneMaterial mat, const std::vector<float> data);
 
@@ -125,7 +129,7 @@ private:
     void setupSkyBoxGeometry();
     void renderSkybox();
 
-    //bezier:
+    //bezier
     glm::vec3 bezierTangent(float t, const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3);
     glm::vec3 bezierPosition(float t, const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3);
     void moveCameraBezier(float deltaTime);
@@ -144,6 +148,7 @@ private:
 
     GLuint m_balloon_shader;
 
+    GLuint m_balloon_shader;
     //Proj6:
     GLuint m_texture_shader;
     GLuint m_defaultFBO;
@@ -152,10 +157,7 @@ private:
     GLuint m_fbo_renderbuffer;
     GLuint m_fullscreen_vbo;
     GLuint m_fullscreen_vao;
-    // std::vector<float> mesh_data;
-    // GLuint mesh_vao;
-    // GLuint mesh_vbo;
-    // int mesh_vertex_count;
+
     std::vector<float> house_mesh_data;
     std::vector<float> balloon_mesh_data;
     GLuint house_vao;
