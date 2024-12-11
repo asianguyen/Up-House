@@ -11,7 +11,7 @@ New Technical Features:
 - Bump mapping: add realistic details to the house (szlim and atnguyen)
 - Bezier curve camera motion: house "floating away" (jlee812)
 - Skybox: large skybox showing clear sky textures  to set the high-altitude scene. (szlim)
-- Physics: house swaying to mock wind
+- Physics: house swaying to mock wind (atnguyen)
 - TBD (atnguyen and nking12)
 
 Additional
