@@ -34,7 +34,11 @@
           "primitives": [
             {
               "type": "mesh",
-              "meshFile": "/Users/asianguyen/Desktop/CS1230/cs1230-final/house/untitled.obj"
+              "meshFile": "/Users/sophialim/Desktop/CS1230/cs1230-final/house/finalballoons.obj"
+            },
+            {
+              "type": "mesh",
+              "meshFile": "/Users/sophialim/Desktop/CS1230/cs1230-final/house/house.obj"
             }
           ]
         }

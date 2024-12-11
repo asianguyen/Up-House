@@ -45,8 +45,13 @@ void Realtime::finish() {
     }
     m_shapeDataList.clear();
 
-    glDeleteBuffers(1, &mesh_vbo);
-    glDeleteVertexArrays(1, &mesh_vao);
+    // glDeleteBuffers(1, &mesh_vbo);
+    // glDeleteVertexArrays(1, &mesh_vao);
+    glDeleteBuffers(1, &house_vbo);
+    glDeleteVertexArrays(1, &house_vao);
+
+    glDeleteBuffers(1, &balloon_vbo);
+    glDeleteVertexArrays(1, &balloon_vao);
 
     this->doneCurrent();
 }
@@ -488,7 +493,8 @@ void Realtime::paintGL() {
 
         GLint modelMatrixLocation = glGetUniformLocation(m_shader, "modelMatrix");
 
-        glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_model * shapeData.modelMatrix));
+        //glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_model * shapeData.modelMatrix));
+        glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, glm::value_ptr(shapeData.modelMatrix));
 
 
         GLint shininessLocation = glGetUniformLocation(m_shader, "shininess");
@@ -623,33 +629,97 @@ void Realtime::setupShapes() {
     }
 }
 
-void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
+// void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
+
+//     ShapeData shapedata;
+//     shapedata.modelMatrix = ctm;
+
+
+//     glGenBuffers(1, &mesh_vbo);
+//     glBindBuffer(GL_ARRAY_BUFFER, mesh_vbo);
+
+//     shapedata.vbo = mesh_vbo;
+
+//     std::vector<float> data;
+
+//     objparser::loadOBJ("/Users/sophialim/Desktop/CS1230/cs1230-final/house/untitled.obj", data);
+
+//     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
+//     mesh_vertex_count = data.size() / 21;
+
+//     shapedata.vertexCount = mesh_vertex_count;
+
+//     shapedata.material = mat;
+
+//     glGenVertexArrays(1, &mesh_vao);
+//     glBindVertexArray(mesh_vao);
+
+//     shapedata.vao = mesh_vao;
+
+
+//     glEnableVertexAttribArray(0);
+//     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,21 * sizeof(GLfloat), reinterpret_cast<void*>(0));
+
+//     //normal attribute
+//     glEnableVertexAttribArray(1);
+//     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
+
+//     // ka attribute
+//     glEnableVertexAttribArray(2);
+//     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
+
+//     //kd attribute
+//     glEnableVertexAttribArray(3);
+//     glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(9 * sizeof(GLfloat)));
+
+//     //ks attribute
+//     glEnableVertexAttribArray(4);
+//     glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(12 * sizeof(GLfloat)));
+
+//     //specular attribute
+//     glEnableVertexAttribArray(5);
+//     glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(15 * sizeof(GLfloat)));
+
+//     glEnableVertexAttribArray(6);
+//     glVertexAttribPointer(6, 2, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(16 * sizeof(GLfloat)));
+
+//     glEnableVertexAttribArray(7);
+//     glVertexAttribPointer(7, 3, GL_FLOAT, GL_FALSE, 21 * sizeof(GLfloat), reinterpret_cast<void*>(18 * sizeof(GLfloat)));
+
+//     m_shapeDataList.push_back(shapedata);
+
+//     glBindBuffer(GL_ARRAY_BUFFER, 0);
+//     glBindVertexArray(0);
+
+// }
+
+void Realtime::setUpHouseMesh(const glm::mat4& ctm, SceneMaterial mat, const char* path) {
 
     ShapeData shapedata;
     shapedata.modelMatrix = ctm;
 
+    glGenBuffers(1, &house_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, house_vbo);
 
-    glGenBuffers(1, &mesh_vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, mesh_vbo);
-
-    shapedata.vbo = mesh_vbo;
+    shapedata.vbo = house_vbo;
 
     std::vector<float> data;
 
-    objparser::loadOBJ("/Users/sophialim/Desktop/CS1230/cs1230-final/house/untitled.obj", data);
+    objparser::loadOBJ(path, data);
+
+    std::cout << "Loaded house data size: " << data.size() << std::endl;
 
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
-    mesh_vertex_count = data.size() / 21;
+    house_vertex_count = data.size() / 21;
 
-    shapedata.vertexCount = mesh_vertex_count;
+    shapedata.vertexCount = house_vertex_count;
 
     shapedata.material = mat;
 
-    glGenVertexArrays(1, &mesh_vao);
-    glBindVertexArray(mesh_vao);
+    glGenVertexArrays(1, &house_vao);
+    glBindVertexArray(house_vao);
 
-    shapedata.vao = mesh_vao;
-
+    shapedata.vao = house_vao;
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,21 * sizeof(GLfloat), reinterpret_cast<void*>(0));
@@ -684,6 +754,7 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+
 
 }
 
@@ -743,20 +814,6 @@ void Realtime::setUpBalloonMesh(const glm::mat4& ctm, SceneMaterial mat, const s
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    // glm::vec3 min(FLT_MAX, FLT_MAX, FLT_MAX);
-    // glm::vec3 max(-FLT_MAX, -FLT_MAX, -FLT_MAX);
-
-    // // Loop over all vertices to find the min and max coordinates
-    // for (size_t i = 0; i < result.size(); i += 21) {
-    //     glm::vec3 vertex(result[i], result[i + 1], result[i + 2]);
-
-    //     min = glm::min(min, vertex); // Update the min bound
-    //     max = glm::max(max, vertex); // Update the max bound
-    // }
-
-    // // Store the bounding box in the ShapeData
-    // shapedata.boundingBoxMin = min;
-    // shapedata.boundingBoxMax = max;
 
 }
 

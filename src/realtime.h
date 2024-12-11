@@ -47,7 +47,8 @@ private:
 
     // Tick Related Variables
     int m_timer;                                        // Stores timer which attempts to run ~60 times per second
-    QElapsedTimer m_elapsedTimer;                       // Stores timer which keeps track of actual time between frames
+    QElapsedTimer m_elapsedTimer;        // Stores timer which keeps track of actual time between frames
+    static std::vector<float> balloonVertexData;
 
     // Input Related Variables
     bool m_mouseDown = false;                           // Stores state of left mouse button
@@ -59,7 +60,9 @@ private:
 
     RenderData renderData;
 
-    glm::mat4 m_model = glm::mat4(1.f);
+    // glm::mat4 m_model = glm::mat4(1.f);
+    glm::mat4 m_house_model = glm::mat4(1.f);
+    glm::mat4 m_balloon_model = glm::mat4(1.f);
     glm::mat4 m_view  = glm::mat4(1.f);
     glm::mat4 m_proj  = glm::mat4(1.f);
 
@@ -83,6 +86,10 @@ private:
         glm::mat4 modelMatrix;
         int vertexCount;
         SceneMaterial material;
+        glm::vec3 boundingBoxMin;
+        glm::vec3 boundingBoxMax;
+        GLuint shader;
+        int offsetRand;
     };
 
     std::vector<ShapeData> m_shapeDataList;
@@ -94,7 +101,10 @@ private:
     void setupShapes();
     // void setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const glm::mat4& ctm, SceneMaterial material);
     void setupShaders();
-    void setUpMesh(const glm::mat4& ctm, SceneMaterial mat);
+    //void setUpMesh(const glm::mat4& ctm, SceneMaterial mat);
+    void setUpHouseMesh(const glm::mat4& ctm, SceneMaterial mat, const char* path);
+    void setUpBalloonMesh(const glm::mat4& ctm, SceneMaterial mat, const std::vector<float> data);
+
 
     //bump mappin
     void loadNormalMap();
@@ -132,6 +142,7 @@ private:
     glm::vec3 m_bezierPosition;
     void moveCameraBezierCircle(float deltaTime);
 
+    GLuint m_balloon_shader;
 
     //Proj6:
     GLuint m_texture_shader;
@@ -141,10 +152,18 @@ private:
     GLuint m_fbo_renderbuffer;
     GLuint m_fullscreen_vbo;
     GLuint m_fullscreen_vao;
-    std::vector<float> mesh_data;
-    GLuint mesh_vao;
-    GLuint mesh_vbo;
-    int mesh_vertex_count;
+    // std::vector<float> mesh_data;
+    // GLuint mesh_vao;
+    // GLuint mesh_vbo;
+    // int mesh_vertex_count;
+    std::vector<float> house_mesh_data;
+    std::vector<float> balloon_mesh_data;
+    GLuint house_vao;
+    GLuint house_vbo;
+    int house_vertex_count;
+    GLuint balloon_vao;
+    GLuint balloon_vbo;
+    int balloon_vertex_count;
 
     void paintTexture(GLuint texture);
     void setupFullscreenQuad();

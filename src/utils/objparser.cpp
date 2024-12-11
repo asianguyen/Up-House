@@ -90,9 +90,13 @@ std::unordered_map<std::string, Material> parseMTL(const std::string& filepath) 
 
 bool objparser::loadOBJ(const char * path, std::vector<float> & out_vertices){
 
+    std::string mtlPath = path;
+    size_t dotPosition = mtlPath.find_last_of('.');
+    if (dotPosition != std::string::npos) {
+        mtlPath.replace(dotPosition, std::string::npos, ".mtl");
+    }
 
-    std::unordered_map<std::string, Material> materials = parseMTL("/Users/sophialim/Desktop/CS1230/cs1230-final/house/untitled.mtl");
-    //std::unordered_map<std::string, Material> materials = parseMTL("C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/house/untitled.mtl");
+    std::unordered_map<std::string, Material> materials = parseMTL(mtlPath);
 
     std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
     std::vector<std::string> materialNames;
@@ -109,15 +113,18 @@ bool objparser::loadOBJ(const char * path, std::vector<float> & out_vertices){
 
     while(1){
         char lineHeader[256];
+
         int res = fscanf(file, "%s", lineHeader);
         if (res == EOF){
+            std::cout << "EOF " <<std::endl;
             break;
         }
 
-        if ( strcmp( lineHeader, "v" ) == 0 ){
+        if ( strcmp( lineHeader, "v" ) == 0){
             glm::vec3 vertex;
             fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
             temp_vertices.push_back(vertex);
+
 
         } else if ( strcmp( lineHeader, "vt" ) == 0 ){
             glm::vec2 uv;

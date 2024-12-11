@@ -35,3 +35,13 @@
 8	38	1733953877335010287	/Users/sophialim/Desktop/cs1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Debug/projects_realtime_autogen/mocs_compilation.cpp	7790607b5895fbf
 39	2577	1733953877366066014	CMakeFiles/projects_realtime.dir/src/realtime.cpp.o	a7b47c256ba80ec7
 2577	2762	1733953879904805131	projects_realtime	8e81cf0316d41fa6
+15	795	1733955945182661000	projects_realtime_autogen/timestamp	7790607b5895fbf
+15	795	1733955945182661000	projects_realtime_autogen/mocs_compilation.cpp	7790607b5895fbf
+15	795	1733955945182661000	/Users/sophialim/Desktop/cs1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Debug/projects_realtime_autogen/timestamp	7790607b5895fbf
+15	795	1733955945182661000	/Users/sophialim/Desktop/cs1230/cs1230-final/build/build-cs1230-final-Qt_6_7_3_for_macOS-Debug/projects_realtime_autogen/mocs_compilation.cpp	7790607b5895fbf
+796	4538	1733955945197565593	CMakeFiles/projects_realtime.dir/src/utils/objparser.cpp.o	362bdc92b6e54b3
+795	5848	1733955945196667157	CMakeFiles/projects_realtime.dir/projects_realtime_autogen/mocs_compilation.cpp.o	76ef895e9655159a
+795	5862	1733955945196952913	CMakeFiles/projects_realtime.dir/src/main.cpp.o	662d7d36651a01b1
+796	6361	1733955945197273003	CMakeFiles/projects_realtime.dir/src/mainwindow.cpp.o	a10227e5282c71a0
+796	7024	1733955945197120916	CMakeFiles/projects_realtime.dir/src/realtime.cpp.o	a7b47c256ba80ec7
+7024	7249	1733955951425514850	projects_realtime	8e81cf0316d41fa6
