@@ -109,7 +109,8 @@ void Realtime::loadNormalMap() {
 
     int width, height, nrChannels;
 
-    std::string normalFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/roof2.jpg";
+    //std::string normalFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/roof2.jpg";
+    std::string normalFile= "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/roof2.jpg";
 
     unsigned char *data = stbi_load(normalFile.c_str(), &width, &height, &nrChannels, 0);
     if (data) {
@@ -133,7 +134,7 @@ void Realtime::loadNormalMap2() {
     glBindTexture(GL_TEXTURE_2D, m_wallMap);
 
     int width, height, nrChannels;
-    std::string wallFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/walls.jpg";
+    std::string wallFile= "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/walls.jpg";
     unsigned char *data = stbi_load(wallFile.c_str(), &width, &height, &nrChannels, 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -156,7 +157,7 @@ void Realtime::loadNormalMap3() {
     glBindTexture(GL_TEXTURE_2D, m_chimneyMap);
 
     int width, height, nrChannels;
-    std::string chimneyFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/brick.jpeg";
+    std::string chimneyFile= "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/brick.jpeg";
     unsigned char *data = stbi_load(chimneyFile.c_str(), &width, &height, &nrChannels, 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -179,7 +180,7 @@ void Realtime::loadNormalMap4() {
     glBindTexture(GL_TEXTURE_2D, m_shingleMap);
 
     int width, height, nrChannels;
-    std::string shingleFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/shingles.jpg";
+    std::string shingleFile= "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/shingles.jpg";
     unsigned char *data = stbi_load(shingleFile.c_str(), &width, &height, &nrChannels, 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -202,6 +203,14 @@ void Realtime::setupSkyBox(){
     glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxTexture);
 
     //load each texture face
+    std::vector<std::string> faces = {
+        "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/right.jpg", //Positive X
+        "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/left.jpg",//Negative X
+        "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/top.jpg", //Positive Y
+        "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/bottom.jpg", //Negative Y
+        "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/front.jpg",//Positive Z
+        "C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/resources/images/back.jpg" //Negative Z
+    };
     // std::vector<std::string> faces = {
     //     "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/right.jpg", //Positive X
     //     "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/left.jpg",//Negative X
@@ -209,16 +218,8 @@ void Realtime::setupSkyBox(){
     //     "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/bottom.jpg", //Negative Y
     //     "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/front.jpg",//Positive Z
     //     "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/back.jpg" //Negative Z
-    // };
-    std::vector<std::string> faces = {
-        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/right.jpg", //Positive X
-        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/left.jpg",//Negative X
-        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/top.jpg", //Positive Y
-        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/bottom.jpg", //Negative Y
-        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/front.jpg",//Positive Z
-        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/back.jpg" //Negative Z
 
-    };
+    // };
 
     int width, height, nrChannels;
     for (unsigned int i = 0; i < faces.size(); i++)
@@ -612,8 +613,7 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
 
     std::vector<float> data;
 
-    objparser::loadOBJ("/Users/sophialim/Desktop/CS1230/cs1230-final/house/untitled.obj", data);
-
+    objparser::loadOBJ("C:/Users/dhlee/OneDrive/Desktop/cs1230/cs1230-final/house/untitled.obj", data);
 
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
     mesh_vertex_count = data.size() / 21;
@@ -789,6 +789,11 @@ void Realtime::settingsChanged() {
     m_shapeDataList.clear();
     m_cameraData.pos = glm::vec4(0.f,5.f,25.f,0.f);
     m_cameraData.look = -m_cameraData.pos;
+    m_view = m_camera.getViewMatrix(
+        glm::vec3(m_cameraData.pos),
+        glm::vec3(m_cameraData.look),
+        glm::vec3(m_cameraData.up)
+        );
     //unnecessarily realocating data for shapes
     setupShapes();
 
@@ -890,7 +895,11 @@ void Realtime::moveCameraBezierCircle(float deltaTime) {
     m_cameraData.pos = glm::vec4(position, 1.0f);
     m_cameraData.look = -m_cameraData.pos;
     m_cameraData.up = glm::vec4(0.f, 1.f, 0.f, 0.f);
-
+    m_view = m_camera.getViewMatrix(
+        glm::vec3(m_cameraData.pos),
+        glm::vec3(m_cameraData.look),
+        glm::vec3(m_cameraData.up)
+        );
     update();
 }
 
