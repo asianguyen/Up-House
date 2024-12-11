@@ -42,10 +42,13 @@ private:
     void mouseReleaseEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void timerEvent(QTimerEvent *event) override;
+    void updateBalloons(float deltaTime);
+    bool checkCollisions();
 
     // Tick Related Variables
     int m_timer;                                        // Stores timer which attempts to run ~60 times per second
-    QElapsedTimer m_elapsedTimer;                       // Stores timer which keeps track of actual time between frames
+    QElapsedTimer m_elapsedTimer;
+    static std::vector<float> balloonVertexData;          // Stores timer which keeps track of actual time between frames
 
     // Input Related Variables
     bool m_mouseDown = false;                           // Stores state of left mouse button
@@ -57,7 +60,8 @@ private:
 
     RenderData renderData;
 
-    glm::mat4 m_model = glm::mat4(1.f);
+    glm::mat4 m_house_model = glm::mat4(1.f);
+    glm::mat4 m_balloon_model = glm::mat4(1.f);
     glm::mat4 m_view  = glm::mat4(1.f);
     glm::mat4 m_proj  = glm::mat4(1.f);
 
@@ -81,6 +85,10 @@ private:
         glm::mat4 modelMatrix;
         int vertexCount;
         SceneMaterial material;
+        glm::vec3 boundingBoxMin;
+        glm::vec3 boundingBoxMax;
+        GLuint shader;
+        int offsetRand;
     };
 
     std::vector<ShapeData> m_shapeDataList;
@@ -92,17 +100,14 @@ private:
     void setupShapes();
     // void setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const glm::mat4& ctm, SceneMaterial material);
     void setupShaders();
-    void setUpMesh(const glm::mat4& ctm, SceneMaterial mat);
+    void setUpHouseMesh(const glm::mat4& ctm, SceneMaterial mat, const char* path);
+    void setUpBalloonMesh(const glm::mat4& ctm, SceneMaterial mat, const std::vector<float> data);
 
     //bump mappin
     void loadNormalMap();
     void loadNormalMap2();
-    void loadNormalMap3();
-    void loadNormalMap4();
     GLuint m_roofMap;
     GLuint m_wallMap;
-    GLuint m_shingleMap;
-    GLuint m_chimneyMap;
 
     //skybox:
     GLuint m_skyboxTexture;
@@ -113,24 +118,8 @@ private:
     void setupSkyBoxGeometry();
     void renderSkybox();
 
-    //bezier:
-    glm::vec3 bezierTangent(float t, const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3);
-    glm::vec3 bezierPosition(float t, const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3);
-    void moveCameraBezier(float deltaTime);
-    float m_t = 0.0f;
 
-    std::vector<glm::vec3> m_controlPoints;
-    std::chrono::high_resolution_clock::time_point previousTime;
-    bool m_tIncreasing = true;
-    glm::vec3 p0;  // Start point
-    glm::vec3 p1;
-    glm::vec3 p2;
-    glm::vec3 p3;
-    glm::vec3 generateControlPoint(const glm::vec3& basePoint, float magnitude);
-    glm::vec3 m_bezierPosition;
-    void moveCameraBezierCircle(float deltaTime);
-
-
+    GLuint m_balloon_shader;
     //Proj6:
     GLuint m_texture_shader;
     GLuint m_defaultFBO;
@@ -139,10 +128,14 @@ private:
     GLuint m_fbo_renderbuffer;
     GLuint m_fullscreen_vbo;
     GLuint m_fullscreen_vao;
-    std::vector<float> mesh_data;
-    GLuint mesh_vao;
-    GLuint mesh_vbo;
-    int mesh_vertex_count;
+    std::vector<float> house_mesh_data;
+    std::vector<float> balloon_mesh_data;
+    GLuint house_vao;
+    GLuint house_vbo;
+    int house_vertex_count;
+    GLuint balloon_vao;
+    GLuint balloon_vbo;
+    int balloon_vertex_count;
 
     void paintTexture(GLuint texture);
     void setupFullscreenQuad();
