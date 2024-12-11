@@ -11,6 +11,7 @@ struct Settings {
     float farPlane = 1;
     bool perPixelFilter = false;
     bool kernelBasedFilter = false;
+    bool bumpmapping = true;
     bool circle = false;
     bool curve = false;
     bool extraCredit1 = false;
@@ -19,7 +20,7 @@ struct Settings {
     bool extraCredit4 = false;
     int cameraDistance = 30;
     int cameraY = 5;
-    float cameraSpeed = 5;
+    float cameraSpeed = 0.05;
 };
 
 

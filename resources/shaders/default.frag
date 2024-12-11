@@ -5,7 +5,7 @@ in vec3 worldNormal;
 in vec3 mat_ka;
 in vec3 mat_kd;
 in vec3 mat_ks;
-//in float mat_shininess;
+in float mat_shininess;
 out vec4 fragColor;
 
 in vec2 TextureCoords;
@@ -28,7 +28,12 @@ uniform float k_a, k_d, k_s, shininess;
 uniform vec4 materialAmbient, materialDiffuse, materialSpecular;
 uniform vec4 cameraPos;
 
-uniform sampler2D normalMap;
+uniform sampler2D roofMap;
+uniform sampler2D wallMap;
+uniform sampler2D shingleMap;
+uniform sampler2D chimneyMap;
+
+uniform bool bumpmapping;
 
 float calculateAttenuation(vec3 attenuation, float distance) {
     float constant = attenuation.x;
@@ -38,11 +43,35 @@ float calculateAttenuation(vec3 attenuation, float distance) {
 }
 
 vec4 calculatePhong(vec3 L, vec4 lightColor, float attenuation) {
-     vec3 N;
-    if(mat_kd == vec3(0.061246,0.038204,0.027321)){
-        vec3 normalMap = texture(normalMap, TextureCoords).rgb * 2.0 - 1.0;
-        N = normalize(TBN * normalMap);
-    } else{
+    vec3 N;
+
+    if(bumpmapping){
+        if(mat_kd == vec3(0.244469,0.137024,0.087113)|| mat_kd == vec3(0.376260,0.205079,0.130137)){
+
+            vec3 roofMap = texture(roofMap, TextureCoords).rgb * 2.0 - 1.0;
+            N = normalize(TBN * roofMap);
+
+        } else if(mat_kd == vec3(0.799098,1.000000,0.412543)||mat_kd == vec3(0.799098,0.450786,0.610496)||mat_kd == vec3(0.799098,0.623961,0.258183) || mat_kd == vec3(0.491017, 0.806953, 0.830770) || mat_kd == vec3(1.000000,0.930112,0.428691)){
+            //yellow wall vec if we want that textured too: mat_kd == vec3(1.000000,0.930112,0.428691)
+
+            vec3 wallMap = texture(wallMap, TextureCoords).rgb * 2.0 - 1.0;
+            N = normalize(TBN * wallMap);
+
+        } else if (mat_kd == vec3(0.799098,0.558341, 0.672444) || mat_kd == vec3( 0.799098, 0.558341, 0.672444) || mat_kd == vec3(0.779223, 1.000000, 0.475430)) {
+
+            vec3 shingleMap = texture(shingleMap, TextureCoords).rgb * 2.0 - 1.0;
+            N = normalize(TBN * shingleMap);
+
+        } else if (mat_kd == vec3(0.318545, 0.068478, 0.072272)) {
+
+            vec3 chimneyMap = texture(chimneyMap, TextureCoords).rgb * 2.0 - 1.0;
+            N = normalize(TBN * chimneyMap);
+        }
+        else{
+            N = normalize(worldNormal);
+        }
+    }
+    else{
         N = normalize(worldNormal);
     }
 
@@ -55,8 +84,13 @@ vec4 calculatePhong(vec3 L, vec4 lightColor, float attenuation) {
 
     //specular
     vec3 reflectedLight = reflect(-lightDir, N);
-    float specIntensity = pow(max(dot(reflectedLight, V), 0.0), max(shininess, 0.001));
-    vec4 specular = k_s * specIntensity * vec4(mat_ks, 1) * lightColor;
+
+    float specIntensity = 0.0; // Default to no specular
+    if (worldPosition[1] >= 16.0) {
+        float spec = mat_shininess * 0.1;
+        specIntensity = pow(max(dot(reflectedLight, V), 0.0), max(spec, 0.001));
+    }
+    vec4 specular = k_s * specIntensity * vec4(mat_ks, 1) * vec4(10.f);
 
     return (diffuse + specular) * attenuation;
 }
@@ -67,11 +101,7 @@ float falloffFunction(float theta, float thetaInner, float thetaOuter){
 }
 
 void main() {
-    // Task 10: set your output color to white (i.e. vec4(1.0)). Make sure you get a white circle!
-    //fragColor = vec4(1.0);
 
-    //output color to the absolute value of your world-space normals, for debugging
-    //fragColor = vec4(abs(worldNormal), 1.0);
 
     vec4 finalColor = k_d * vec4(mat_kd, 1.0);
 
@@ -131,7 +161,6 @@ void main() {
     }
 
     fragColor = finalColor;
-    // fragColor += k_a * vec4(mat_ka, 1.0);
 
 
 

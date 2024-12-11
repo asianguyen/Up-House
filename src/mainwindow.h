@@ -26,6 +26,7 @@ private:
     void connectFar();
     void connectPerPixelFilter();
     void connectKernelBasedFilter();
+    void connectBumpmapping();
     void connectUploadFile();
     void connectSaveImage();
     void connectExtraCredit();
@@ -47,6 +48,9 @@ private:
     QDoubleSpinBox *nearBox;
     QDoubleSpinBox *farBox;
 
+    //bumpmapping
+    QCheckBox *bumpmapping;
+
     //Bezier:
     QButtonGroup* modeGroup;
     // Extra Credit:
@@ -58,6 +62,7 @@ private:
 private slots:
     void onPerPixelFilter();
     void onKernelBasedFilter();
+    void onBumpmapping();
     void onUploadFile();
     void onSaveImage();
     void onValChangeP1(int newValue);

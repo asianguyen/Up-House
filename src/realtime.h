@@ -15,7 +15,7 @@
 #include <QTimer>
 
 #include "utils/sceneparser.h"
-#include "shapes/shape.h"
+//#include "shapes/shape.h"
 #include "camera/camera.h"
 
 class Realtime : public QOpenGLWidget
@@ -61,6 +61,8 @@ private:
     glm::mat4 m_view  = glm::mat4(1.f);
     glm::mat4 m_proj  = glm::mat4(1.f);
 
+    float offset;
+
     GLuint m_shader;
 
     glm::vec4 m_lightPos;
@@ -88,13 +90,19 @@ private:
 
 
     void setupShapes();
-    void setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const glm::mat4& ctm, SceneMaterial material);
+    // void setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const glm::mat4& ctm, SceneMaterial material);
     void setupShaders();
     void setUpMesh(const glm::mat4& ctm, SceneMaterial mat);
 
     //bump mappin
     void loadNormalMap();
-    GLuint m_normalMap;
+    void loadNormalMap2();
+    void loadNormalMap3();
+    void loadNormalMap4();
+    GLuint m_roofMap;
+    GLuint m_wallMap;
+    GLuint m_shingleMap;
+    GLuint m_chimneyMap;
 
     //skybox:
     GLuint m_skyboxTexture;
@@ -121,6 +129,7 @@ private:
     glm::vec3 generateControlPoint(const glm::vec3& basePoint, float magnitude);
     glm::vec3 m_bezierPosition;
     void moveCameraBezierCircle(float deltaTime);
+
 
     //Proj6:
     GLuint m_texture_shader;
