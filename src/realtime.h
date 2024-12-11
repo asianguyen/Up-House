@@ -62,6 +62,8 @@ private:
 
     glm::mat4 m_house_model = glm::mat4(1.f);
     glm::mat4 m_balloon_model = glm::mat4(1.f);
+
+    glm::mat4 m_model = glm::mat4(1.f);
     glm::mat4 m_view  = glm::mat4(1.f);
     glm::mat4 m_proj  = glm::mat4(1.f);
 
@@ -106,8 +108,12 @@ private:
     //bump mappin
     void loadNormalMap();
     void loadNormalMap2();
+    void loadNormalMap3();
+    void loadNormalMap4();
     GLuint m_roofMap;
     GLuint m_wallMap;
+    GLuint m_shingleMap;
+    GLuint m_chimneyMap;
 
     //skybox:
     GLuint m_skyboxTexture;
@@ -117,6 +123,23 @@ private:
     GLuint m_skyboxVBO;
     void setupSkyBoxGeometry();
     void renderSkybox();
+
+    //bezier
+    glm::vec3 bezierTangent(float t, const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3);
+    glm::vec3 bezierPosition(float t, const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3);
+    void moveCameraBezier(float deltaTime);
+    float m_t = 0.0f;
+
+    std::vector<glm::vec3> m_controlPoints;
+    std::chrono::high_resolution_clock::time_point previousTime;
+    bool m_tIncreasing = true;
+    glm::vec3 p0;  // Start point
+    glm::vec3 p1;
+    glm::vec3 p2;
+    glm::vec3 p3;
+    glm::vec3 generateControlPoint(const glm::vec3& basePoint, float magnitude);
+    glm::vec3 m_bezierPosition;
+    void moveCameraBezierCircle(float deltaTime);
 
 
     GLuint m_balloon_shader;

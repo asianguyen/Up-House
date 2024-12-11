@@ -101,6 +101,8 @@ bool objparser::loadOBJ(const char * path, std::vector<float> & out_vertices){
 
     std::unordered_map<std::string, Material> materials = parseMTL(mtlPath);
 
+    //std::unordered_map<std::string, Material> materials = parseMTL("/Users/sophialim/Desktop/CS1230/cs1230-final/house/untitled.mtl");
+
     std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
     std::vector<std::string> materialNames;
     std::vector<glm::vec3> temp_vertices;
