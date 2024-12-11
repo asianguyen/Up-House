@@ -280,7 +280,7 @@ void MainWindow::connectUIElements() {
     // connectNear();
     connectFar();
     connectBumpmapping();
-    //connectExtraCredit();
+    connectExtraCredit();
 }
 
 void MainWindow::connectPerPixelFilter() {
@@ -411,8 +411,8 @@ void MainWindow::onValChangeP2(int newValue) {
 
 void MainWindow::onSpinBoxChangeP3(int boxValue) {
 
-    //float sliderValue = (boxValue / 100.f);
-    settings.cameraSpeed = boxValue;
+    float newValue = (boxValue / 100.f);
+    settings.cameraSpeed = newValue;
 }
 
 
