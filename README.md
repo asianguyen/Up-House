@@ -31,4 +31,4 @@ Curve - House moves in a curve
 8. Toggle on/off the bump mapping textures
 
 ## External Libraries
-- stb library for skybox: https://github.com/nothings/stb/blob/master/stb_image.h (sophia)
+- stb library for loading images for the skybox: https://github.com/nothings/stb/blob/master/stb_image.h (sophia)
