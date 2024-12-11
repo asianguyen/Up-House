@@ -33,6 +33,8 @@ uniform sampler2D wallMap;
 uniform sampler2D shingleMap;
 uniform sampler2D chimneyMap;
 
+uniform bool bumpmapping;
+
 float calculateAttenuation(vec3 attenuation, float distance) {
     float constant = attenuation.x;
     float linear = attenuation.y;
@@ -43,29 +45,32 @@ float calculateAttenuation(vec3 attenuation, float distance) {
 vec4 calculatePhong(vec3 L, vec4 lightColor, float attenuation) {
     vec3 N;
 
-    if(mat_kd == vec3(0.244469,0.137024,0.087113)|| mat_kd == vec3(0.376260,0.205079,0.130137)){
+    if(bumpmapping){
+        if(mat_kd == vec3(0.244469,0.137024,0.087113)|| mat_kd == vec3(0.376260,0.205079,0.130137)){
 
-        vec3 roofMap = texture(roofMap, TextureCoords).rgb * 2.0 - 1.0;
-        N = normalize(TBN * roofMap);
+            vec3 roofMap = texture(roofMap, TextureCoords).rgb * 2.0 - 1.0;
+            N = normalize(TBN * roofMap);
 
-    } else if(mat_kd == vec3(0.799098,1.000000,0.412543)||mat_kd == vec3(0.799098,0.450786,0.610496)||mat_kd == vec3(0.799098,0.623961,0.258183) || mat_kd == vec3(0.491017, 0.806953, 0.830770) || mat_kd == vec3(1.000000,0.930112,0.428691)){
-        //yellow wall vec if we want that textured too: mat_kd == vec3(1.000000,0.930112,0.428691)
+        } else if(mat_kd == vec3(0.799098,1.000000,0.412543)||mat_kd == vec3(0.799098,0.450786,0.610496)||mat_kd == vec3(0.799098,0.623961,0.258183) || mat_kd == vec3(0.491017, 0.806953, 0.830770) || mat_kd == vec3(1.000000,0.930112,0.428691)){
+            //yellow wall vec if we want that textured too: mat_kd == vec3(1.000000,0.930112,0.428691)
 
-        vec3 wallMap = texture(wallMap, TextureCoords).rgb * 2.0 - 1.0;
-        N = normalize(TBN * wallMap);
+            vec3 wallMap = texture(wallMap, TextureCoords).rgb * 2.0 - 1.0;
+            N = normalize(TBN * wallMap);
 
-    } else if (mat_kd == vec3(0.799098,0.558341, 0.672444) || mat_kd == vec3( 0.799098, 0.558341, 0.672444) || mat_kd == vec3(0.779223, 1.000000, 0.475430)) {
+        } else if (mat_kd == vec3(0.799098,0.558341, 0.672444) || mat_kd == vec3( 0.799098, 0.558341, 0.672444) || mat_kd == vec3(0.779223, 1.000000, 0.475430)) {
 
-        vec3 shingleMap = texture(shingleMap, TextureCoords).rgb * 2.0 - 1.0;
-        N = normalize(TBN * shingleMap);
+            vec3 shingleMap = texture(shingleMap, TextureCoords).rgb * 2.0 - 1.0;
+            N = normalize(TBN * shingleMap);
 
-    } else if (mat_kd == vec3(0.318545, 0.068478, 0.072272)) {
+        } else if (mat_kd == vec3(0.318545, 0.068478, 0.072272)) {
 
-        vec3 chimneyMap = texture(chimneyMap, TextureCoords).rgb * 2.0 - 1.0;
-        N = normalize(TBN * chimneyMap);
-
+            vec3 chimneyMap = texture(chimneyMap, TextureCoords).rgb * 2.0 - 1.0;
+            N = normalize(TBN * chimneyMap);
+        }
+        else{
+            N = normalize(worldNormal);
+        }
     }
-
     else{
         N = normalize(worldNormal);
     }

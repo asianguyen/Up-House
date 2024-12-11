@@ -109,7 +109,7 @@ void Realtime::loadNormalMap() {
 
     int width, height, nrChannels;
 
-    std::string normalFile= "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/roof2.jpg";
+    std::string normalFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/roof2.jpg";
 
     unsigned char *data = stbi_load(normalFile.c_str(), &width, &height, &nrChannels, 0);
     if (data) {
@@ -133,7 +133,7 @@ void Realtime::loadNormalMap2() {
     glBindTexture(GL_TEXTURE_2D, m_wallMap);
 
     int width, height, nrChannels;
-    std::string wallFile= "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/walls.jpg";
+    std::string wallFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/walls.jpg";
     unsigned char *data = stbi_load(wallFile.c_str(), &width, &height, &nrChannels, 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -156,7 +156,7 @@ void Realtime::loadNormalMap3() {
     glBindTexture(GL_TEXTURE_2D, m_chimneyMap);
 
     int width, height, nrChannels;
-    std::string chimneyFile= "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/brick.jpeg";
+    std::string chimneyFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/brick.jpeg";
     unsigned char *data = stbi_load(chimneyFile.c_str(), &width, &height, &nrChannels, 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -179,7 +179,7 @@ void Realtime::loadNormalMap4() {
     glBindTexture(GL_TEXTURE_2D, m_shingleMap);
 
     int width, height, nrChannels;
-    std::string shingleFile= "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/shingles.jpg";
+    std::string shingleFile= "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/shingles.jpg";
     unsigned char *data = stbi_load(shingleFile.c_str(), &width, &height, &nrChannels, 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -211,12 +211,12 @@ void Realtime::setupSkyBox(){
     //     "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/back.jpg" //Negative Z
     // };
     std::vector<std::string> faces = {
-        "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/right.jpg", //Positive X
-        "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/left.jpg",//Negative X
-        "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/top.jpg", //Positive Y
-        "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/bottom.jpg", //Negative Y
-        "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/front.jpg",//Positive Z
-        "/Users/asianguyen/Desktop/CS1230/cs1230-final/resources/images/back.jpg" //Negative Z
+        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/right.jpg", //Positive X
+        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/left.jpg",//Negative X
+        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/top.jpg", //Positive Y
+        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/bottom.jpg", //Negative Y
+        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/front.jpg",//Positive Z
+        "/Users/sophialim/Desktop/CS1230/cs1230-final/resources/images/back.jpg" //Negative Z
 
     };
 
@@ -476,6 +476,9 @@ void Realtime::paintGL() {
     GLint lightCountLoc = glGetUniformLocation(m_shader, "lightCount");
     glUniform1i(lightCountLoc, renderData.lights.size());
 
+    GLint bumpMappingLoc = glGetUniformLocation(m_shader, "bumpmapping");
+    glUniform1i(bumpMappingLoc, settings.bumpmapping);
+
     // loop through all shapes
     for (const auto& shapeData : m_shapeDataList) {
 
@@ -528,10 +531,10 @@ void Realtime::paintGL() {
     previousTime = currentTime;
 
     if (settings.circle){
-        moveCameraBezierCircle(deltaTime.count());
+        Realtime::moveCameraBezierCircle(deltaTime.count());
     }
     if (settings.curve){
-        moveCameraBezier(deltaTime.count());
+        Realtime::moveCameraBezier(deltaTime.count());
     }
 
 }
@@ -609,7 +612,7 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
 
     std::vector<float> data;
 
-    objparser::loadOBJ("/Users/asianguyen/Desktop/CS1230/cs1230-final/house/untitled.obj", data);
+    objparser::loadOBJ("/Users/sophialim/Desktop/CS1230/cs1230-final/house/untitled.obj", data);
 
 
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
@@ -662,54 +665,54 @@ void Realtime::setUpMesh(const glm::mat4& ctm, SceneMaterial mat) {
 }
 
 
-void Realtime::setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const glm::mat4& ctm, SceneMaterial material) {
+// void Realtime::setupVAOVBOForShape(Shape &shape, PrimitiveType shapeType, const glm::mat4& ctm, SceneMaterial material) {
 
-    ShapeData shapeData;
-    shapeData.modelMatrix = ctm;
+//     ShapeData shapeData;
+//     shapeData.modelMatrix = ctm;
 
-    glGenBuffers(1, &shapeData.vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, shapeData.vbo);
+//     glGenBuffers(1, &shapeData.vbo);
+//     glBindBuffer(GL_ARRAY_BUFFER, shapeData.vbo);
 
-    std::vector<float> data = shape.generateShape();
-    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
-    shapeData.vertexCount = data.size() / 16;
+//     std::vector<float> data = shape.generateShape();
+//     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
+//     shapeData.vertexCount = data.size() / 16;
 
 
-    shapeData.material = material;
+//     shapeData.material = material;
 
-    glGenVertexArrays(1, &shapeData.vao);
-    glBindVertexArray(shapeData.vao);
+//     glGenVertexArrays(1, &shapeData.vao);
+//     glBindVertexArray(shapeData.vao);
 
-    //position attribute
-    glEnableVertexAttribArray(0);
+//     //position attribute
+//     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(0));
+//     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(0));
 
-    //normal attribute
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
+//     //normal attribute
+//     glEnableVertexAttribArray(1);
+//     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
 
-    //ka attribute
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
+//     //ka attribute
+//     glEnableVertexAttribArray(2);
+//     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
 
-    //kd attribute
-    glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(9 * sizeof(GLfloat)));
+//     //kd attribute
+//     glEnableVertexAttribArray(3);
+//     glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(9 * sizeof(GLfloat)));
 
-    //ks attribute
-    glEnableVertexAttribArray(4);
-    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(12 * sizeof(GLfloat)));
+//     //ks attribute
+//     glEnableVertexAttribArray(4);
+//     glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(12 * sizeof(GLfloat)));
 
-    //specular attribute
-    glEnableVertexAttribArray(5);
-    glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(15 * sizeof(GLfloat)));
+//     //specular attribute
+//     glEnableVertexAttribArray(5);
+//     glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 16 * sizeof(GLfloat), reinterpret_cast<void*>(15 * sizeof(GLfloat)));
 
-    m_shapeDataList.push_back(shapeData);
+//     m_shapeDataList.push_back(shapeData);
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-}
+//     glBindBuffer(GL_ARRAY_BUFFER, 0);
+//     glBindVertexArray(0);
+// }
 
 
 void Realtime::resizeGL(int w, int h) {
@@ -794,6 +797,10 @@ void Realtime::settingsChanged() {
 
 // ================== Project 6: Action!
 
+glm::vec3 Realtime::bezierTangent(float t, const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3){
+    float u = 1 - t;
+    return 3 * u * u * (p1 - p0) + 6 * u * t * (p2 - p1) + 3 * t * t * (p3 - p2);
+}
 
 glm::vec3 Realtime::bezierPosition(float t, const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3){
     float u = 1 - t;
@@ -820,7 +827,7 @@ void Realtime::moveCameraBezier(float deltaTime){
     glm::vec3 p2(4.0f, 30.0f, -10.0f);
     glm::vec3 p3(10.0f,-40.0f,10.0f);
 
-    glm::vec3 position = bezierPosition(m_t, p0, p1, p2, p3);
+    glm::vec3 position = Realtime::bezierPosition(m_t, p0, p1, p2, p3);
 
     for (auto& shapeData : m_shapeDataList) {
         shapeData.modelMatrix = glm::translate(glm::mat4(1.0f), position);
@@ -865,17 +872,17 @@ void Realtime::moveCameraBezierCircle(float deltaTime) {
     glm::vec3 forward;
 
     if (segment == 0) {
-        position = bezierPosition(segmentT, p0, p1, p2, p3);
-        forward = bezierTangent(segmentT, p0, p1, p2, p3);
+        position = Realtime::bezierPosition(segmentT, p0, p1, p2, p3);
+        forward = Realtime::bezierTangent(segmentT, p0, p1, p2, p3);
     } else if (segment == 1) {
-        position = bezierPosition(segmentT, p3, p4, p5, p6);
-        forward = bezierTangent(segmentT, p3, p4, p5, p6);
+        position = Realtime::bezierPosition(segmentT, p3, p4, p5, p6);
+        forward = Realtime::bezierTangent(segmentT, p3, p4, p5, p6);
     } else if (segment == 2) {
-        position = bezierPosition(segmentT, p6, p7, p8, p9);
-        forward = bezierTangent(segmentT, p6, p7, p8, p9);
+        position = Realtime::bezierPosition(segmentT, p6, p7, p8, p9);
+        forward = Realtime::bezierTangent(segmentT, p6, p7, p8, p9);
     } else if (segment == 3) {
-        position = bezierPosition(segmentT, p9, p10, p11, p0);
-        forward = bezierTangent(segmentT, p9, p10, p11, p0);
+        position = Realtime::bezierPosition(segmentT, p9, p10, p11, p0);
+        forward = Realtime::bezierTangent(segmentT, p9, p10, p11, p0);
     }
 
     forward = glm::normalize(forward);

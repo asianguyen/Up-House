@@ -34,6 +34,9 @@ void MainWindow::initialize() {
     QLabel *filters_label = new QLabel(); // Filters label
     filters_label->setText("Filters");
     filters_label->setFont(font);
+    QLabel *bumpmapping_label = new QLabel(); // bumpmapping label
+    bumpmapping_label->setText("Bump Mapping");
+    bumpmapping_label->setFont(font);
     QLabel *bez_label = new QLabel(); // Bezier label
     bez_label->setText("Bezier Curve Options");
     bez_label->setFont(font);
@@ -65,6 +68,11 @@ void MainWindow::initialize() {
     filter2 = new QCheckBox();
     filter2->setText(QStringLiteral("Kernel-Based Filter"));
     filter2->setChecked(false);
+
+    //create checkbox for bump mapping
+    bumpmapping = new QCheckBox();
+    bumpmapping->setText(QStringLiteral("Apply Bump Mapping"));
+    bumpmapping->setChecked(true);
 
     // Create file uploader for scene file
     uploadFile = new QPushButton();
@@ -202,13 +210,13 @@ void MainWindow::initialize() {
     vLayout->addWidget(saveImage);
 
     vLayout->addWidget(camera_label);
-    vLayout->addWidget(near_label);
-    vLayout->addWidget(nearLayout);
+    // vLayout->addWidget(near_label);
+    // vLayout->addWidget(nearLayout);
     vLayout->addWidget(far_label);
     vLayout->addWidget(farLayout);
-    vLayout->addWidget(filters_label);
-    vLayout->addWidget(filter1);
-    vLayout->addWidget(filter2);
+    // vLayout->addWidget(filters_label);
+    // vLayout->addWidget(filter1);
+    // vLayout->addWidget(filter2);
 
     //Bezier curve
     vLayout->addWidget(bez_label);
@@ -225,6 +233,11 @@ void MainWindow::initialize() {
     // speed of camera
     vLayout->addWidget(speed_label);
     vLayout->addWidget(p3Layout);
+
+    //bump mapping
+    vLayout->addWidget(bumpmapping_label);
+    vLayout->addWidget(bumpmapping);
+
 
     // vLayout->addWidget(tesselation_label);
     // vLayout->addWidget(param1_label);
@@ -257,16 +270,17 @@ void MainWindow::finish() {
 }
 
 void MainWindow::connectUIElements() {
-    connectPerPixelFilter();
-    connectKernelBasedFilter();
+    //connectPerPixelFilter();
+    //connectKernelBasedFilter();
     connectUploadFile();
     connectSaveImage();
     connectParam1();
     connectParam2();
     connectParam3();
-    connectNear();
+    // connectNear();
     connectFar();
-    connectExtraCredit();
+    connectBumpmapping();
+    //connectExtraCredit();
 }
 
 void MainWindow::connectPerPixelFilter() {
@@ -275,6 +289,10 @@ void MainWindow::connectPerPixelFilter() {
 
 void MainWindow::connectKernelBasedFilter() {
     connect(filter2, &QCheckBox::clicked, this, &MainWindow::onKernelBasedFilter);
+}
+
+void MainWindow::connectBumpmapping() {
+    connect(bumpmapping, &QCheckBox::clicked, this, &MainWindow::onBumpmapping);
 }
 
 void MainWindow::connectUploadFile() {
@@ -328,6 +346,11 @@ void MainWindow::onPerPixelFilter() {
 
 void MainWindow::onKernelBasedFilter() {
     settings.kernelBasedFilter = !settings.kernelBasedFilter;
+    realtime->settingsChanged();
+}
+
+void MainWindow::onBumpmapping() {
+    settings.bumpmapping = !settings.bumpmapping;
     realtime->settingsChanged();
 }
 

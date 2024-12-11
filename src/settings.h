@@ -11,6 +11,7 @@ struct Settings {
     float farPlane = 1;
     bool perPixelFilter = false;
     bool kernelBasedFilter = false;
+    bool bumpmapping = true;
     bool circle = false;
     bool curve = false;
     bool extraCredit1 = false;
