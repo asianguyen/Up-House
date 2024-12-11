@@ -113,6 +113,24 @@ private:
     void setupSkyBoxGeometry();
     void renderSkybox();
 
+    //bezier:
+    glm::vec3 bezierTangent(float t, const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3);
+    glm::vec3 bezierPosition(float t, const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3);
+    void moveCameraBezier(float deltaTime);
+    float m_t = 0.0f;
+
+    std::vector<glm::vec3> m_controlPoints;
+    std::chrono::high_resolution_clock::time_point previousTime;
+    bool m_tIncreasing = true;
+    glm::vec3 p0;  // Start point
+    glm::vec3 p1;
+    glm::vec3 p2;
+    glm::vec3 p3;
+    glm::vec3 generateControlPoint(const glm::vec3& basePoint, float magnitude);
+    glm::vec3 m_bezierPosition;
+    void moveCameraBezierCircle(float deltaTime);
+
+
     //Proj6:
     GLuint m_texture_shader;
     GLuint m_defaultFBO;
