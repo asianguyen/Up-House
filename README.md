@@ -12,7 +12,7 @@ New Technical Features:
 - Bezier curve camera motion: house "floating away" (jlee812)
 - Skybox: large skybox showing clear sky textures  to set the high-altitude scene. (szlim)
 - Physics: house swaying to mock wind (atnguyen)
-- TBD (atnguyen and nking12)
+- Balloon movement: (atnguyen and nking12)
 
 Additional
 - Blender model rendering for a more realistic house and balloon objects (atnguyen and nking12)
